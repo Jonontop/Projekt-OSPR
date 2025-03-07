@@ -1,11 +1,11 @@
 # Projekt-OSPR
 Projekt za OSPR
 #TODO
-- []Cpanel
-- []Home Page
-- []Login
-- []Payment System
+- []Cpanel - py flask, html
+- []Home Page - hmtl
+- []Login - flask login
+- []Payment System - glask paypal
 - []Google Analitics
-- []DataBase
-- []Plans site
-- []currency acquering system
+- []DataBase - firebase
+- []Plans site - html
+- []currency acquering system - firebase, py
