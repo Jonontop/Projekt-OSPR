@@ -26,3 +26,4 @@ Resources:
 - https://flask.palletsprojects.com/en/stable/api/ - flask
 - https://github.com/pallets-eco/flask-wtf - data menegment
 - https://github.com/maxcountryman/flask-login - login
+- https://medium.com/@andrii.gorshunov/paypal-flask-integration-python-2022-1c012322801d - paypal integration
