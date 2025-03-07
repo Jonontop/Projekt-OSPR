@@ -32,30 +32,30 @@ Resources:
 # Structure:
 
 OSPR-projekt/
--│
--├── flask/
--│   ├── __init__.py      # Initialize the Flask app and bring everything together
--│   ├── routes.py        # Define the routes in this file
--│   ├── auth/            # Authentication related views
--│   │   └── __init__.py  # Blueprint for authentication
--│   │   └── login.py     # Login route
--│   ├── blog/            # Blog related views
--│   │   └── __init__.py  # Blueprint for blog
--│   │   └── about.py     # About route
--│   │   └── tos.py       # Terms of Service route
--│   │   └── pp.py        # Privacy Policy route
--│   ├── static/          # Static files (CSS, JS, etc.)
--│   │   └── css/         # Stylesheets
--│   │   └── js/          # JavaScript
--│   └── templates/       # HTML templates
--│       ├── index.html   # Home page
--│       ├── auth/        # Authentication templates
--│       │   └── login.html
--│       ├── blog/        # Blog-related templates
--│       │   ├── about.html
--│       │   ├── TOS.html
--│       │   └── PP.html
--├── config.py            # Configuration settings (e.g., app settings, database)
--├── run.py               # To run the application
--├── venv/                # Virtual environment
--└── requirements.txt     # List of dependencies
+- │
+- ├── flask/
+- │   ├── __init__.py      # Initialize the Flask app and bring everything together
+- │   ├── routes.py        # Define the routes in this file
+- │   ├── auth/            # Authentication related views
+- │   │   └── __init__.py  # Blueprint for authentication
+- │   │   └── login.py     # Login route
+- │   ├── blog/            # Blog related views
+- │   │   └── __init__.py  # Blueprint for blog
+- │   │   └── about.py     # About route
+- │   │   └── tos.py       # Terms of Service route
+- │   │   └── pp.py        # Privacy Policy route
+- │   ├── static/          # Static files (CSS, JS, etc.)
+- │   │   └── css/         # Stylesheets
+- │   │   └── js/          # JavaScript
+- │   └── templates/       # HTML templates
+- │       ├── index.html   # Home page
+- │       ├── auth/        # Authentication templates
+- │       │   └── login.html
+- │       ├── blog/        # Blog-related templates
+- │       │   ├── about.html
+- │       │   ├── TOS.html
+- │       │   └── PP.html
+- ├── config.py            # Configuration settings (e.g., app settings, database)
+- ├── run.py               # To run the application
+- ├── venv/                # Virtual environment
+- └── requirements.txt     # List of dependencies
