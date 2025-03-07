@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f8fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        nav {
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-left, .nav-center, .nav-right {
+            flex: 1;
+        }
+        .nav-center {
+            display: flex;
+            justify-content: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px; 
+        }
+        nav ul li {
+            position: relative;
+        }
+        nav ul li a {
+            display: block;
+            padding: 10px 15px;
+            color: #0073b1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            white-space: nowrap; 
+        }
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: #0073b1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease-out;
+        }
+        nav ul li a:hover::after,
+        nav ul li a:focus::after,
+        nav ul li a:active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        nav ul li ul {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 10px 0;
+            margin: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+        nav ul li:hover > ul {
+            display: block;
+        }
+        nav ul li ul li {
+            width: 200px;
+        }
+        nav ul li ul li a {
+            padding: 10px 20px;
+        }
+        nav ul li ul li a:hover {
+            background-color: #f7f8fa;
+        }
+        nav ul li ul li ul {
+            top: 0;
+            left: 100%;
+            border-radius: 5px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-right: 20px;
+        }
+        .nav-button {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+            background-color: #0073b1;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+        .nav-button:hover {
+            background-color: #005682;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+        }
+        .nav-button.signup {
+            color: #0073b1;
+            background-color: #ffffff;
+            border: 2px solid #0073b1;
+        }
+        .nav-button.signup:hover {
+            background-color: #f0f0f0;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard-container h2 {
+            text-align: center;
+            font-size: 2em;
+            color: #0073b1;
+            margin-bottom: 20px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .dashboard-item {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard-item h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .dashboard-item p {
+            color: #666;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav>
+        <div class="nav-left"></div>
+        <div class="nav-center">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li>
+                    <a href="dela.html">Jobs</a>
+                    <ul>
+                        <li><a href="dodajdelo.html">Add Job</a></li>
+                        <li>
+                            <a href="dela.html">Jobs</a>
+                            <ul>
+                                <li><a href="favdela.html">Favorite Jobs</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="dashboard.php">Dashboard</a></li>
+            </ul>
+        </div>
+        <div class="nav-right nav-buttons">
+            <form action="" method="POST">
+                <button type="submit" name="logout" class="nav-button">Log Out</button>
+            </form>
+        </div>
+    </nav>
+
+   
+    <div class="dashboard-container">
+        <h2>Dashboard Overview</h2>
+        <div class="dashboard-grid">
+            <div class="dashboard-item">
+                <h3>Profile Overview</h3>
+                <p>Check and update your personal information.</p>
+            </div>
+            <div class="dashboard-item">
+                <h3>Job Applications</h3>
+                <p>View and manage your applications.</p>
+            </div>
+            <div class="dashboard-item">
+                <h3>Recent Notifications</h3>
+                <p>Stay updated with the latest news.</p>
+            </div>
+            <div class="dashboard-item">
+                <h3>Analytics</h3>
+                <p>Track your activity and job views.</p>
+            </div>
+            <div class="dashboard-item">
+                <h3>Account Settings</h3>
+                <p>Manage your account preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer>
+        <p style="text-align:center; margin: 20px 0;">&copy; 2023 Professional Presentation. All rights reserved.</p>
+    </footer>
+</body>
+</html>
