@@ -2,8 +2,15 @@
 Projekt za OSPR
 #TODO
 - []Cpanel - py flask, html
-- []Home Page - hmtl
+    - console
+    - analitics
+    - database
+    - user system
+    - settings
+      
+- []Home Page - html
 - []Login - flask login
+    - Login/Register Website - FB, html, py
 - []Payment System - glask paypal
 - []Google Analitics
 - []DataBase - firebase
