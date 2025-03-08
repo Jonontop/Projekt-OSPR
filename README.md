@@ -9,11 +9,20 @@ Projekt za OSPR
     - settings
       
 - []Home Page - html
+- []Blog - html
+    - []about - html
+    - []TOS - html
+    - []PP - html
+- []Error - html
+    - []404 - html
 - []Login - flask login
     - Login/Register Website - FireBase, html, py
-- []Payment System - glask paypal
-- []Google Analitics
+- []Payment System - flask paypal
+- [x]Google Analitics
 - []DataBase - firebase
+    - [x]connection
+    - []user's info
+    - []user's general info
 - []Plans site - html
 - []currency acquering system - firebase, py
 
