@@ -2,12 +2,12 @@
 Projekt za OSPR
 #TODO
 - []Cpanel - py flask, html
-    - console
-    - analitics
-    - database
-    - user system
-    - settings
-      
+    - []console
+    - []analitics
+    - []database
+    - []user system
+    - []settings
+    - []cpanel
 - []Home Page - html
 - []Blog - html
     - []about - html
@@ -18,11 +18,11 @@ Projekt za OSPR
 - []Login - flask login
     - Login/Register Website - FireBase, html, py
 - []Payment System - flask paypal
-- [x]Google Analitics
 - []DataBase - firebase
     - [x]connection
     - []user's info
     - []user's general info
+    - [x]Google Analitics
 - []Plans site - html
 - []currency acquering system - firebase, py
 
