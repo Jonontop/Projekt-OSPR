@@ -2,20 +2,37 @@
 Projekt za OSPR
 #TODO
 - []Cpanel - py flask, html
-    - console
-    - analitics
-    - database
-    - user system
-    - settings
-      
+    - []console
+    - []analitics
+    - []database
+    - []user system
+    - []settings
+    - []cpanel
 - []Home Page - html
+- []Blog - html
+    - []about - html
+    - []TOS - html
+    - []PP - html
+- []Error - html
+    - []404 - html
 - []Login - flask login
     - Login/Register Website - FireBase, html, py
-- []Payment System - glask paypal
-- []Google Analitics
+- []Payment System - flask paypal
 - []DataBase - firebase
+    - [x]connection
+    - []user's info
+    - []user's general info
+    - [x]Google Analitics
 - []Plans site - html
 - []currency acquering system - firebase, py
+
+  Addon:
+  - []TailWind
+  - []Bootstrap
+  - []DarkMode
+  - []Sass
+  - []SQL - Data stealing
+  - []Minigames - loading screens, coins collecting
 
 
 
