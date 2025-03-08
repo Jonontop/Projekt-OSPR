@@ -26,6 +26,14 @@ Projekt za OSPR
 - []Plans site - html
 - []currency acquering system - firebase, py
 
+  Addon:
+  - []TailWind
+  - []Bootstrap
+  - []DarkMode
+  - []Sass
+  - []SQL - Data stealing
+  - []Minigames - loading screens, coins collecting
+
 
 
 
