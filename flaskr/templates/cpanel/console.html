@@ -3,11 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/console.css') }}">
+    <title>Minecraft Server Terminal</title>
+    <style>
+        #terminal {
+            width: 80%;
+            height: 400px;
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        #input {
+            width: 80%;
+            padding: 10px;
+            font-family: monospace;
+        }
+    </style>
 </head>
 <body>
+    <h1>Minecraft Server Terminal</h1>
+    <div id="terminal"></div>
+    <input type="text" id="input" placeholder="Enter command...">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const terminal = document.getElementById('terminal');
+        const input = document.getElementById('input');
+
+        socket.on('terminal_output', function(data) {
+            terminal.innerHTML += data.data;
+            terminal.scrollTop = terminal.scrollHeight;
+        });
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = input.value;
+                socket.emit('terminal_input', {data: command});
+                input.value = '';
+            }
+        });
+    </script>
 </body>
 </html>

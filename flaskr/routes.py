@@ -15,4 +15,4 @@ def login():
 
 @app.route('/cpanel')
 def cpanel():
-    return render_template('cpanel.html')
+    return render_template('cpanel/cpanel.html')
