@@ -10,7 +10,7 @@ Projekt za OSPR
       
 - []Home Page - html
 - []Login - flask login
-    - Login/Register Website - FB, html, py
+    - Login/Register Website - FireBase, html, py
 - []Payment System - glask paypal
 - []Google Analitics
 - []DataBase - firebase
