@@ -1,5 +1,9 @@
-from flask import redirect, render_template, request, make_response, session, abort, jsonify, url_for
+from functools import wraps
+
+from flask import redirect, render_template, make_response, session, url_for
+
 from flaskr import app
+
 
 ##### Public Links
 
@@ -9,7 +13,7 @@ def index():
 
 @app.route('/about')
 def about():
-    return render_template('about.html') # About Us
+    return render_template('blog/about.html') # About Us
 
 @app.route('/terms')
 def terms():
@@ -24,7 +28,7 @@ def login():
     if 'user' in session:
         return render_template(url_for('dashboard')) # redirect for CPanel
     else:
-        return render_template('login.html') # Back to login 
+        return render_template('auth/login.html') # Back to login
 
 @app.route('/logout')
 def logout():
@@ -34,6 +38,19 @@ def logout():
 
 
 ##### Private Links
+
+def auth_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Check if user is authenticated
+        if 'user' not in session:
+            return redirect(url_for('login'))
+
+        else:
+            return f(*args, **kwargs)
+
+    return decorated_function
+
 
 @app.route('/dashboard')
 @auth_required

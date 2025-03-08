@@ -1,11 +1,9 @@
-from flask import Flask
-from flask_socketio import SocketIO, emit
-import secrets
-from functools import wraps
-import firebase_admin
-from firebase_admin import credentials, firestore, auth
 from datetime import timedelta
-import os
+
+import firebase_admin
+from firebase_admin import credentials, firestore
+from flask import Flask
+from flask_socketio import SocketIO
 
 # Defining the Flask app
 app = Flask(__name__)
@@ -19,7 +17,7 @@ app.config['SESSION_REFRESH_EACH_REQUEST'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Can be 'Strict', 'Lax', or 'None'
 
 # Defining the SQLAlchemy database object
-#db = SQLAlchemy(app)
+#db = SQLAlchemy(app) # data stealing
 
 # Define SocketIO object
 socketio = SocketIO(app)
@@ -29,16 +27,20 @@ cred = credentials.Certificate("firebase-auth.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-def auth_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        # Check if user is authenticated
-        if 'user' not in session:
-            return redirect(url_for('login'))
-        
-        else:
-            return f(*args, **kwargs)
-        
-    return decorated_function
+"""
+# Usage example of FireBase - FireStore
+
+data = {
+    "name": "Los Angeles",
+    "state": "CA",
+    "country": "USA"
+}
+
+x = db.collection('cities').document().set(data)
+
+print(x)
+
+"""
+
 
 from flaskr import routes, models
