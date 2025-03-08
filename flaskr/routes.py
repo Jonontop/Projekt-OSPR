@@ -32,7 +32,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user', None) # idk
+    session.pop('user', None) # None = Privzeta vrednost če 'user' ni v session
     response = make_response(redirect(url_for('login'))) # redirecta na login
     response.set_cookie('session', '', expires=0) # uniči session
 
@@ -62,4 +62,8 @@ def cpanel():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('404.html'), 404
+    return render_template('errors/404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('errors/500.html'), 500
