@@ -1,44 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
-</head>
-<body>
-    <nav>
-    <div class="nav-left"></div>
-    <div class="nav-center">
-        <ul>
-            <li>
-                <a href="index.html">Services</a>
-                <ul>
-                    <a href="">1</a>
-                    <a href="">2</a>
-                    <a href="">3</a>
-                    <a href="">4</a> <!--treba se povedat katere service-->
-                </ul>
-            </li>
+{% extends "base.html" %}
 
-            <li>
-                <a href="dela.html">More</a>
-                <ul>
-                    <a href="">About us</a>
-                    <a href="">Support</a>
-                    <a href="">Privacy</a>
-                    <a href="">Terms of Service</a>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    </div>
-    <div class="nav-right">
-        <a href="#" class="nav-button free-hosting">Free Hosting</a>
-        <a href="#" class="nav-button paid-hosting">Paid Hosting</a>
-    </div>
-</nav>
-</body>
-</html>
+{% block title %}
+    500
+{% endblock %}
+
+{% block content %}
+    <h1>500</h1>
+    <p>Page not found</p>
+{% endblock %}

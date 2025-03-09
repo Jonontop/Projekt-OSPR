@@ -39,6 +39,7 @@ def logout():
 
 ##### Private Links
 
+## Put in auth.py
 def auth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -50,7 +51,7 @@ def auth_required(f):
             return f(*args, **kwargs)
 
     return decorated_function
-
+##
 
 @app.route('/dashboard')
 @auth_required
@@ -67,3 +68,11 @@ def page_not_found(error):
 @app.errorhandler(500)
 def internal_server_error(error):
     return render_template('errors/500.html'), 500
+
+"""
+
+@app.errorhandler(301)
+def redirecting(error):
+    return render_template('errors/301.html'), 301
+
+"""

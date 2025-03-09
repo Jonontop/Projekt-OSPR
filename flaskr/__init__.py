@@ -4,6 +4,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask import Flask
 from flask_socketio import SocketIO
+from flask_login import LoginManager
 
 # Defining the Flask app
 app = Flask(__name__)
@@ -27,7 +28,20 @@ cred = credentials.Certificate("firebase-auth.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+## FireBase - Client Func
+def get_firestore_client():
+    """
+    Get the Firestore client instance.
+    """
+    return db
+
 """
+# Define the login manager
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+
 # Usage example of FireBase - FireStore
 
 data = {
