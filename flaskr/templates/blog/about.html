@@ -5,6 +5,108 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Homepage</h1>
-    <p>Welcome to the homepage</p>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .team-member {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .team-member img {
+            border-radius: 50%;
+            margin-right: 20px;
+            width: 100px;
+            height: 100px;
+        }
+        .team-member div {
+            flex: 1;
+        }
+    </style>
+
+
+    <header>
+        <h1>About Us</h1>
+        <p>Welcome to [Your Server Hosting Website Name]</p>
+    </header>
+
+    <section>
+        <h2>Our Mission</h2>
+        <p>At [Your Server Hosting Website Name], our mission is to provide reliable, secure, and scalable server hosting solutions to businesses and individuals around the world. We are committed to delivering exceptional service and support to help our clients achieve their online goals.</p>
+    </section>
+
+    <section>
+        <h2>Our Story</h2>
+        <p>Founded in [Year], [Your Server Hosting Website Name] started as a small team of passionate IT professionals with a vision to revolutionize the hosting industry. Over the years, we have grown into a trusted provider, serving thousands of clients with a wide range of hosting services, including shared hosting, VPS hosting, dedicated servers, and cloud hosting.</p>
+    </section>
+
+    <section>
+        <h2>Our Values</h2>
+        <ul>
+            <li><strong>Customer-Centric:</strong> We prioritize our customers' needs and strive to exceed their expectations.</li>
+            <li><strong>Innovation:</strong> We continuously innovate to provide cutting-edge hosting solutions.</li>
+            <li><strong>Integrity:</strong> We operate with honesty and transparency in all our dealings.</li>
+            <li><strong>Reliability:</strong> We ensure our services are reliable and available 24/7.</li>
+            <li><strong>Community:</strong> We believe in giving back to the community and supporting sustainable practices.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Meet Our Team</h2>
+        <div class="team-member">
+            <img src="team-member1.jpg" alt="Team Member 1">
+            <div>
+                <h3>John Doe</h3>
+                <p>CEO & Founder</p>
+                <p>John has over 15 years of experience in the hosting industry and is passionate about technology and innovation.</p>
+            </div>
+        </div>
+        <div class="team-member">
+            <img src="team-member2.jpg" alt="Team Member 2">
+            <div>
+                <h3>Jane Smith</h3>
+                <p>Chief Technology Officer</p>
+                <p>Jane oversees our technical operations and ensures our infrastructure is robust and secure.</p>
+            </div>
+        </div>
+        <div class="team-member">
+            <img src="team-member3.jpg" alt="Team Member 3">
+            <div>
+                <h3>Mike Johnson</h3>
+                <p>Customer Support Manager</p>
+                <p>Mike leads our support team and is dedicated to providing exceptional customer service.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Why Choose Us?</h2>
+        <p>Choosing [Your Server Hosting Website Name] means choosing a partner who is committed to your success. Here are a few reasons why our clients trust us:</p>
+        <ul>
+            <li><strong>24/7 Support:</strong> Our expert support team is available around the clock to assist you.</li>
+            <li><strong>State-of-the-Art Infrastructure:</strong> We use the latest technology to ensure optimal performance and security.</li>
+            <li><strong>Scalable Solutions:</strong> Our hosting plans are designed to grow with your business.</li>
+            <li><strong>Competitive Pricing:</strong> We offer affordable hosting solutions without compromising on quality.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Contact Us</h2>
+        <p>We'd love to hear from you! If you have any questions or need assistance, please don't hesitate to reach out.</p>
+        <ul>
+            <li>Email: [Your Email Address]</li>
+            <li>Phone: [Your Phone Number]</li>
+            <li>Address: [Your Physical Address]</li>
+        </ul>
+    </section>
 {% endblock %}
