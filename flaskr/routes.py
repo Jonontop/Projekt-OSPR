@@ -17,11 +17,15 @@ def about():
 
 @app.route('/terms')
 def terms():
-    return render_template('terms.html') # needs to be added
+    return render_template('blog/terms.html') # needs to be added
 
 @app.route('/privacy')
 def privacy():
-    return render_template('privacy.html') # needs to be added
+    return render_template('blog/privacy.html') # needs to be added
+
+@app.route('/support')
+def support():
+    return render_template('blog/support.html')
 
 @app.route('/login')
 def login():
