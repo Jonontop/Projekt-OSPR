@@ -1,29 +1,70 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service</title>
+    <link rel="stylesheet" href="termsstyle.css">
+</head>
+<body>
 
-{% block title %}
-    TOS
-{% endblock %}
+    
+    <nav>
+      <div class="nav-center">
+          <ul>
+              <li><a href="index.html" class="nav-menu">Home</a></li>
+              <li>
+                  <a href="#" class="nav-menu">Services</a>
+                  
+              </li>
+              <li><a href="#" class="nav-menu">More</a></li>
+          </ul>
+      </div>
+      <div class="nav-right">
+          <a href="#" class="nav-button free-hosting">Free Hosting</a>
+          <a href="#" class="nav-button paid-hosting">Paid Hosting</a>
+      </div>
+  </nav>
 
+    
+    <section class="terms-section">
+        <h2>Terms of Service</h2>
+        <p><strong>Last Updated: 24th February 2025</strong></p>
+        <p>By using our hosting services, you agree to comply with the terms outlined in this document. If you do not agree, we kindly ask that you refrain from using our services.</p>
 
-{% block content %}
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Terms of Service</h1>
-            <p></p>
-            <!-- <a href="#" class="cta-button">Get Started</a> -->
-        </div>
+        <h3>1. Payments</h3>
+        <ul>
+            <li>Full payment is required before services can be activated.</li>
+            <li>We do not offer refunds under any circumstances.</li>
+            <li>Free services come with certain limitations, which are outlined on our website.</li>
+        </ul>
+
+        <h3>2. Termination</h3>
+        <ul>
+            <li>We reserve the right to suspend or terminate accounts at our discretion.</li>
+            <li>Upon termination, access to services will be revoked, and all data associated with the account may be deleted.</li>
+        </ul>
+
+        <h3>3. Liability and Warranties</h3>
+        <ul>
+            <li>Our services are provided on an "as is" and "as available" basis, without guarantees of uninterrupted or error-free performance.</li>
+            <li>We are not responsible for any loss, damage, or data corruption.</li>
+            <li>Our liability is limited to the amount paid for services in the six months before any claim.</li>
+        </ul>
+
+        <h3>4. Account Security</h3>
+        <ul>
+            <li>You are responsible for ensuring the security of your account.</li>
+            <li>We are not liable for any unauthorised access caused by weak passwords or negligence.</li>
+            <li>If you suspect unauthorised use, please notify us immediately.</li>
+        </ul>
+
+        <h3>5. Fair Use</h3>
+        <p>We have a separate document that elaborates on permissible usage, see <a href="#">Fair Use Policy</a>.</p>
+
+        <h3>6. Get In Touch With Us</h3>
+        <p>Email <a href="">mail</a> for assistance.</p>
     </section>
 
-    <!-- About Section -->
-
-    <section class="about">
-        <h2>Term 1.</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec euismod odio. Nulla euismod massa vel nulla laoreet, ut fermentum mi interdum. Donec varius lacus vitae leo efficitur, at blandit tortor condimentum.</p>
-    </section>
-    <section class="about">
-        <h2>Term 1.</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec euismod odio. Nulla euismod massa vel nulla laoreet, ut fermentum mi interdum. Donec varius lacus vitae leo efficitur, at blandit tortor condimentum.</p>
-    </section>
-
-
-{% endblock %}
+</body>
+</html>
