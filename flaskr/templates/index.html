@@ -1,51 +1,169 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <nav>
+        <div class="nav-left"></div>
+            <div class="nav-center">
+                <ul>
+                    <li>
+                        <a href="service.html" class="nav-button service">Services</a>
+                    </li>
+                    <li>
+                        <a href="more.html" class="nav-button more">More</a>
+                    </li>
+                </ul>
+            </div>
 
-{% block title %}
-    Home
-{% endblock %}
+        <div class="nav-right">
+            <a href="#" class="nav-button free-hosting">Free Hosting</a>
+            <a href="#" class="nav-button paid-hosting">Paid Hosting</a>
+        </div>
+    </nav>
 
-{ # Css Link # }
-{% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-{% endblock %}
-
-{ # Page Content # }
-
-{% block content %}
-    <section class="hero">
+    <!-- Hero Section -->
+    <section class="hero-section">
         <div class="hero-content">
-            <h1>Your Dream Hosting Solution</h1>
-            <p>Experience the fastest, most reliable, and secure hosting for your website.</p>
-            <a href="#" class="cta-button">Get Started</a>
+            <h1>Lorem Ipsum, a hosting network built for speed</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.</p>
+            
+           
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="about">
-        <h2>About Us</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec euismod odio. Nulla euismod massa vel nulla laoreet, ut fermentum mi interdum. Donec varius lacus vitae leo efficitur, at blandit tortor condimentum.</p>
+    <!-- Content Section -->
+    <section class="content-section">
+        <h2>Naslov</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.</p>
+        <div class="features-grid">
+            <div class="feature">
+                <h3>Podnaslov 1</h3>
+                <p class="short-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <div class="more-content">
+                    <p>Curabitur tincidunt, libero non ultrices euismod, ex metus fringilla purus, a tristique libero dolor ut erat.</p>
+                </div>
+                <button class="read-more-btn" onclick="toggleContent(this)">Read More</button>
+            </div>
+            <div class="feature">
+                <h3>Podnaslov 2</h3>
+                <p class="short-description">Etiam dapibus leo at sem tincidunt, nec aliquet ligula aliquet.</p>
+                <div class="more-content">
+                    <p>Proin vehicula, lectus ut vehicula convallis, mauris lectus euismod risus, sit amet vehicula sapien felis sit amet neque.</p>
+                </div>
+                <button class="read-more-btn" onclick="toggleContent(this)">Read More</button>
+            </div>
+            <div class="feature">
+                <h3>Podnaslov 3</h3>
+                <p class="short-description">Etiam dapibus leo at sem tincidunt, nec aliquet ligula aliquet.</p>
+                <div class="more-content">
+                    <p>Proin vehicula, lectus ut vehicula convallis, mauris lectus euismod risus, sit amet vehicula sapien felis sit amet neque.</p>
+                </div>
+                <button class="read-more-btn" onclick="toggleContent(this)">Read More</button>
+            </div>
+        </div>
     </section>
 
-    <!-- Services Section -->
-    <section class="services">
-        <h2>Our Services</h2>
-        <div class="service-item">
-            <h3>Service 1</h3>
-            <p>Detailed description of Service 1.</p>
+    <section class="features">
+        <div class="feture-content">
+            <h1>Why choose lallalalalalal???</h1>
+            
         </div>
-        <div class="service-item">
-            <h3>Service 2</h3>
-            <p>Detailed description of Service 2.</p>
-        </div>
-        <div class="service-item">
-            <h3>Service 3</h3>
-            <p>Detailed description of Service 3.</p>
-        </div>
-        <div class="service-item">
-            <h3>Service 4</h3>
-            <p>Detailed description of Service 4.</p>
+    
+        <div class="feature-grid">
+            <div class="window feature-item" onclick="toggleFeature(this)">
+                <div class="description">
+                    <h3>Feature 1</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.</p>
+                </div>
+            </div>
+            <div class="window feature-item" onclick="toggleFeature(this)">
+                <div class="description">
+                    <h3>Feature 2</h3>
+                    <p>Etiam sodales orci in neque scelerisque hendrerit. Phasellus ultrices semper risus nec varius.</p>
+                </div>
+            </div>
+            <div class="window feature-item" onclick="toggleFeature(this)">
+                <div class="description">
+                    <h3>Feature 3</h3>
+                    <p>Vivamus ac arcu augue. Curabitur ut magna tortor. Vivamus est augue, blandit ac elit sed.</p>
+                </div>
+            </div>
+            <div class="window feature-item" onclick="toggleFeature(this)">
+                <div class="description">
+                    <h3>Feature 4</h3>
+                    <p>Integer libero nisi, imperdiet nec hendrerit in, blandit quis ex. Vestibulum aliquam fermentum turpis.</p>
+                </div>
+            </div>
+            <div class="window feature-item" onclick="toggleFeature(this)">
+                <div class="description">
+                    <h3>Feature 5</h3>
+                    <p>Integer libero nisi, imperdiet nec hendrerit in, blandit quis ex. Vestibulum aliquam fermentum turpis.</p>
+                </div>
+            </div>
+            <div class="window feature-item" onclick="toggleFeature(this)">
+                <div class="description">
+                    <h3>Feature 6</h3>
+                    <p>Integer libero nisi, imperdiet nec hendrerit in, blandit quis ex. Vestibulum aliquam fermentum turpis.</p>
+                </div>
+            </div>
         </div>
     </section>
-{% endblock %}
+    <section class="faq-section">
+        <div class="faq-container">
+            <h2>Frequently Asked Questions</h2>
+            <p>Got questions? Check out these FAQs from our latest customers. If you need further assistance, reach out to our support team.</p>
+            
+            <div class="faq-item">
+                <button class="faq-question">How does monthly hosting work? <span>&#9662;</span></button>
+                <div class="faq-answer">You pay a fixed monthly fee for hosting services...</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What is your refund policy? <span>&#9662;</span></button>
+                <div class="faq-answer">We offer a 30-day money-back guarantee...</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">How do you afford to offer free hosting? <span>&#9662;</span></button>
+                <div class="faq-answer">We fund our free hosting through premium plans...</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">How do I cancel my server? <span>&#9662;</span></button>
+                <div class="faq-answer">You can cancel your server anytime through your dashboard...</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What payment methods do you accept? <span>&#9662;</span></button>
+                <div class="faq-answer">We accept credit cards, PayPal, and crypto payments...</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What is the difference between free and paid hosting? <span>&#9662;</span></button>
+                <div class="faq-answer">Paid hosting offers more features, better performance, and priority support...</div>
+            </div>
+        </div>
+    </section>
+    <script>
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                button.classList.toggle('active');
+                if (button.classList.contains('active')) {
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                } else {
+                    answer.style.maxHeight = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>  
 
 
