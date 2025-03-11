@@ -4,7 +4,7 @@ from flaskr import app
 import subprocess
 import threading
 
-## NEEDS TO BE FIXED - ADDED, JON
+## NEEDS TO BE FIXED - ADDED, JON FIXED MY ČRT
 
 socketio = SocketIO(app)
 

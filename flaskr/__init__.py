@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, auth
 from flask import Flask
 from flask_socketio import SocketIO
 from flask_login import LoginManager
@@ -30,9 +30,6 @@ db = firestore.client()
 
 ## FireBase - Client Func
 def get_firestore_client():
-    """
-    Get the Firestore client instance.
-    """
     return db
 
 """

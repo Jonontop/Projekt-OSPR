@@ -9,11 +9,9 @@ class User(UserMixin):
         self.username = username
         self.email = email
 
+    # Static method to get a user from Firestore
     @staticmethod
     def get(user_id):
-        """
-        Retrieve a user from Firestore by ID.
-        """
         user_ref = db.collection("users").document(user_id)
         user = user_ref.get()
         if user.exists:

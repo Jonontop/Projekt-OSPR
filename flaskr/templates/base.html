@@ -6,6 +6,7 @@
     <title>{% block title %}Default Title{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    {% block head %}{% endblock %}
 </head>
 <body>
 
@@ -14,17 +15,11 @@
         <div class="nav-center">
             <ul>
                 <li>
-                    <a href="index.html">Services</a>
-                    <ul>
-                        <a href="">1</a>
-                        <a href="">2</a>
-                        <a href="">3</a>
-                        <a href="">4</a> <!--treba se povedat katere service-->
-                    </ul>
+                    <a href="{{ url_for('services') }}">Services</a>
                 </li>
 
                 <li>
-                    <a href="dela.html">More</a>
+                    <a href="">More</a>
                     <ul>
                         <a href="{{ url_for('about') }}">About us</a>
                         <a href="{{ url_for('support') }}">Support</a>

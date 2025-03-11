@@ -1,14 +1,14 @@
 import time
 
+from flask import flas
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from flaskr import get_firestore_client
 
 db = get_firestore_client()
 
+# Register user
 def register_user(username:str, email:str, password:str, name:str):
-    """
-    Register a new user in Firestore.
-    """
     users_ref = db.collection("users")
     # Check if email already exists
     query = users_ref.where("email", "==", email).limit(1).get()
@@ -30,10 +30,8 @@ def register_user(username:str, email:str, password:str, name:str):
     users_ref.add(user_data)
     return True, "User registered successfully."
 
+# Login user
 def login_user(email, password):
-    """
-    Authenticate a user.
-    """
     users_ref = db.collection("users")
     query = users_ref.where("email", "==", email).limit(1).get()
 
