@@ -1,39 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-    <nav>
-        <div class="nav-left"></div>
-            <div class="nav-center">
-                <ul>
-                    <li>
-                        <a href="service.html" class="nav-button service">Services</a>
-                    </li>
-                    <li>
-                        <a href="more.html" class="nav-button more">More</a>
-                    </li>
-                </ul>
-            </div>
+{% extends 'base.html' %}
 
-        <div class="nav-right">
-            <a href="#" class="nav-button free-hosting">Free Hosting</a>
-            <a href="#" class="nav-button paid-hosting">Paid Hosting</a>
-        </div>
-    </nav>
+{% block title %}
+  Home
+{% endblock %}
 
-    <!-- Hero Section -->
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
             <h1>Lorem Ipsum, a hosting network built for speed</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna ut erat sagittis vehicula.</p>
-            
-           
+
+
         </div>
     </section>
 
@@ -72,9 +54,9 @@
     <section class="features">
         <div class="feture-content">
             <h1>Why choose lallalalalalal???</h1>
-            
+
         </div>
-    
+
         <div class="feature-grid">
             <div class="window feature-item" onclick="toggleFeature(this)">
                 <div class="description">
@@ -118,7 +100,7 @@
         <div class="faq-container">
             <h2>Frequently Asked Questions</h2>
             <p>Got questions? Check out these FAQs from our latest customers. If you need further assistance, reach out to our support team.</p>
-            
+
             <div class="faq-item">
                 <button class="faq-question">How does monthly hosting work? <span>&#9662;</span></button>
                 <div class="faq-answer">You pay a fixed monthly fee for hosting services...</div>
@@ -163,7 +145,4 @@
             });
         });
     </script>
-</body>
-</html>  
-
-
+{% endblock %}

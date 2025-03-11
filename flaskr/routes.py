@@ -78,7 +78,7 @@ def register():
             flash('Registration failed. Please try again.', 'danger')
             return redirect(url_for('register'))
 
-    return render_template('login.html')  # Render the same login.html since it contains the register form
+    return render_template('auth/login.html')  # Render the same login.html since it contains the register form
 
 @app.route('/logout')
 def logout():

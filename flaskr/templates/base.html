@@ -12,27 +12,20 @@
 
     <nav>
         <div class="nav-left"></div>
-        <div class="nav-center">
-            <ul>
-                <li>
-                    <a href="{{ url_for('services') }}">Services</a>
-                </li>
+            <div class="nav-center">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('services') }}" class="nav-button service">Services</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('support') }}" class="nav-button more">More</a>
+                    </li>
+                </ul>
+            </div>
 
-                <li>
-                    <a href="">More</a>
-                    <ul>
-                        <a href="{{ url_for('about') }}">About us</a>
-                        <a href="{{ url_for('support') }}">Support</a>
-                        <a href="{{ url_for('privacy') }}">Privacy</a>
-                        <a href="{{ url_for('terms') }}">Terms of Service</a>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        </div>
         <div class="nav-right">
-            <a href="#" class="nav-button free-hosting">Free Hosting</a>
-            <a href="#" class="nav-button paid-hosting">Paid Hosting</a>
+            <a href="{{ url_for('register') }}" class="nav-button free-hosting">Free Hosting</a>
+            <a href="{{ url_for('register') }}" class="nav-button paid-hosting">Paid Hosting</a>
         </div>
     </nav>
     {% block content %}
