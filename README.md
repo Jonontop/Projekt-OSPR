@@ -8,13 +8,14 @@ Projekt za OSPR
     - []user system
     - []settings
     - []cpanel
-- []Home Page - html
+- [x]Home Page - html
 - []Blog - html
     - []about - html
-    - []TOS - html
+    - [x]TOS - html
     - []PP - html
 - []Error - html
-    - []404 - html
+    - [x]404 - html
+    - [x]500 - html
 - []Login - flask login
     - Login/Register Website - FireBase, html, py
 - []Payment System - flask paypal
