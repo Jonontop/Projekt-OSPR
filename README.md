@@ -16,13 +16,13 @@ Projekt za OSPR
 - []Error - html
     - [x]404 - html
     - [x]500 - html
-- []Login - flask login
+- [x]Login - flask login
     - Login/Register Website - FireBase, html, py
 - []Payment System - flask paypal
-- []DataBase - firebase
+- [x]DataBase - firebase
     - [x]connection
-    - []user's info
-    - []user's general info
+    - [x]user's info
+    - [x]user's general info
     - [x]Google Analitics
 - []Plans site - html
 - []currency acquering system - firebase, py
@@ -31,7 +31,7 @@ Projekt za OSPR
   - []TailWind
   - []Bootstrap
   - []DarkMode
-  - []Sass
+  - [x]1 File for primary settings - css
   - []SQL - Data stealing
   - []Minigames - loading screens, coins collecting
 
