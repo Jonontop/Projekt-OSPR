@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Plans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/price.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Choose Your Plan</h1>
+
+        <div class="pricing-plans">
+            <!-- Basic Plan -->
+            <div class="plan" id="basic">
+                <div class="plan-header">
+                    <div class="plan-name">Basic</div>
+                    <div class="plan-price">$29</div>
+                    <div class="plan-billing">per month</div>
+                </div>
+
+                <div class="features">
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>5 Projects</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>20GB Storage</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Basic Support</span>
+                    </div>
+                    <div class="feature not-included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span>Advanced Analytics</span>
+                    </div>
+                    <div class="feature not-included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span>API Access</span>
+                    </div>
+                </div>
+
+                <div class="comparison">
+                    Best for individuals and small teams just getting started.
+                </div>
+
+                <a href="/purchase/basic" class="buy-now">Buy Basic Plan</a>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="plan" id="pro">
+                <div class="plan-popular">MOST POPULAR</div>
+                <div class="plan-header">
+                    <div class="plan-name">Pro</div>
+                    <div class="plan-price">$79</div>
+                    <div class="plan-billing">per month</div>
+                </div>
+
+                <div class="features">
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>20 Projects</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>100GB Storage</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Priority Support</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Advanced Analytics</span>
+                    </div>
+                    <div class="feature not-included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span>API Access</span>
+                    </div>
+                </div>
+
+                <div class="comparison">
+                    Perfect for growing businesses with more advanced needs.
+                </div>
+
+                <a href="/purchase/pro" class="buy-now">Buy Pro Plan</a>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="plan" id="enterprise">
+                <div class="plan-header">
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-price">$199</div>
+                    <div class="plan-billing">per month</div>
+                </div>
+
+                <div class="features">
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Unlimited Projects</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>500GB Storage</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>24/7 Dedicated Support</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Advanced Analytics</span>
+                    </div>
+                    <div class="feature included">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>API Access</span>
+                    </div>
+                </div>
+
+                <div class="comparison">
+                    Designed for large organizations requiring maximum capability.
+                </div>
+
+                <a href="/purchase/enterprise" class="buy-now">Buy Enterprise Plan</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -28,6 +28,10 @@ def terms():
 def privacy():
     return render_template('blog/privacy.html') # needs to be added
 
+@app.route('/plans')
+def plans():
+    return render_template('blog/plans.html') # needs to be added
+
 @app.route('/support')
 def support():
     return render_template('blog/support.html')
@@ -35,6 +39,12 @@ def support():
 @app.route('/services')
 def services():
     return render_template('blog/services.html') # needs to be added
+
+@app.route('/purchase/<plan>')
+def purchase(plan):
+    # Logic for handling purchases would go here
+    # For now, just redirect back to pricing page
+    return f"Processing purchase for {plan} plan..."
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
