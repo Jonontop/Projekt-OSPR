@@ -1,0 +1,33 @@
+:root {
+    /* -- Primary Colors -- */
+    --primary-color: #3498db;
+    --secondary-color: #fff ; /* #2ecc71 */
+    --tertiary-color: #2b63b6;
+
+    /* -- Secondary Colors -- */
+    --background-color: #f4f4f4;
+    --background-2-color: #f9f9f9; /* Lighter Grey */
+    --light-text-color: #666;
+    --hover-bg: #f0f0f0;
+    --navbar-bg: #2c3e50;
+
+    /* -- Button 1 Color and Hover --  */
+    --button-color: #3498db; /* Blue */
+    --button-hover: #2980b9; /* Dark Blue */
+
+    /* -- Button 2 Color and Hover -- */
+    --button-2-color: #8e44ad; /* Purple */
+    --button-2-hover: #7d3c98; /* Dark Purple */
+
+    /* -- Font -- */
+    --text-color: #333; /* #333 */
+    --font-weight: 700;
+    --font-family: 'Arial', sans-serif;
+
+    /* -- Border -- */
+    --border-radius: 10px;
+    --border-color: #ddd;
+
+    /* -- Shadow -- */
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }

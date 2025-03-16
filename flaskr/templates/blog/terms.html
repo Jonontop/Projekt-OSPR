@@ -1,33 +1,15 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/terms.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
 
-    
-    <nav>
-      <div class="nav-center">
-          <ul>
-              <li><a href="index.html" class="nav-menu">Home</a></li>
-              <li>
-                  <a href="#" class="nav-menu">Services</a>
-                  
-              </li>
-              <li><a href="#" class="nav-menu">More</a></li>
-          </ul>
-      </div>
-      <div class="nav-right">
-          <a href="#" class="nav-button free-hosting">Free Hosting</a>
-          <a href="#" class="nav-button paid-hosting">Paid Hosting</a>
-      </div>
-  </nav>
+{% block title %}
+  Terms
+{% endblock %}
 
-    
-    <section class="terms-section">
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/terms.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="terms-section">
         <h2>Terms of Service</h2>
         <p><strong>Last Updated: 24th February 2025</strong></p>
         <p>By using our hosting services, you agree to comply with the terms outlined in this document. If you do not agree, we kindly ask that you refrain from using our services.</p>
@@ -64,7 +46,6 @@
 
         <h3>6. Get In Touch With Us</h3>
         <p>Email <a href="">mail</a> for assistance.</p>
-    </section>
+    </section><p>Unless otherwise stated, Company Name and/or its licensors own the intellectual property rights for all material on Website Name. All intellectual property rights are reserved. You may access this from Website Name for your own personal use subjected to restrictions set in these terms and conditions.</p>
 
-</body>
-</html>
+{% endblock %}
