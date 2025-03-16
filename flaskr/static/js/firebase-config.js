@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-import { getAuth, 
-         GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,10 +14,16 @@ const firebaseConfig = {
   };
 
 // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-  
-  const db = getFirestore(app);
-  
-  export { auth, provider, db };
+const app = initializeApp(firebaseConfig); // Initialize Firebase
+const auth = getAuth(app); // Get the Auth service for the default app
+//const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+
+//export { auth, db, googleProvider };
+export { auth, googleProvider };
+
+// Export auth for use in other modules
+window.auth = auth;
+
+
+

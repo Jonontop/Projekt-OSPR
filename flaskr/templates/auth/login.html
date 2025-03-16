@@ -6,27 +6,45 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <!-- Include Firebase SDK as modules -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+     <!-- Include your custom scripts as modules -->
+    <script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}
 
 {% block content %}
     <div class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <!-- Login Form -->
         <div class="form-container login-form">
             <h2>Login</h2>
-            <form action="{{ url_for('login') }}" method="POST">
-                <label for="login-username">Username</label>
+            <form id="login-form">
+                <label for="login-username">Email</label>
                 <input type="text" id="login-username" name="username" required>
                 <label for="login-password">Password</label>
                 <input type="password" id="login-password" name="password" required>
                 <button type="submit">Login</button>
             </form>
             <p>Don't have an account? <a href="#" id="show-register-link">Register here</a></p>
+            <p>Didn't receive the verification email? <a href="#" id="resend-verification-link">Resend verification email</a></p>
+            <p>Or sign in with:</p>
+            <button id="google-sign-in-button">Sign in with Google</button>
         </div>
 
         <!-- Register Form -->
         <div class="form-container register-form">
             <h2>Register</h2>
-            <form action="{{ url_for('register') }}" method="POST">
+            <form id="register-form">
                 <label for="register-username">Username</label>
                 <input type="text" id="register-username" name="username" required>
                 <label for="register-email">Email</label>
@@ -36,8 +54,10 @@
                 <button type="submit">Register</button>
             </form>
             <p>Already have an account? <a href="#" id="show-login-link">Login here</a></p>
+
         </div>
     </div>
 
+    <!-- Include script.js for form toggling (not a module) -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}

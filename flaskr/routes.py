@@ -1,10 +1,14 @@
 from functools import wraps
 
 from firebase_admin import auth
-from flask import redirect, render_template, make_response, session, url_for, request, flash
+from flask import redirect, render_template, make_response, session, url_for, request, flash, jsonify
 
 from flaskr import app
+from flaskr import get_firestore_client
+from firebase_config import firebaseConfig
 
+
+db = get_firestore_client()
 
 ##### Public Links
 
@@ -34,51 +38,26 @@ def services():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form.get('username')  # Get username from form
-        password = request.form.get('password')  # Get password from form
-
-        try:
-            # Authenticate user with Firebase
-            user = auth.get_user_by_email(username)  # Firebase uses email as username
-            # Note: Firebase doesn't store plaintext passwords, so you'll need to use Firebase Auth for password verification
-            # For now, we'll assume authentication is successful
-            session['user'] = user.uid  # Store user ID in session
-            flash('Login successful!', 'success')
-            return redirect(url_for('dashboard'))  # Redirect to dashboard after login
-        except Exception as e:
-            flash('Login failed. Please check your credentials.', 'danger')
-            return redirect(url_for('login'))
-
-        return render_template('login.html')
-
-    if 'user' in session:
-        return render_template(url_for('dashboard')) # redirect for CPanel
-    else:
-        return render_template('auth/login.html') # Back to login
+    return render_template('auth/login.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        email = request.form.get('email')  # Get email from form
-        password = request.form.get('password')  # Get password from form
-        username = request.form.get('username')  # Get username from form
+    id_token = request.json.get('idToken')
+    username = request.json.get('username')
 
-        try:
-            # Create user with Firebase
-            user = auth.create_user(
-                email=email,
-                password=password,
-                display_name=username  # Optional: Store username as display name
-            )
-            flash('Registration successful! Please login.', 'success')
-            return redirect(url_for('login'))  # Redirect to login page after registration
-        except Exception as e:
-            flash('Registration failed. Please try again.', 'danger')
-            return redirect(url_for('register'))
+    try:
+        # Verify the ID token
+        decoded_token = auth.verify_id_token(id_token)
+        user_id = decoded_token['uid']
 
-    return render_template('auth/login.html')  # Render the same login.html since it contains the register form
+        # Store user data in your database (e.g., Firestore or Realtime Database)
+        # Example: db.collection('users').document(user_id).set({'username': username})
+
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
 
 @app.route('/logout')
 def logout():
@@ -94,13 +73,21 @@ def logout():
 def auth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # Check if user is authenticated
-        if 'user' not in session:
+        # Check if the user is logged in (e.g., via session or token)
+        if 'user_id' not in session:
+            flash('Login failed!', 'error')
             return redirect(url_for('login'))
 
-        else:
+        try:
+            # Verify the user exists in Firebase Authentication
+            user = auth.get_user(session['user_id'])
             return f(*args, **kwargs)
-
+        except auth.UserNotFoundError:
+            flash('Login failed! User not found.', 'error')
+            return redirect(url_for('login'))
+        except Exception as e:
+            flash(f'Login failed: {str(e)}', 'error')
+            return redirect(url_for('login'))
     return decorated_function
 
 @app.route('/dashboard')
@@ -118,3 +105,20 @@ def page_not_found(error):
 @app.errorhandler(500)
 def internal_server_error(error):
     return render_template('errors/500.html'), 500
+
+
+##### Config
+
+# Verify ID Token Endpoint
+@app.route('/verify_token', methods=['POST'])
+def verify_token():
+    id_token = request.json.get('idToken')
+    try:
+        # Verify the ID token
+        decoded_token = auth.verify_id_token(id_token)
+        user_id = decoded_token['uid']
+        # Store user ID in session
+        session['user_id'] = user_id
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
