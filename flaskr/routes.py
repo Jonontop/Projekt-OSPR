@@ -2,42 +2,54 @@ from functools import wraps
 
 from firebase_admin import auth
 from flask import redirect, render_template, make_response, session, url_for, request, flash, jsonify
-
-from flaskr import app, socketio
-from flaskr import get_firestore_client
+from flask_socketio import emit
+from flaskr import get_firestore_client, app, socketio
+import subprocess
 
 
 db = get_firestore_client()
 
 ##### Public Links
 
+"""
+Main Page
+"""
 @app.route('/')
 def index():
     return render_template('index.html') # HomePage
 
+
+"""
+About Us
+"""
 @app.route('/about')
 def about():
     return render_template('blog/about.html') # About Us
 
+
+"""
+Terms of Service
+"""
 @app.route('/terms')
 def terms():
     return render_template('blog/terms.html') # needs to be added
 
+
+"""
+Privacy Policy
+"""
 @app.route('/privacy')
 def privacy():
     return render_template('blog/privacy.html') # needs to be added
 
+
+"""
+Plans
+"""
 @app.route('/plans')
 def plans():
     return render_template('blog/plans.html') # needs to be added
 
-@app.route('/support')
-def support():
-    return render_template('blog/support.html')
-
-@app.route('/services')
-def services():
-    return render_template('blog/services.html') # needs to be added
 
 @app.route('/purchase/<plan>')
 def purchase(plan):
@@ -45,10 +57,26 @@ def purchase(plan):
     # For now, just redirect back to pricing page
     return f"Processing purchase for {plan} plan..."
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template('auth/login.html')
 
+"""
+Support
+"""
+
+@app.route('/support')
+def support():
+    return render_template('blog/support.html')
+
+
+"""
+Services
+"""
+@app.route('/services')
+def services():
+    return render_template('blog/services.html') # needs to be added
+
+"""
+Authentication
+"""
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -67,6 +95,9 @@ def register():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('auth/login.html')
 
 @app.route('/logout')
 def logout():
@@ -75,6 +106,15 @@ def logout():
     response.set_cookie('session', '', expires=0) # uniči session
     return response
 
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    pass
+
+
+@app.route('/console1', methods=['GET', 'POST'])
+def console1():
+    return render_template('cpanel/console.html')
 
 ##### Private Links
 
@@ -133,4 +173,14 @@ def verify_token():
         return jsonify({'success': False, 'error': str(e)})
 
 
-@socketio.on()
+@socketio.on('input')
+def handle_input(data):
+    command = data['command']
+    try:
+        # Execute the command
+        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, universal_newlines=True)
+    except subprocess.CalledProcessError as e:
+        result = e.output
+
+    # Emit the result back to the client
+    emit('output', {'output': result})

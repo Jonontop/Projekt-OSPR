@@ -3,32 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Terminal</title>
+    <title>Web Terminal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
 </head>
 <body>
-    <h1>Minecraft Server Terminal</h1>
-    <div id="terminal"></div>
-    <input type="text" id="input" placeholder="Enter command...">
+    <div id="terminal" style="height: 400px; width: 100%;"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <!-- xterm.js -->
+    <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.js"></script>
+
+    <!-- socket.io -->
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.4.1/dist/socket.io.min.js"></script>
+
     <script>
-        const socket = io();
+        window.onload = function() {
+            const socket = io.connect();
+            const term = new Terminal();
 
-        const terminal = document.getElementById('terminal');
-        const input = document.getElementById('input');
+            let commandBuffer = ''; // To store the full command
 
-        socket.on('terminal_output', function(data) {
-            terminal.innerHTML += data.data;
-            terminal.scrollTop = terminal.scrollHeight;
-        });
+            // Open the terminal in the #terminal div
+            term.open(document.getElementById('terminal'));
 
-        input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const command = input.value;
-                socket.emit('terminal_input', {data: command});
-                input.value = '';
-            }
-        });
+            // Handle terminal data (input)
+            term.onData(data => {
+                if (data === '\r') { // 'Enter' key sends the command
+                    socket.emit('input', { command: commandBuffer });
+                    commandBuffer = '';  // Clear the buffer after sending
+                    term.write('\r\n');  // Newline in terminal
+                } else if (data === '\u007F') {  // 'Backspace' handling
+                    if (commandBuffer.length > 0) {
+                        commandBuffer = commandBuffer.slice(0, -1);
+                        term.write('\b \b');  // Move cursor back, overwrite character
+                    }
+                } else {
+                    commandBuffer += data;  // Add character to buffer
+                    term.write(data);  // Echo the character on the terminal
+                }
+            });
+
+            // Handle output from server
+            socket.on('output', (data) => {
+                if (data.output) {
+                    // Normalize line breaks to prevent strange formatting
+                    let output = data.output.replace(/\n/g, '\r\n');
+                    term.write(output);  // Write the server's response to the terminal
+                } else {
+                    console.error('No output received from server');
+                }
+            });
+
+            term.write('Welcome to the web terminal! Type a command.\r\n');
+        };
     </script>
 </body>
 </html>
