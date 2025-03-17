@@ -6,28 +6,69 @@
     <title>{% block title %}Default Title{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <script src="{{ url_for('static' , filename='js/menu.js') }}"></script>
     {% block head %}{% endblock %}
 </head>
 <body>
 
-    <nav>
-        <div class="nav-left"></div>
-            <div class="nav-center">
-                <ul>
-                    <li>
-                        <a href="{{ url_for('services') }}" class="nav-button service">Services</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('support') }}" class="nav-button more">More</a>
-                    </li>
-                </ul>
-            </div>
+    <nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">Company</div>
+
+        <div class="mobile-toggle" id="mobileToggle">☰</div>
+
+        <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+                <a href="#" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dropdown-trigger" data-dropdown="more-dropdown">MORE ▼</a>
+                <div class="dropdown-content" id="more-dropdown">
+                    <a href="#" class="dropdown-item">Resources</a>
+                    <a href="#" class="dropdown-item">Blog</a>
+                    <a href="#" class="dropdown-item">Support</a>
+                    <a href="#" class="dropdown-item">Contact</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dropdown-trigger" data-dropdown="services-dropdown">SERVICES ▼</a>
+                <div class="dropdown-content wide-dropdown" id="services-dropdown">
+                    <div class="service-item">
+                        <div class="service-title">Consulting</div>
+                        <div class="service-description">Expert advice on business strategies and technology implementation.</div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-title">Development</div>
+                        <div class="service-description">Custom software solutions tailored to your business needs.</div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-title">Cloud Services</div>
+                        <div class="service-description">Scalable cloud infrastructure and migration services.</div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-title">Data Analytics</div>
+                        <div class="service-description">Turn your data into actionable business insights.</div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-title">Security</div>
+                        <div class="service-description">Protect your business with our comprehensive security solutions.</div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-title">Training</div>
+                        <div class="service-description">Empower your team with our professional training programs.</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
 
         <div class="nav-right">
-            <a href="{{ url_for('register') }}" class="nav-button free-hosting">Free Hosting</a>
-            <a href="{{ url_for('register') }}" class="nav-button paid-hosting">Paid Hosting</a>
+            <button class="nav-button">Login</button>
         </div>
-    </nav>
+    </div>
+</nav>
     {% block content %}
     {% endblock %}
 </body>
