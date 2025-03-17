@@ -24,7 +24,7 @@ Projekt za OSPR
     - [x]user's info
     - [x]user's general info
     - [x]Google Analitics
-- []Plans site - html
+- [x]Plans site - html
 - []currency acquering system - firebase, py
 
   Addon:
