@@ -3,9 +3,8 @@ from functools import wraps
 from firebase_admin import auth
 from flask import redirect, render_template, make_response, session, url_for, request, flash, jsonify
 
-from flaskr import app
+from flaskr import app, socketio
 from flaskr import get_firestore_client
-from firebase_config import firebaseConfig
 
 
 db = get_firestore_client()
@@ -132,3 +131,6 @@ def verify_token():
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+
+
+@socketio.on()
