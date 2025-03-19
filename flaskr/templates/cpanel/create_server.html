@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Create Server{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Create a New Server</h1>
+    
+    {% set server_type = request.args.get('type', 'minecraft') %}
+    
+    <div class="bg-white p-6 rounded-lg shadow">
+        <form method="POST" action="/create_server">
+            <input type="hidden" name="server_type" value="{{ server_type }}">
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="server_name">
+                    Server Name
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                       id="server_name" name="server_name" type="text" 
+                       placeholder="My {{ templates[server_type].name }}" required>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="ram">
+                    RAM (MB)
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                       id="ram" name="ram" type="number" 
+                       min="{{ templates[server_type].ram_min }}" 
+                       max="{{ templates[server_type].ram_max }}" 
+                       value="{{ templates[server_type].ram_default }}" required>
+                <p class="text-gray-600 text-sm mt-1">
+                    Min: {{ templates[server_type].ram_min }}MB, Max: {{ templates[server_type].ram_max }}MB
+                </p>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="port">
+                    Port
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                       id="port" name="port" type="number" 
+                       min="1025" max="65535" 
+                       value="{{ templates[server_type].port_default }}" required>
+                <p class="text-gray-600 text-sm mt-1">
+                    Choose a port between 1025 and 65535
+                </p>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <a href="/dashboard" class="text-blue-500 hover:text-blue-700">
+                    Cancel
+                </a>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                        type="submit">
+                    Create Server
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

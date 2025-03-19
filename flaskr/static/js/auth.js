@@ -56,7 +56,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         // Sign in with email and password
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        //console.log("User signed in successfully:", userCredential.user);
+        console.log("User signed in successfully:", userCredential.user);
 
         // Check if email is verified
         if (!user.emailVerified) {
@@ -66,7 +66,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 
         // Get the ID token
         const idToken = await user.getIdToken();
-        //console.log("ID token:", idToken);
+        console.log("ID token:", idToken);
 
         // Send ID token to backend for verification
         const response = await fetch('/verify_token', {
@@ -78,7 +78,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         });
 
         const data = await response.json();
-        //console.log("Backend response:", data);
+        console.log("Backend response:", data);
 
         if (data.success) {
             window.location.href = '/dashboard'; // Redirect to cpanel

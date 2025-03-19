@@ -4,6 +4,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask import Flask
 from flask_socketio import SocketIO
+from flaskr.models import load_server_templates
 
 # Defining the Flask app
 app = Flask(__name__)
@@ -32,6 +33,7 @@ db = firestore.client()
 ## FireBase - Client Function
 def get_firestore_client():
     return db
+
 
 
 

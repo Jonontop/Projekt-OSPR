@@ -1,0 +1,42 @@
+{
+  "minecraft": {
+    "name": "Minecraft Server",
+    "ram_min": 1024,
+    "ram_default": 2048,
+    "ram_max": 8192,
+    "port_default": 25565,
+    "startup_script": "start_minecraft.sh",
+    "config_files": ["server.properties", "eula.txt"],
+    "base_folder": "minecraft_servers"
+  },
+  "vps_ubuntu": {
+    "name": "Ubuntu VPS",
+    "ram_min": 512,
+    "ram_default": 1024,
+    "ram_max": 4096,
+    "port_default": 22,
+    "startup_script": "start_vps.sh",
+    "config_files": ["network.conf", "user_data.yml"],
+    "base_folder": "vps_servers"
+  },
+  "game_server_cs2": {
+    "name": "Counter-Strike 2 Server",
+    "ram_min": 2048,
+    "ram_default": 4096,
+    "ram_max": 8192,
+    "port_default": 27015,
+    "startup_script": "start_cs2.sh",
+    "config_files": ["server.cfg", "gamemode.cfg", "admins.cfg"],
+    "base_folder": "cs2_servers"
+  },
+  "web_server": {
+    "name": "Web Hosting",
+    "ram_min": 256,
+    "ram_default": 512,
+    "ram_max": 2048,
+    "port_default": 80,
+    "startup_script": "start_nginx.sh",
+    "config_files": ["nginx.conf", "php.ini"],
+    "base_folder": "web_servers"
+  }
+}
