@@ -1,5 +1,5 @@
 import { auth, googleProvider } from "./firebase-config.js";
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
 console.log("auth.js loaded successfully!");
 
@@ -138,6 +138,23 @@ document.getElementById('google-sign-in-button').addEventListener('click', async
     } catch (error) {
         console.error('Error:', error);
         alert('Google Sign-In failed!');
+    }
+});
+
+
+// Reset password function
+document.getElementById('reset-password-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('reset-email').value;
+
+    try {
+        // Send password reset email
+        await sendPasswordResetEmail(auth, email);
+        alert("A password reset email has been sent to your email address.");
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to send password reset email.');
     }
 });
 
