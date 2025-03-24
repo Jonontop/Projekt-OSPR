@@ -1,13 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <script src="{{ url_for('static' , filename='js/menu.js') }}"></script>
+    {% block head %}{% endblock %}
 </head>
 <body>
 
+    <nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">Company</div>
+
+        <div class="mobile-toggle" id="mobileToggle">☰</div>
+
+        <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+                <a href="{{ url_for('index') }}" class="nav-link">Servers</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('about') }}" class="nav-link">Buy</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('about') }}" class="nav-link">Plans</a>
+            </li>
+
+        </ul>
+
+        <div class="nav-right">
+            <button class="nav-button"><a href="{{ url_for('logout') }}" style="text-decoration: none; color: white;">Logout</a></button>
+        </div>
+    </div>
+</nav>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>
