@@ -9,3 +9,6 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)  # Adjust session e
 app.config['SESSION_REFRESH_EACH_REQUEST'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Can be 'Strict', 'Lax', or 'None'
 app.secret_key = "iojbgisdhjfbisdfljkhviojdbvkfdobgijhndvbiuzhbsdcv"
+# Google OAuth Credentials
+GOOGLE_CLIENT_ID = "895371472700-so2hqv67c4fvipff2f8r4strcrmmg1ao.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET = "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"
