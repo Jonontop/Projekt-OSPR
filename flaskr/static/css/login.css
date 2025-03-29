@@ -1,61 +1,48 @@
 /* Color Variables */
 @import url('root.css');
 
-
-/* Basic Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: var(--font-family);
-  background-color: var(--background-color);
-  color: var(--text-color);
-}
-
 /* Forms */
 .container {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 50px; /* več prostora na vrhu */
 }
 
 .form-container {
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  padding: 30px; /* več notranjega prostora */
+  border-radius: 10px;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+  width: 320px;
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* več prostora pod naslovom */
 }
 
 label {
-  font-size: 14px;
-  margin-bottom: 5px;
+  font-size: 15px;
+  margin-bottom: 8px; /* več prostora pod labelami */
   display: block;
 }
 
 input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
+  padding: 12px;
+  margin-bottom: 20px; /* več prostora med inputi */
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
+  margin-top: 10px; /* več prostora nad gumbom */
   background-color: var(--button-color);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -65,6 +52,7 @@ button:hover {
 
 p {
   text-align: center;
+  margin-top: 15px; /* več prostora nad besedilom */
 }
 
 a {
@@ -72,12 +60,9 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
+
 
 /* Hide the Register Form initially */
 .register-form {
   display: none;
 }
-
