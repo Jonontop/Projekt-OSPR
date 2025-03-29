@@ -1,10 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Support
-{% endblock %}
+{% block title %}Support{% endblock %}
 
 {% block content %}
-    <h1>Homepage</h1>
-    <p>Welcome to the homepage</p>
+<section class="content-section">
+    <h2>Support</h2>
+
+    <h3>Kako vam lahko pomagamo?</h3>
+    <p>Dobrodošli na naši strani za podporo. Naš cilj je, da čim hitreje in učinkoviteje rešimo vaša vprašanja in težave.</p>
+
+    <h3>Pogosta vprašanja (FAQ)</h3>
+    <div class="features-grid">
+        <div class="feature">
+            <h4>Kako lahko ustvarim nov račun?</h4>
+            <p class="short-description">Kliknite na gumb "Prijava" na zgornjem desnem delu strani in sledite navodilom.</p>
+        </div>
+        <div class="feature">
+            <h4>Pozabil/a sem geslo. Kaj lahko storim?</h4>
+            <p class="short-description">Uporabite funkcijo za ponastavitev gesla na strani za prijavo.</p>
+        </div>
+        <div class="feature">
+            <h4>Kje lahko spremenim podatke o svojem računu?</h4>
+            <p class="short-description">Prijavite se v račun in obiščite razdelek "Moj račun".</p>
+        </div>
+    </div>
+
+    <h3>Kontaktirajte podporo</h3>
+    <p>
+        E-pošta: <a href="mailto:mailzapodporo@gmail.com">mailzapodporo@gmail.com</a><br> 
+        Telefon: +386 1 234 56 78<br>
+        Delovni čas: ponedeljek - petek, 8:00 - 16:00
+    </p>
+
+    <h3>Vodniki in dokumentacija</h3>
+    <p>
+        Za podrobnejše informacije in navodila obiščite našo 
+        <a href="#">dokumentacijo</a>, kjer najdete obsežne priročnike in vodnike za uporabo naših storitev.
+    </p>
+</section>
 {% endblock %}
