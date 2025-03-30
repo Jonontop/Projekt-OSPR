@@ -127,7 +127,7 @@
       }
     }
   },
-    "voice_server": {
+  "voice_server": {
         "name": "Voice Server",
         "ram_min": 512,
         "ram_default": 1024,

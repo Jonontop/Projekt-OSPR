@@ -2,8 +2,9 @@ from functools import wraps
 import firebase_admin
 from firebase_admin import auth, firestore, credentials
 from flask import redirect, render_template, make_response, session, url_for, request, flash, jsonify
+from jinja2 import TemplateNotFound
 from flask_socketio import emit
-from flaskr import get_firestore_client, app, socketio
+from flaskr import get_firestore_client, app, socketio, client
 from flaskr.models import TokenVerify, load_server_templates, create_server_instance, auth_required, load_server_templates
 import subprocess
 import uuid
@@ -58,15 +59,11 @@ Services
 """
 
 # Example services data
-# Load services from JSON file
-def load_services():
-    with open('flaskr/templates.json') as f:
-        return json.load(f)
 
 
 @app.route('/services/<name>', methods=['GET'])
 def get_service(name):
-    services = load_services()
+    services = SERVER_TEMPLATES
     service = services.get(name)
 
     if name in services:
@@ -134,52 +131,32 @@ def cpanel():
 @app.route('/create_server', methods=['GET', 'POST'])
 @auth_required
 def create_server():
-    if request.method == 'POST':
-        user_id = session['user_id']
-        server_type = request.form.get('server_type')
-        # print(user_id, server_type) # Testing
+    if not request.method == 'POST':
+        return render_template('cpanel/create_server.html', templates=SERVER_TEMPLATES)
 
-        # Validate server type exists in templates
-        if server_type not in SERVER_TEMPLATES:
-            return render_template('create_server.html',
-                                   templates=SERVER_TEMPLATES,
-                                   error="Invalid server type selected")
 
-        server_name = request.form.get('server_name')
-        ram = int(request.form.get('ram', SERVER_TEMPLATES[server_type]['ram_default']))
-        port = int(request.form.get('port', SERVER_TEMPLATES[server_type]['port_default']))
+    # Get the necessary data (e.g., server name, game type) from the request
+    server_name = request.form.get('server_name')
+    game_type = request.form.get('server_template')
 
-        # Generate a unique server ID
-        server_id = str(uuid.uuid4())
+    # Select the Docker image based on the game type
+    if game_type == 'minecraft':
+        pass
+        docker_image = 'itzg/minecraft-server:latest'  # Minecraft image
+    else:
+        return jsonify({"error": "Unsupported game type"}), 400
 
-        # Create server configuration
-        server_config = {
-            'id': server_id,
-            'type': server_type,
-            'name': server_name,
-            'user_id': user_id,
-            'ram': ram,
-            'port': port,
-            'status': 'creating',
-            'created_at': firestore.SERVER_TIMESTAMP,
-            'ip_address': '127.0.0.1',  # This would be assigned dynamically in production
-        }
-
-        # Save to Firebase
-        db.collection('servers').document(server_id).set(server_config)
-
-        # Queue server creation task (in a real app, this would be handled by a background worker)
-        # For demo, we'll just simulate the server creation
-        create_server_instance(server_id, server_type, server_config)
-
-        return redirect(url_for('server_details', server_id=server_id))
-
-    # Get the server type from query parameter if provided
-    server_type = request.args.get('type')
-    if server_type and server_type not in SERVER_TEMPLATES:
-        server_type = next(iter(SERVER_TEMPLATES), None)  # Default to first template
-
-    return render_template('cpanel/create_server.html', templates=SERVER_TEMPLATES, default_type=server_type)
+    try:
+        # Run the container with the appropriate Docker image
+        container = client.containers.run(
+            docker_image,
+            name=server_name,
+            detach=True,  # Run in detached mode
+            ports={'25565/tcp': None},  # Expose necessary ports for the game
+        )
+        return jsonify({"message": f"Server '{server_name}' created successfully!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Needs to be fixed
 @app.route('/server/<server_id>')
@@ -293,6 +270,7 @@ def manage_templates():
 ##### Errors
 
 @app.errorhandler(404)
+@app.errorhandler(TemplateNotFound)
 def page_not_found(error):
     return render_template('errors/404.html'), 404
 

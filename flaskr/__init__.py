@@ -5,6 +5,10 @@ from firebase_admin import credentials, firestore
 from flask import Flask
 from flask_socketio import SocketIO
 from flaskr.models import load_server_templates
+import docker
+
+# Load Docker client
+client = docker.from_env()
 
 # Defining the Flask app
 app = Flask(__name__)
