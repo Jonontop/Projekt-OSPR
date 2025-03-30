@@ -28,29 +28,11 @@ def index():
 
 
 """
-About Us
+All routes in /Blog/
 """
-# Needs to be updated
-@app.route('/about')
-def about():
-    return render_template('blog/about.html') # About Us
-
-
-"""
-Terms of Service
-"""
-@app.route('/terms')
-def terms():
-    return render_template('blog/terms.html') # needs to be added
-
-
-"""
-Privacy Policy
-"""
-# Needs to be updated
-@app.route('/privacy')
-def privacy():
-    return render_template('blog/privacy.html') # needs to be added
+@app.route('/<path>')
+def blog(path):
+    return render_template(f'blog/{path}.html') # needs to be added
 
 
 """
@@ -69,19 +51,26 @@ def purchase(plan):
 
 
 """
-Support
-"""
-@app.route('/support')
-def support():
-    return render_template('blog/support.html')
-
-
-"""
 Services
 """
-@app.route('/services')
-def services():
-    return render_template('blog/services.html') # needs to be added
+
+# Example services data
+# Load services from JSON file
+def load_services():
+    with open('flaskr/services.json') as f:
+        return json.load(f)
+
+
+@app.route('/services/<name>', methods=['GET'])
+def get_service(name):
+    services = load_services()
+    service = services.get(name)
+
+    if name in services:
+        return render_template(f'blog/about_service.html', services=service)  # Render corresponding HTML file
+    else:
+        return render_template('errors/404.html'), 404  # Render 404 page if service not found
+
 
 """
 Authentication

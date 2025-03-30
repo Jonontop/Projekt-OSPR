@@ -1,0 +1,93 @@
+{
+    "minecraft": {
+        "name": "Minecraft Server",
+        "description": "A popular sandbox game server. <br> Minecraft is a game about placing blocks and going on adventures. Create, explore, survive, repeat.",
+        "status": "active",
+        "plans": {
+            "basic": {
+                "name": "Basic Plan",
+                "ram": 2048,
+                "cpu": 1,
+                "disk": 20
+            },
+            "standard": {
+                "name": "Standard Plan",
+                "ram": 4096,
+                "cpu": 2,
+                "disk": 50
+            },
+            "premium": {
+                "name": "Premium Plan",
+                "ram": 8192,
+                "cpu": 4,
+                "disk": 100
+            }
+        }
+    },
+    "teraria": {
+        "name": "Terraria Server",
+        "description": "A 2D sandbox game server. <br> Dig, fight, explore, build! Nothing is impossible in this action-packed adventure game. The world is your canvas and the ground itself is your paint.",
+        "status": "inactive",
+        "plans": {
+            "basic": {
+                "ram": 1024,
+                "cpu": 1,
+                "disk": 10
+            },
+            "standard": {
+                "ram": 2048,
+                "cpu": 2,
+                "disk": 20
+            },
+            "premium": {
+                "ram": 4096,
+                "cpu": 4,
+                "disk": 50
+            }
+        }
+    },
+    "webhosting": {
+        "name": "Web Hosting",
+        "description": "A web hosting service. <br> Host your website with us and enjoy fast and reliable service.",
+        "status": "active",
+        "plans": {
+            "basic": {
+                "ram": 512,
+                "cpu": 1,
+                "disk": 10
+            },
+            "standard": {
+                "ram": 1024,
+                "cpu": 2,
+                "disk": 20
+            },
+            "premium": {
+                "ram": 2048,
+                "cpu": 4,
+                "disk": 50
+            }
+        }
+    },
+    "codehosting": {
+        "name": "Code Hosting",
+        "description": "A code hosting service. <br> Host your code repositories with us and enjoy fast and reliable service.",
+        "status": "active",
+        "plans": {
+            "basic": {
+                "ram": 512,
+                "cpu": 1,
+                "disk": 10
+            },
+            "standard": {
+                "ram": 1024,
+                "cpu": 2,
+                "disk": 20
+            },
+            "premium": {
+                "ram": 2048,
+                "cpu": 4,
+                "disk": 50
+            }
+        }
+    }
+}

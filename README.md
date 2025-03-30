@@ -13,7 +13,7 @@ Projekt za OSPR
     - []about - html
     - [x]TOS - html
     - []PP - html
-- []Error - html
+- [x]Error - html
     - [x]404 - html
     - [x]500 - html
 - [x]Login - flask login

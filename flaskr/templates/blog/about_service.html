@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ services.name }}{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>{{ services.name }}</h1>
+        <p id="description"></p>
+    </div>
+
+    <div class="container">
+        <h2>Server Templates</h2>
+        <ul>
+            {% for service_name, service in services.plans.items() %}
+                <li>
+                    <h3>{{ service.name }}</h3>
+                    <p>RAM: {{ service.ram }} MB</p>
+                    <p>Port: {{ service.disk }} GB</p>
+                    <a href="{{ url_for('login') }}">Create Server</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+   <script>
+        // Pass the Jinja2 JSON data to JavaScript
+        const servicesData = {{ services|tojson }};
+
+        document.getElementById("description").innerHTML = servicesData.description;
+
+    </script>
+
+{% endblock %}
+
+
