@@ -6,33 +6,148 @@
 
 {% block content %}
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
+<style>
+    :root {
+        --primary-color: #2e86de;
+        --tertiary-color: #ecf2f9;
+        --text-color: #333;
+        --light-text-color: #666;
+        --font-weight: 700;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.7;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f9;
+        color: var(--text-color);
+    }
+
+    header {
+        background-color: #fff;
+        padding: 80px 20px 40px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+
+    header p {
+        font-size: 1.2rem;
+        color: var(--light-text-color);
+    }
+
+    section {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 0 20px;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    section:nth-of-type(1) { animation-delay: 0.1s; }
+    section:nth-of-type(2) { animation-delay: 0.2s; }
+    section:nth-of-type(3) { animation-delay: 0.3s; }
+    section:nth-of-type(4) { animation-delay: 0.4s; }
+    section:nth-of-type(5) { animation-delay: 0.5s; }
+    section:nth-of-type(6) { animation-delay: 0.6s; }
+
+    section h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+        font-weight: var(--font-weight);
+        padding: 0;
+        margin-left: 0;
+        border: none;
+    }
+
+    section p, section li {
+        font-size: 1.1rem;
+        margin-bottom: 16px;
+        color: var(--text-color);
+    }
+
+    ul {
+        padding-left: 30px;
+        list-style-type: disc;
+    }
+
+    .team-member {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .team-member:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .team-member img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+    }
+
+    .team-member div {
+        flex: 1;
+    }
+
+    .team-member h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: var(--primary-color);
+    }
+
+    .team-member p:first-of-type {
+        color: var(--light-text-color);
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-        h1, h2 {
-            color: #333;
-        }
-        p {
-            margin: 10px 0;
-        }
+    }
+
+    @media (max-width: 768px) {
         .team-member {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
+            flex-direction: column;
+            text-align: center;
         }
+
         .team-member img {
-            border-radius: 50%;
-            margin-right: 20px;
-            width: 100px;
-            height: 100px;
+            margin-bottom: 15px;
         }
-        .team-member div {
-            flex: 1;
+
+        header h1 {
+            font-size: 2.2rem;
         }
-    </style>
+
+        section h2 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+
 
 
     <header>

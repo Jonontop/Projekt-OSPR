@@ -3,13 +3,114 @@
 {% block title %}Support{% endblock %}
 
 {% block content %}
+<style>
+    :root {
+        --primary-color: #2e86de;
+        --tertiary-color: #ecf2f9;
+        --text-color: #333;
+        --light-text-color: #666;
+        --font-weight: 700;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.7;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f9;
+        color: var(--text-color);
+    }
+
+    .content-section {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 0 20px;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease forwards;
+        animation-delay: 0.1s;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: 1.6rem;
+        color: var(--primary-color);
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+
+    h4 {
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+        color: var(--text-color);
+    }
+
+    p, .short-description, li {
+        font-size: 1.1rem;
+        color: var(--text-color);
+        margin-bottom: 16px;
+    }
+
+    a {
+        color: var(--primary-color);
+        text-decoration: underline;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .feature {
+        background-color: #fff;
+        padding: 20px 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+
 <section class="content-section">
     <h2>Support</h2>
 
     <h3>Kako vam lahko pomagamo?</h3>
     <p>Dobrodošli na naši strani za podporo. Naš cilj je, da čim hitreje in učinkoviteje rešimo vaša vprašanja in težave.</p>
 
-    <h3>Pogosta vprašanja </h3>
+    <h3>Pogosta vprašanja (FAQ)</h3>
     <div class="features-grid">
         <div class="feature">
             <h4>Kako lahko ustvarim nov račun?</h4>
@@ -27,14 +128,14 @@
 
     <h3>Kontaktirajte podporo</h3>
     <p>
-        E-pošta: <a href="mailto:mailzapodporo@gmail.com">mailzapodporo@gmail.com</a><br> 
+        E-pošta: <a href="mailto:mailzapodporo@gmail.com">mailzapodporo@gmail.com</a><br>
         Telefon: +386 1 234 56 78<br>
         Delovni čas: ponedeljek - petek, 8:00 - 16:00
     </p>
 
     <h3>Vodniki in dokumentacija</h3>
     <p>
-        Za podrobnejše informacije in navodila obiščite našo 
+        Za podrobnejše informacije in navodila obiščite našo
         <a href="#">dokumentacijo</a>, kjer najdete obsežne priročnike in vodnike za uporabo naših storitev.
     </p>
 </section>
