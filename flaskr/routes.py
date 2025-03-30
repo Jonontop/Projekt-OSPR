@@ -118,6 +118,7 @@ def forgot_password():
 @auth_required
 def cpanel():
     # Get user's servers
+
     user_id = session['user_id']
     server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
 

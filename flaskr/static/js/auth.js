@@ -142,20 +142,6 @@ document.getElementById('google-sign-in-button').addEventListener('click', async
 });
 
 
-// Reset password function
-document.getElementById('reset-password-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
 
-    const email = document.getElementById('reset-email').value;
-
-    try {
-        // Send password reset email
-        await sendPasswordResetEmail(auth, email);
-        alert("A password reset email has been sent to your email address.");
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Failed to send password reset email.');
-    }
-});
 
 
