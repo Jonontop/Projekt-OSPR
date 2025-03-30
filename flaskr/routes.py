@@ -30,9 +30,12 @@ def index():
 """
 All routes in /Blog/
 """
-@app.route('/<path>')
+@app.route('/<path:path>')
 def blog(path):
-    return render_template(f'blog/{path}.html') # needs to be added
+    if path != 'about_service.html':
+        return render_template(f'blog/{path}.html') # needs to be added
+    else:
+        return render_template('blog/about_service.html')
 
 
 """
@@ -57,7 +60,7 @@ Services
 # Example services data
 # Load services from JSON file
 def load_services():
-    with open('flaskr/services.json') as f:
+    with open('flaskr/templates.json') as f:
         return json.load(f)
 
 

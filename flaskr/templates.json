@@ -7,7 +7,29 @@
     "port_default": 25565,
     "startup_script": "start_minecraft.sh",
     "config_files": ["server.properties", "eula.txt"],
-    "base_folder": "minecraft_servers"
+    "base_folder": "minecraft_servers",
+    "description": "A popular sandbox game server. <br> Minecraft is a game about placing blocks and going on adventures. Create, explore, survive, repeat.",
+    "status": "active",
+    "plans": {
+      "basic": {
+        "name": "Basic Plan",
+        "ram": 2048,
+        "cpu": 1,
+        "disk": 20
+      },
+      "standard": {
+        "name": "Standard Plan",
+        "ram": 4096,
+        "cpu": 2,
+        "disk": 50
+      },
+      "premium": {
+        "name": "Premium Plan",
+        "ram": 8192,
+        "cpu": 4,
+        "disk": 100
+      }
+    }
   },
   "vps_ubuntu": {
     "name": "Ubuntu VPS",
@@ -17,7 +39,29 @@
     "port_default": 22,
     "startup_script": "start_vps.sh",
     "config_files": ["network.conf", "user_data.yml"],
-    "base_folder": "vps_servers"
+    "base_folder": "vps_servers",
+    "description": "A virtual private server running Ubuntu. <br> Get full control over your server with root access.",
+    "status": "active",
+    "plans": {
+      "basic": {
+        "name": "Basic Plan",
+        "ram": 1024,
+        "cpu": 1,
+        "disk": 20
+      },
+      "standard": {
+        "name": "Standard Plan",
+        "ram": 2048,
+        "cpu": 2,
+        "disk": 50
+      },
+      "premium": {
+        "name": "Premium Plan",
+        "ram": 4096,
+        "cpu": 4,
+        "disk": 100
+      }
+    }
   },
   "game_server_cs2": {
     "name": "Counter-Strike 2 Server",
@@ -27,7 +71,29 @@
     "port_default": 27015,
     "startup_script": "start_cs2.sh",
     "config_files": ["server.cfg", "gamemode.cfg", "admins.cfg"],
-    "base_folder": "cs2_servers"
+    "base_folder": "cs2_servers",
+    "description": "A first-person shooter game server. <br> Counter-Strike 2 is a multiplayer tactical shooter game. Team up with friends and take on the world.",
+    "status": "active",
+    "plans": {
+      "basic": {
+        "name": "Basic Plan",
+        "ram": 4096,
+        "cpu": 1,
+        "disk": 20
+      },
+      "standard": {
+        "name": "Standard Plan",
+        "ram": 8192,
+        "cpu": 2,
+        "disk": 50
+      },
+      "premium": {
+        "name": "Premium Plan",
+        "ram": 16384,
+        "cpu": 4,
+        "disk": 100
+      }
+    }
   },
   "web_server": {
     "name": "Web Hosting",
@@ -37,6 +103,60 @@
     "port_default": 80,
     "startup_script": "start_nginx.sh",
     "config_files": ["nginx.conf", "php.ini"],
-    "base_folder": "web_servers"
-  }
+    "base_folder": "web_servers",
+    "description": "A web hosting service. <br> Host your website with us and enjoy fast and reliable service.",
+    "status": "active",
+    "plans": {
+      "basic": {
+        "name": "Basic Plan",
+        "ram": 512,
+        "cpu": 1,
+        "disk": 10
+      },
+      "standard": {
+        "name": "Standard Plan",
+        "ram": 1024,
+        "cpu": 2,
+        "disk": 20
+      },
+      "premium": {
+        "name": "Premium Plan",
+        "ram": 2048,
+        "cpu": 4,
+        "disk": 50
+      }
+    }
+  },
+    "voice_server": {
+        "name": "Voice Server",
+        "ram_min": 512,
+        "ram_default": 1024,
+        "ram_max": 4096,
+        "port_default": 9987,
+        "startup_script": "start_ts3.sh",
+        "config_files": ["ts3server.ini", "ts3server.sql"],
+        "base_folder": "voice_servers",
+        "description": "A voice communication server. <br> Connect with friends and teammates using our voice server.",
+        "status": "active",
+        "plans": {
+        "basic": {
+            "name": "Basic Plan",
+            "ram": 1024,
+            "cpu": 1,
+            "disk": 10
+        },
+        "standard": {
+            "name": "Standard Plan",
+            "ram": 2048,
+            "cpu": 2,
+            "disk": 20
+        },
+        "premium": {
+            "name": "Premium Plan",
+            "ram": 4096,
+            "cpu": 4,
+            "disk": 50
+        }
+        }
+    }
 }
