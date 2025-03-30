@@ -21,6 +21,7 @@ SERVER_TEMPLATES = load_server_templates()
 """
 Main Page
 """
+# Needs to be updated
 @app.route('/')
 def index():
     return render_template('index.html') # HomePage
@@ -29,6 +30,7 @@ def index():
 """
 About Us
 """
+# Needs to be updated
 @app.route('/about')
 def about():
     return render_template('blog/about.html') # About Us
@@ -45,6 +47,7 @@ def terms():
 """
 Privacy Policy
 """
+# Needs to be updated
 @app.route('/privacy')
 def privacy():
     return render_template('blog/privacy.html') # needs to be added
