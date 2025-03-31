@@ -132,21 +132,26 @@ def cpanel():
 @auth_required
 def create_server():
     locations = ["Slovenija, Ljubljana"]
-    print(SERVER_TEMPLATES)
     if not request.method == 'POST':
         return render_template('cpanel/create_server.html', nests=SERVER_TEMPLATES, locations=locations)
 
 
     # Get the necessary data (e.g., server name, game type) from the request
     server_name = request.form.get('server_name')
-    game_type = request.form.get('server_template')
+    server_description = request.form.get('server_description')
+    server_cpu = request.form.get('server_cpu')
+    server_ram = request.form.get('server_ram')
+    server_storage = request.form.get('server_storage')
+    server_ports = request.form.get('server_ports')
+    server_databases = request.form.get('server_databases')
+    server_backup = request.form.get('server_backup')
+    server_location = request.form.get('server_location')
+    server_nest = request.form.get('server_nest')
+    server_egg = request.form.get('server_egg')
 
-    # Select the Docker image based on the game type
-    if game_type == 'minecraft':
-        pass
-        docker_image = 'itzg/minecraft-server:latest'  # Minecraft image
-    else:
-        return jsonify({"error": "Unsupported game type"}), 400
+
+
+    docker_image=SERVER_TEMPLATES[server_nest]['eggs'][server_egg]['docker_image']
 
     try:
         # Run the container with the appropriate Docker image
@@ -155,8 +160,23 @@ def create_server():
             name=server_name,
             detach=True,  # Run in detached mode
             ports={'25565/tcp': None},  # Expose necessary ports for the game
+            environment={
+                'EULA': 'TRUE',  # Example environment variable
+                'SERVER_NAME': server_name,
+                "CPU": server_cpu,
+                "STORAGE": server_storage,
+
+            },
+            mem_limit=f"{server_ram}M",  # Set memory limit
+
+
         )
-        return jsonify({"message": f"Server '{server_name}' created successfully!"}), 200
+
+        # Fetch and print logs
+        logs = container.logs().decode("utf-8")
+        print(f"Container Logs:\n{logs}")
+
+        return render_template('cpanel/server_details.html', server=container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

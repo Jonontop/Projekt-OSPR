@@ -33,21 +33,38 @@
     "eggs": {
       "spigot": {
         "name": "Spigot",
+        "docker_image": "itzg/minecraft-server",
         "startup_script": "start_spigot.sh",
         "config_files": ["spigot.yml", "bukkit.yml"],
         "description": "A high-performance fork of the Minecraft server software. <br> Spigot is designed to be faster and more efficient than the vanilla server."
       },
       "paper": {
         "name": "Paper",
+        "docker_image": "itzg/minecraft-server",
         "startup_script": "start_paper.sh",
         "config_files": ["paper.yml", "bukkit.yml"],
         "description": "A high-performance fork of Spigot. <br> Paper offers more features and optimizations for your Minecraft server."
       },
         "forge": {
             "name": "Forge",
+            "docker_image": "itzg/minecraft-server",
             "startup_script": "start_forge.sh",
             "config_files": ["forge.cfg", "mods"],
             "description": "A modding platform for Minecraft. <br> Forge allows you to install and run mods on your Minecraft server."
+        },
+        "fabric": {
+            "name": "Fabric",
+            "docker_image": "itzg/minecraft-server",
+            "startup_script": "start_fabric.sh",
+            "config_files": ["fabric.yml", "mods"],
+            "description": "A lightweight modding toolchain for Minecraft. <br> Fabric is designed to be fast and easy to use."
+        },
+        "vanilla": {
+            "name": "Vanilla",
+            "docker_image": "itzg/minecraft-server",
+            "startup_script": "start_vanilla.sh",
+            "config_files": ["server.properties", "eula.txt"],
+            "description": "The original Minecraft server software. <br> Vanilla is the unmodified version of Minecraft."
         }
     }
   },
@@ -85,12 +102,14 @@
     "eggs": {
       "lamp": {
         "name": "LAMP Stack",
+        "docker_image": "lamp/lamp",
         "startup_script": "start_lamp.sh",
         "config_files": ["apache2.conf", "mysql.cnf"],
         "description": "A software stack for web development. <br> LAMP stands for Linux, Apache, MySQL, and PHP."
       },
       "docker": {
         "name": "Docker",
+        "docker_image": "docker/docker",
         "startup_script": "start_docker.sh",
         "config_files": ["docker-compose.yml", ".env"],
         "description": "A platform for developing, shipping, and running applications in containers. <br> Docker allows you to package your applications with all their dependencies."
@@ -131,12 +150,14 @@
     "eggs": {
       "wordpress": {
         "name": "WordPress",
+        "docker_image": "wordpress/wordpress",
         "startup_script": "start_wordpress.sh",
         "config_files": ["wp-config.php", ".htaccess"],
         "description": "A popular content management system. <br> Create and manage your website with WordPress."
       },
       "laravel": {
         "name": "Laravel",
+        "docker_image": "laravel/laravel",
         "startup_script": "start_laravel.sh",
         "config_files": ["laravel.env", "routes/web.php"],
         "description": "A PHP framework for web artisans. <br> Build modern web applications with Laravel."
@@ -173,6 +194,22 @@
             "cpu": 4,
             "disk": 50
         }
+        },
+        "eggs": {
+            "teamspeak": {
+                "name": "TeamSpeak",
+                "docker_image": "teamspeak/teamspeak",
+                "startup_script": "start_teamspeak.sh",
+                "config_files": ["ts3server.ini", "ts3server.sql"],
+                "description": "A voice communication software. <br> TeamSpeak is designed for high-performance voice communication."
+            },
+            "mumble": {
+                "name": "Mumble",
+                "docker_image": "mumble/mumble",
+                "startup_script": "start_mumble.sh",
+                "config_files": ["murmur.ini", "murmur.sqlite"],
+                "description": "An open-source voice chat application. <br> Mumble is designed for low-latency and high-quality audio."
+            }
         }
     }
 }
