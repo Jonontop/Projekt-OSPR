@@ -31,39 +31,39 @@
             <li class="nav-item">
                 <a class="nav-link dropdown-trigger" data-dropdown="more-dropdown">MORE ▼</a>
                 <div class="dropdown-content" id="more-dropdown">
-                    <a href="{{ url_for('blog', path=about) }}" class="dropdown-item">About</a>
-                    <a href="{{ url_for('blog', path=support) }}" class="dropdown-item">Support</a>
-                    <a href="{{ url_for('blog', path=terms) }}" class="dropdown-item">TOS</a>
-                    <a href="{{ url_for('blog', path=privacy) }}" class="dropdown-item">Privacy policy</a>
+                    <a href="{{ url_for('blog', path='about') }}" class="dropdown-item">About</a>
+                    <a href="{{ url_for('blog', path='support') }}" class="dropdown-item">Support</a>
+                    <a href="{{ url_for('blog', path='terms') }}" class="dropdown-item">TOS</a>
+                    <a href="{{ url_for('blog', path='privacy') }}" class="dropdown-item">Privacy policy</a>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link dropdown-trigger" data-dropdown="services-dropdown">SERVICES ▼</a>
                 <div class="dropdown-content wide-dropdown" id="services-dropdown">
+                    <a href="{{ url_for('get_service', name='minecraft') }}" style="text-decoration: none;">
                     <div class="service-item">
-                        <div class="service-title">Consulting</div>
+                        <div class="service-title">Minecraft</div>
                         <div class="service-description">Expert advice on business strategies and technology implementation.</div>
                     </div>
+                    </a>
+                    <a href="{{ url_for('get_service', name='vps_ubuntu') }}" style="text-decoration: none;">
                     <div class="service-item">
-                        <div class="service-title">Development</div>
+                        <div class="service-title">VPS</div>
                         <div class="service-description">Custom software solutions tailored to your business needs.</div>
                     </div>
+                    </a>
+                    <a href="{{ url_for('get_service', name='web_server') }}" style="text-decoration: none;">
                     <div class="service-item">
-                        <div class="service-title">Cloud Services</div>
+                        <div class="service-title">Web Server</div>
                         <div class="service-description">Scalable cloud infrastructure and migration services.</div>
                     </div>
+                    </a>
+                    <a href="{{ url_for('get_service', name='voice_server') }}" style="text-decoration: none;">
                     <div class="service-item">
-                        <div class="service-title">Data Analytics</div>
+                        <div class="service-title">Voice Server</div>
                         <div class="service-description">Turn your data into actionable business insights.</div>
                     </div>
-                    <div class="service-item">
-                        <div class="service-title">Security</div>
-                        <div class="service-description">Protect your business with our comprehensive security solutions.</div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-title">Training</div>
-                        <div class="service-description">Empower your team with our professional training programs.</div>
-                    </div>
+                    </a>
                 </div>
             </li>
         </ul>
