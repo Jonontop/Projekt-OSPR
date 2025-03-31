@@ -13,17 +13,86 @@
   <div class="container">
     <h1>Create Server</h1>
     <form id="create-server-form" action="{{ url_for('create_server') }}" method="POST">
+
+      <h2>Basic Details</h2>
+      <h6>Basic Details of your server</h6>
+      <br>
       <label for="server-name">Server Name:</label>
-      <input type="text" id="server-name" name="server_name" required>
-      <label for="server-template">Server Template:</label>
-      <select id="server-template" name="server_template" required>
-        {% for template in templates %}
-          <option value="{{ template }}">{{ template }}</option>
-        {% endfor %}
+      <input type="text" id="server-name" name="server_name" placeholder="Host Name" required>
+      <label for="server-description">Server Description:</label>
+      <input type="text" id="server-description" name="server_description" placeholder="My 24/7 server" required>
+
+      <h2>Resource limits</h2>
+      <h6>Set specific limits for CPU, RAM and storage</h6>
+      <br>
+      <label for="server-cpu">Server CPU limit:</label>
+      <input type="number" id="server-cpu" name="server_cpu" placeholder="50" required>
+      <label for="server-ram">Server RAM limit:</label>
+      <input type="number" id="server-ram" name="server_ram" placeholder="512" required>
+      <label for="server-storage">Server Storage limit:</label>
+      <input type="number" id="server-storage" name="server_storage" placeholder="1024" required>
+
+      <h2>Feature Limits</h2>
+      <h6>Add databases, backups and ports to your server.</h6>
+      <label for="server-ports">Server Ports</label>
+      <input type="number" id="server-ports" name="server_ports" placeholder="2" required>
+      <label for="server-databases">Server Databases:</label>
+      <input type="number" id="server-databases" name="server_databases" placeholder="1" required>
+      <label for="server-backups">Server Backups:</label>
+      <input type="number" id="server-backups" name="server_backups" placeholder="3" required>
+
+      <h2>Deployment</h2>
+      <h6>Choose a server template to deploy.</h6>
+      <label for="server-location">Server Locations:</label>
+        <select id="server-location" name="server_location" required>
+            {% for location in locations %}
+            <option value="{{ location }}">{{ location }}</option>
+            {% endfor %}
+        </select>
+      <label for="server-nest">Server Nest:</label>
+      <select id="server-nest" name="server_nest" required>
+          <option value="">Select a Nest</option>
+          {% for nest, details in nests.items() %}
+          <option value="{{ nest }}">{{ details['name'] }}</option>
+          {% endfor %}
       </select>
+
+
+      <label for="server-egg">Server Egg:</label>
+      <select id="server-egg" name="server_egg" required>
+          <option value="">Select a Nest First</option>
+      </select>
+
       <button type="submit">Create Server</button>
     </form>
   </div>
 
-  <!-- <script src="{{ url_for('static', filename='js/create_server.js') }}"></script> -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const nestSelect = document.getElementById("server-nest");
+      const eggSelect = document.getElementById("server-egg");
+
+      nestSelect.addEventListener("change", function () {
+          const selectedNest = this.value;
+
+          // Clear previous eggs
+          eggSelect.innerHTML = '<option value="">Select an Egg</option>';
+
+          if (!selectedNest) return; // If no nest selected, exit
+
+          // Fetch eggs dynamically from Flask route
+          fetch(`/get_eggs/${selectedNest}`)
+              .then(response => response.json())
+              .then(eggs => {
+                  Object.entries(eggs).forEach(([eggKey, eggData]) => {
+                      let option = document.createElement("option");
+                      option.value = eggKey;
+                      option.textContent = eggData.name;
+                      eggSelect.appendChild(option);
+                  });
+              })
+              .catch(error => console.error("Error fetching eggs:", error));
+      });
+  });
+  </script>
 {% endblock %}

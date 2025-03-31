@@ -131,8 +131,10 @@ def cpanel():
 @app.route('/create_server', methods=['GET', 'POST'])
 @auth_required
 def create_server():
+    locations = ["Slovenija, Ljubljana"]
+    print(SERVER_TEMPLATES)
     if not request.method == 'POST':
-        return render_template('cpanel/create_server.html', templates=SERVER_TEMPLATES)
+        return render_template('cpanel/create_server.html', nests=SERVER_TEMPLATES, locations=locations)
 
 
     # Get the necessary data (e.g., server name, game type) from the request
@@ -157,6 +159,12 @@ def create_server():
         return jsonify({"message": f"Server '{server_name}' created successfully!"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/get_eggs/<nest>')
+def get_eggs(nest):
+    eggs = SERVER_TEMPLATES.get(nest, {}).get("eggs", {})
+    return jsonify(eggs)
 
 # Needs to be fixed
 @app.route('/server/<server_id>')

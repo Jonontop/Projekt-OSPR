@@ -29,6 +29,26 @@
         "cpu": 4,
         "disk": 100
       }
+    },
+    "eggs": {
+      "spigot": {
+        "name": "Spigot",
+        "startup_script": "start_spigot.sh",
+        "config_files": ["spigot.yml", "bukkit.yml"],
+        "description": "A high-performance fork of the Minecraft server software. <br> Spigot is designed to be faster and more efficient than the vanilla server."
+      },
+      "paper": {
+        "name": "Paper",
+        "startup_script": "start_paper.sh",
+        "config_files": ["paper.yml", "bukkit.yml"],
+        "description": "A high-performance fork of Spigot. <br> Paper offers more features and optimizations for your Minecraft server."
+      },
+        "forge": {
+            "name": "Forge",
+            "startup_script": "start_forge.sh",
+            "config_files": ["forge.cfg", "mods"],
+            "description": "A modding platform for Minecraft. <br> Forge allows you to install and run mods on your Minecraft server."
+        }
     }
   },
   "vps_ubuntu": {
@@ -61,37 +81,19 @@
         "cpu": 4,
         "disk": 100
       }
-    }
-  },
-  "game_server_cs2": {
-    "name": "Counter-Strike 2 Server",
-    "ram_min": 2048,
-    "ram_default": 4096,
-    "ram_max": 8192,
-    "port_default": 27015,
-    "startup_script": "start_cs2.sh",
-    "config_files": ["server.cfg", "gamemode.cfg", "admins.cfg"],
-    "base_folder": "cs2_servers",
-    "description": "A first-person shooter game server. <br> Counter-Strike 2 is a multiplayer tactical shooter game. Team up with friends and take on the world.",
-    "status": "active",
-    "plans": {
-      "basic": {
-        "name": "Basic Plan",
-        "ram": 4096,
-        "cpu": 1,
-        "disk": 20
+    },
+    "eggs": {
+      "lamp": {
+        "name": "LAMP Stack",
+        "startup_script": "start_lamp.sh",
+        "config_files": ["apache2.conf", "mysql.cnf"],
+        "description": "A software stack for web development. <br> LAMP stands for Linux, Apache, MySQL, and PHP."
       },
-      "standard": {
-        "name": "Standard Plan",
-        "ram": 8192,
-        "cpu": 2,
-        "disk": 50
-      },
-      "premium": {
-        "name": "Premium Plan",
-        "ram": 16384,
-        "cpu": 4,
-        "disk": 100
+      "docker": {
+        "name": "Docker",
+        "startup_script": "start_docker.sh",
+        "config_files": ["docker-compose.yml", ".env"],
+        "description": "A platform for developing, shipping, and running applications in containers. <br> Docker allows you to package your applications with all their dependencies."
       }
     }
   },
@@ -124,6 +126,20 @@
         "ram": 2048,
         "cpu": 4,
         "disk": 50
+      }
+    },
+    "eggs": {
+      "wordpress": {
+        "name": "WordPress",
+        "startup_script": "start_wordpress.sh",
+        "config_files": ["wp-config.php", ".htaccess"],
+        "description": "A popular content management system. <br> Create and manage your website with WordPress."
+      },
+      "laravel": {
+        "name": "Laravel",
+        "startup_script": "start_laravel.sh",
+        "config_files": ["laravel.env", "routes/web.php"],
+        "description": "A PHP framework for web artisans. <br> Build modern web applications with Laravel."
       }
     }
   },
