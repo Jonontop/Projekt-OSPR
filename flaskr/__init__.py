@@ -9,9 +9,6 @@ import docker
 import os
 
 # Load Docker client
-
-
-# Connect to the remote Docker daemon
 REMOTE_DOCKER_HOST = 'tcp://10.0.2.15:2375'  # Replace with your Docker host URL
 #client = docker.DockerClient(base_url=REMOTE_DOCKER_HOST)
 client = docker.from_env()
@@ -19,7 +16,6 @@ client = docker.from_env()
 # Defining the Flask app
 app = Flask(__name__)
 app.config.from_object('config')
-
 
 # Defining the SQLAlchemy database object
 # db = SQLAlchemy(app) # data stealing
@@ -31,7 +27,6 @@ socketio = SocketIO(app)
 cred = credentials.Certificate("firebase-auth.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
-
 
 ## FireBase - Client Function
 def get_firestore_client():

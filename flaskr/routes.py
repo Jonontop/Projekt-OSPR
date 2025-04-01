@@ -1,17 +1,13 @@
-from functools import wraps
-import firebase_admin
-from firebase_admin import auth, firestore, credentials
-from flask import redirect, render_template, make_response, session, url_for, request, flash, jsonify
-from jinja2 import TemplateNotFound
-from flask_socketio import emit
-from flaskr import get_firestore_client, app, socketio, client
-from flaskr.models import TokenVerify, load_server_templates, create_server_instance, auth_required, load_server_templates
-import subprocess
-import uuid
+from firebase_admin import auth
 import json
 import time
-import os
 
+from firebase_admin import auth
+from flask import redirect, render_template, make_response, session, url_for, request, jsonify
+from jinja2 import TemplateNotFound
+
+from flaskr import get_firestore_client, app, client
+from flaskr.models import TokenVerify, auth_required, load_server_templates
 
 db = get_firestore_client()
 
@@ -51,10 +47,6 @@ def purchase(plan):
 """
 Services
 """
-
-# Example services data
-
-
 @app.route('/services/<name>', methods=['GET'])
 def get_service(name):
     services = SERVER_TEMPLATES
@@ -96,7 +88,6 @@ def logout():
     response = make_response(redirect(url_for('login'))) # redirecta na login
     response.set_cookie('session', '', expires=0) # uniči session
     return response
-
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
@@ -158,9 +149,6 @@ def create_server():
         'status': 'creating',
         'type': server_nest
     })
-
-
-
 
 
     docker_image=SERVER_TEMPLATES[server_nest]['eggs'][server_egg]['docker_image']
