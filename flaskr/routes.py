@@ -17,6 +17,7 @@ db = get_firestore_client()
 
 SERVER_TEMPLATES = load_server_templates()
 
+
 ##### Public Links
 
 """

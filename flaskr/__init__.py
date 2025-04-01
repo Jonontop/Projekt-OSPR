@@ -6,8 +6,14 @@ from flask import Flask
 from flask_socketio import SocketIO
 from flaskr.models import load_server_templates
 import docker
+import os
 
 # Load Docker client
+
+
+# Connect to the remote Docker daemon
+REMOTE_DOCKER_HOST = 'tcp://10.0.2.15:2375'  # Replace with your Docker host URL
+#client = docker.DockerClient(base_url=REMOTE_DOCKER_HOST)
 client = docker.from_env()
 
 # Defining the Flask app
