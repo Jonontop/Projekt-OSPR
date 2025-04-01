@@ -39,13 +39,6 @@ def blog(path):
         return render_template('blog/about_service.html')
 
 
-"""
-Plans
-"""
-@app.route('/plans')
-def plans():
-    return render_template('blog/plans.html') # needs to be added
-
 
 @app.route('/purchase/<plan>')
 def purchase(plan):
@@ -148,6 +141,24 @@ def create_server():
     server_location = request.form.get('server_location')
     server_nest = request.form.get('server_nest')
     server_egg = request.form.get('server_egg')
+
+    # Adding server to Firestore
+    server_ref = db.collection('servers').add({
+        'name': server_name,
+        'description': server_description,
+        'cpu': server_cpu,
+        'ram': server_ram,
+        'storage': server_storage,
+        'ports': server_ports,
+        'databases': server_databases,
+        'backup': server_backup,
+        'location': server_location,
+        'user_id': session['user_id'],
+        'status': 'creating',
+        'type': server_nest
+    })
+
+
 
 
 

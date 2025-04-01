@@ -7,9 +7,11 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/root.css') }}">
 
 {% endblock %}
 {% block content %}
+
 
 
     <section>
@@ -30,5 +32,96 @@
             </ul>
         </div>
     </section>
+    <section>
+        <div class="coins">
+            <ul class="coins-items">
+                <li class="coins-item"><a href="">Coins</a></li>
+                <li class="coins-item"><a href="">Coins</a></li>
+                <li class="coins-item"><a href="">Coins</a></li>
+            </ul>
+        </div>
+    </section>
+    <section>
+        <div class="content">
+            <h1>Welcome to the Control Panel</h1>
+            <p>This is the main content area.</p>
+            <p>Here you can manage your servers, view statistics, and more.</p>
+        </div>
+            <h2>Servers</h2>
+            <ul>
+                {% for server in servers %}
+                    <li>{{ server.name }} - {{ server.status }}</li>
+                {% endfor %}
+            </ul>
+    </section>
+
+    <style>
+        .hamburger::--webkit-scrollbar {
+            width: 80px;
+        }
+
+        .hamburger {
+    position: fixed;
+    top: 70px; /* Same as top-nav height */
+    left: 0;
+    width: 250px; /* Fixed width */
+    height: calc(100vh - 60px); /* Full height minus top nav */
+    background-color: #333;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto; /* Enables scrolling if items overflow */
+}
+
+.hamburger-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.hamburger-item {
+    margin-bottom: 15px;
+}
+
+.hamburger-link {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.hamburger-link:hover {
+    background-color: #555;
+}
+        .coins{
+            position: relative;
+            left: 15vh; !* Same as top-nav height */
+
+        }
+
+
+        .coins-items{
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .coins-item {
+            display: inline-block;
+            width: 400px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            list-style: none;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
+
+        .coins-item a{
+            text-decoration: none;
+            color: black;
+        }
+
+    </style>
 
 {% endblock %}
