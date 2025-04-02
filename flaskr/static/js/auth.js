@@ -1,5 +1,5 @@
 import { auth, googleProvider } from "./firebase-config.js";
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
 console.log("auth.js loaded successfully!");
 
@@ -129,11 +129,15 @@ document.getElementById('google-sign-in-button').addEventListener('click', async
             body: JSON.stringify({ idToken }),
         });
 
+        if (!response.ok) {
+           throw new Error('Server responded with an error');
+        }
+
         const data = await response.json();
         if (data.success) {
             window.location.href = '/cpanel'; // Redirect to cpanel
         } else {
-            alert('Login failed!');
+            alert('Login failed!', error);
         }
     } catch (error) {
         console.error('Error:', error);

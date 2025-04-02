@@ -44,7 +44,7 @@
                             </div>
                             <div class="info-item">
                                 <span class="info-label">Created:</span>
-                                <span class="info-value">{{ server.created_at.strftime('%Y-%m-%d %H:%M:%S') if server.created_at else 'N/A' }}</span>
+                                <span class="info-value"></span>
                             </div>
                         </div>
                     </div>
@@ -52,22 +52,13 @@
                     <div class="server-card">
                         <h2>Management</h2>
                         <div class="server-actions">
-                            {% if server.status == 'running' %}
                             <button class="action-button stop-button" onclick="updateServerStatus('{{ server.id }}', 'stop')">
                                 <i class="fas fa-stop-circle"></i> Stop Server
                             </button>
                             <button class="action-button restart-button" onclick="updateServerStatus('{{ server.id }}', 'restart')">
                                 <i class="fas fa-sync"></i> Restart Server
                             </button>
-                            {% elif server.status == 'stopped' %}
-                            <button class="action-button start-button" onclick="updateServerStatus('{{ server.id }}', 'start')">
-                                <i class="fas fa-play-circle"></i> Start Server
-                            </button>
-                            {% elif server.status == 'creating' %}
-                            <div class="creating-status">
-                                <i class="fas fa-spinner fa-spin"></i> Server is being created...
-                            </div>
-                            {% endif %}
+
                             
                             <button class="action-button delete-button" onclick="confirmDelete('{{ server.id }}')">
                                 <i class="fas fa-trash"></i> Delete Server
@@ -78,18 +69,9 @@
                     <div class="server-card">
                         <h2>Server Configuration</h2>
                         <div class="server-config">
-                            {% if template.config_options %}
-                                {% for option in template.config_options %}
-                                <div class="config-item">
-                                    <span class="config-label">{{ option.name }}:</span>
-                                    <span class="config-value">{{ option.default }}</span>
-                                </div>
-                                {% endfor %}
-                            {% else %}
-                                <p>No configuration options available for this server type.</p>
-                            {% endif %}
+
                             
-                            <button class="action-button edit-button" onclick="location.href='{{ url_for('edit_server', server_id=server.id) }}'">
+                            <button class="action-button edit-button">
                                 <i class="fas fa-edit"></i> Edit Configuration
                             </button>
                         </div>
@@ -99,10 +81,8 @@
                         <h2>Connection Details</h2>
                         <div class="connection-info">
                             <p>Connect to your server using the following details:</p>
-                            <code>
-                                {{ template.connection_command|replace('{ip}', server.ip_address)|replace('{port}', server.port|string) }}
-                            </code>
-                            <button class="action-button copy-button" onclick="copyToClipboard('{{ template.connection_command|replace('{ip}', server.ip_address)|replace('{port}', server.port|string) }}')">
+
+                            <button class="action-button copy-button">
                                 <i class="fas fa-copy"></i> Copy
                             </button>
                         </div>
@@ -125,80 +105,6 @@
         </div>
     </div>
     
-    <script>
-        let serverToDelete = null;
-        
-        function updateServerStatus(serverId, action) {
-            fetch(`/api/servers/${serverId}/${action}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token() }}'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while updating the server status.');
-            });
-        }
-        
-        function confirmDelete(serverId) {
-            serverToDelete = serverId;
-            document.getElementById('delete-modal').style.display = 'flex';
-        }
-        
-        function closeModal() {
-            document.getElementById('delete-modal').style.display = 'none';
-        }
-        
-        function deleteServer() {
-            if (!serverToDelete) return;
-            
-            fetch(`/api/servers/${serverToDelete}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token() }}'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = '{{ url_for('dashboard') }}';
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while deleting the server.');
-            });
-        }
-        
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    alert('Connection command copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy text: ', err);
-                });
-        }
-        
-        // Auto-refresh the page if server is in 'creating' status
-        {% if server.status == 'creating' %}
-        setTimeout(() => {
-            window.location.reload();
-        }, 10000);
-        {% endif %}
-    </script>
+
 </body>
 </html>

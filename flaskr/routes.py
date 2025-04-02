@@ -134,6 +134,7 @@ def create_server():
     server_nest = request.form.get('server_nest')
     server_egg = request.form.get('server_egg')
 
+
     # Adding server to Firestore
     server_ref = db.collection('servers').add({
         'name': server_name,
@@ -146,7 +147,6 @@ def create_server():
         'backup': server_backup,
         'location': server_location,
         'user_id': session['user_id'],
-        'status': 'creating',
         'type': server_nest
     })
 
@@ -171,10 +171,6 @@ def create_server():
 
 
         )
-
-        # Fetch and print logs
-        logs = container.logs().decode("utf-8")
-        print(f"Container Logs:\n{logs}")
 
         return render_template('cpanel/server_details.html', server=container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
