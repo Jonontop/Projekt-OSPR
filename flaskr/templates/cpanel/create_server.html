@@ -10,6 +10,75 @@
 {% endblock %}
 
 {% block content %}
+<style>
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    font-family: Arial, sans-serif;
+  }
+
+  h1, h2 {
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  h6 {
+    color: #888;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: normal;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #444;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select {
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s;
+  }
+
+  input:focus,
+  select:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+
+  button[type="submit"] {
+    margin-top: 25px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+</style>
+
   <div class="container">
     <h1>Create Server</h1>
     <form id="create-server-form" action="{{ url_for('create_server') }}" method="POST">
