@@ -181,14 +181,14 @@
 <body>
     <div class="container">
 
-        
+
         <main class="content">
             <div class="server-details-container">
                 <div class="server-header">
                     <h1>Server: {{ server.name }}</h1>
                     <span class="server-status status-{{ server.status }}">{{ server.status }}</span>
                 </div>
-                
+
                 <div class="server-info">
                     <div class="server-card">
                         <h2>General Information</h2>
@@ -219,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="server-card">
                         <h2>Management</h2>
                         <div class="server-actions">
@@ -239,13 +239,13 @@
                                 <i class="fas fa-spinner fa-spin"></i> Server is being created...
                             </div>
                             {% endif %}
-                            
+
                             <button class="action-button delete-button" onclick="confirmDelete('{{ server.id }}')">
                                 <i class="fas fa-trash"></i> Delete Server
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="server-card">
                         <h2>Server Configuration</h2>
                         <div class="server-config">
@@ -259,13 +259,13 @@
                             {% else %}
                                 <p>No configuration options available for this server type.</p>
                             {% endif %}
-                            
+
                             <button class="action-button edit-button" onclick="location.href='{{ url_for('edit_server', server_id=server.id) }}'">
                                 <i class="fas fa-edit"></i> Edit Configuration
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="server-card">
                         <h2>Connection Details</h2>
                         <div class="connection-info">
@@ -281,10 +281,10 @@
                 </div>
             </div>
         </main>
-        
+
 
     </div>
-    
+
     <div id="delete-modal" class="modal">
         <div class="modal-content">
             <h2>Delete Server</h2>
@@ -295,10 +295,10 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         let serverToDelete = null;
-        
+
         function updateServerStatus(serverId, action) {
             fetch(`/api/servers/${serverId}/${action}`, {
                 method: 'POST',
@@ -320,19 +320,19 @@
                 alert('An error occurred while updating the server status.');
             });
         }
-        
+
         function confirmDelete(serverId) {
             serverToDelete = serverId;
             document.getElementById('delete-modal').style.display = 'flex';
         }
-        
+
         function closeModal() {
             document.getElementById('delete-modal').style.display = 'none';
         }
-        
+
         function deleteServer() {
             if (!serverToDelete) return;
-            
+
             fetch(`/api/servers/${serverToDelete}`, {
                 method: 'DELETE',
                 headers: {
@@ -353,7 +353,7 @@
                 alert('An error occurred while deleting the server.');
             });
         }
-        
+
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text)
                 .then(() => {
@@ -363,7 +363,7 @@
                     console.error('Failed to copy text: ', err);
                 });
         }
-        
+
         // Auto-refresh the page if server is in 'creating' status
         {% if server.status == 'creating' %}
         setTimeout(() => {

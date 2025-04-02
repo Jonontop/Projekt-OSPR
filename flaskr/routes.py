@@ -24,7 +24,6 @@ Main Page
 def index():
     return render_template('index.html') # HomePage
 
-
 """
 All routes in /Blog/
 """
@@ -34,7 +33,6 @@ def blog(path):
         return render_template(f'blog/{path}.html') # needs to be added
     else:
         return render_template('blog/about_service.html')
-
 
 
 @app.route('/purchase/<plan>')
@@ -171,6 +169,10 @@ def create_server():
 
 
         )
+
+        print(container)
+        print(container.id)
+        print(container.name)
 
         return render_template('cpanel/server_details.html', server=container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
