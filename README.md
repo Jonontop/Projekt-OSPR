@@ -32,7 +32,7 @@ Projekt za OSPR
   - []Bootstrap
   - []DarkMode
   - [x]1 File for primary settings - css
-  - []SQL - Data stealing
+  - []SQL - Database - Data stealing
   - []Minigames - loading screens, coins collecting
 
 

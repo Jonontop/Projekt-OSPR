@@ -10,6 +10,7 @@ import os
 
 # Load Docker client
 REMOTE_DOCKER_HOST = 'tcp://local.jonpecar.xyz:2375'  # Replace with your Docker host URL
+#REMOTE_DOCKER_HOST = 'tcp://192.168.1.187:2375'  # Replace with your Docker host URL
 client = docker.DockerClient(base_url=REMOTE_DOCKER_HOST)
 #client = docker.from_env()
 

@@ -133,21 +133,6 @@ def create_server():
     server_egg = request.form.get('server_egg')
 
 
-    # Adding server to Firestore
-    server_ref = db.collection('servers').add({
-        'name': server_name,
-        'description': server_description,
-        'cpu': server_cpu,
-        'ram': server_ram,
-        'storage': server_storage,
-        'ports': server_ports,
-        'databases': server_databases,
-        'backup': server_backup,
-        'location': server_location,
-        'user_id': session['user_id'],
-        'type': server_nest
-    })
-
 
     docker_image=SERVER_TEMPLATES[server_nest]['eggs'][server_egg]['docker_image']
 
@@ -170,9 +155,21 @@ def create_server():
 
         )
 
-        print(container)
-        print(container.id)
-        print(container.name)
+        # Adding server to Firestore
+        server_ref = db.collection('servers').add({
+            'name': server_name,
+            'description': server_description,
+            'cpu': server_cpu,
+            'ram': server_ram,
+            'storage': server_storage,
+            'ports_number': server_ports,
+            'databases_number': server_databases,
+            'backup_number': server_backup,
+            'location': server_location,
+            'user_id': session['user_id'],
+            'type': server_nest
+        })
+
 
         return render_template('cpanel/server_details.html', server=container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
