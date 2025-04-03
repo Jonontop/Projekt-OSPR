@@ -18,17 +18,9 @@
         <div class="hamburger">
             <ul class="hamburger-menu">
                 <li class="hamburger-item"><a href="" class="hamburger-link">Dashboard</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Console</a></li>
                 <li class="hamburger-item"><a href="{{ url_for('create_server')}}" class="hamburger-link">Create Server</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 4</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 5</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 6</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 7</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 8</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 9</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 10</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 11</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Link 12</a></li>
+                <li class="hamburger-item"><a href="" class="hamburger-link">Store</a></li>
+                <li class="hamburger-item"><a href="" class="hamburger-link">Earn</a></li>
             </ul>
         </div>
     </section>
@@ -50,12 +42,42 @@
             <h2>Servers</h2>
             <ul>
                 {% for server in servers %}
-                    <li>{{ server.name }} - {{ server.status }}</li>
+                    <a href="{{ url_for('console', container_id=server.container_id) }}"><li class="server_item">
+                        <h3 style="border: 2px solid gray; border-radius:2px; background-color: gray;">{{ server.name }}</h3>
+                        <h4>IP: {{ server.ip }}:{{ server.port }}</h4>
+                        <h4>CPU: {{ server.cpu }}% <br> RAM: {{ server.ram }} MiB <br> DISK: {{ server.storage }} MiB</h4>
+                        <h4>Status:
+                            {% if server.status == 'running' %}
+                                <span style="color: green;">{{ server.status }}</span>
+                            {% elif server.status == 'stopped' %}
+                                <span style="color: red;">{{ server.status }}</span>
+                            {% else %}
+                                <span style="color: orange;">{{ server.status }}</span>
+                            {% endif %}
+                        </h4>
+
+                    </li></a>
                 {% endfor %}
             </ul>
     </section>
 
     <style>
+        .server_item {
+            display: inline-block;
+            width: 400px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            list-style: none;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
+
+        .server_item {
+            text-decoration: none;
+            color: black;
+        }
+
+
         .hamburger::--webkit-scrollbar {
             width: 80px;
         }

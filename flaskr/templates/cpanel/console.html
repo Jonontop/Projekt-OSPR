@@ -1,60 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Terminal</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
-</head>
+{% extends 'cpanel/base.html' %}
+
+
+
+{% block title %}
+  Console Logs
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+{% endblock %}
+{% block content %}
 <body>
-    <div id="terminal" style="height: 400px; width: 100%;"></div>
+    <style>
+        #console {
+            font-family: monospace;
+            color: white;
+            width: 90%;
+            height: 90vh;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 1px solid black;
+            padding: 10px;
+            background-color: black;
 
-    <!-- xterm.js -->
-    <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.js"></script>
-
-    <!-- socket.io -->
-    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.4.1/dist/socket.io.min.js"></script>
-
+        }
+    </style>
     <script>
-        window.onload = function() {
-            const socket = io.connect();
-            const term = new Terminal();
+        const containerId = "{{ container_id }}"; // Container ID from docker
 
-            let commandBuffer = ''; // To store the full command
+        function startStream() {
+            const eventSource = new EventSource(`/stream/${containerId}`);
+            const consoleDiv = document.getElementById("console");
 
-            // Open the terminal in the #terminal div
-            term.open(document.getElementById('terminal'));
+            eventSource.onmessage = function(event) {
+                const newLine = document.createElement("div");
+                newLine.textContent = event.data;
+                consoleDiv.appendChild(newLine);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight; // Auto-scroll
+            };
 
-            // Handle terminal data (input)
-            term.onData(data => {
-                if (data === '\r') { // 'Enter' key sends the command
-                    socket.emit('input', { command: commandBuffer });
-                    commandBuffer = '';  // Clear the buffer after sending
-                    term.write('\r\n');  // Newline in terminal
-                } else if (data === '\u007F') {  // 'Backspace' handling
-                    if (commandBuffer.length > 0) {
-                        commandBuffer = commandBuffer.slice(0, -1);
-                        term.write('\b \b');  // Move cursor back, overwrite character
-                    }
-                } else {
-                    commandBuffer += data;  // Add character to buffer
-                    term.write(data);  // Echo the character on the terminal
-                }
-            });
+            eventSource.onerror = function() {
+                consoleDiv.innerHTML += "\n[ERROR] Connection lost.";
+                eventSource.close();
+            };
+        }
 
-            // Handle output from server
-            socket.on('output', (data) => {
-                if (data.output) {
-                    // Normalize line breaks to prevent strange formatting
-                    let output = data.output.replace(/\n/g, '\r\n');
-                    term.write(output);  // Write the server's response to the terminal
-                } else {
-                    console.error('No output received from server');
-                }
-            });
-
-            term.write('Welcome to the web terminal! Type a command.\r\n');
-        };
+        window.onload = startStream;
     </script>
+    <h2 style="color: black;">Docker Console Logs</h2>
+    <div id="console"></div>
 </body>
-</html>
+
+{% endblock %}
+

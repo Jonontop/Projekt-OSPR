@@ -19,18 +19,22 @@
 
         <ul class="nav-links" id="navLinks">
             <li class="nav-item">
-                <a href="{{ url_for('cpanel') }}" class="nav-link">Servers</a>
+                <a href="{{ url_for('cpanel') }}" class="nav-link">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a href="{{ url_for('blog', path=about) }}" class="nav-link">Buy</a>
+                <a href="{{ url_for('create_server') }}" class="nav-link">Create Server</a>
             </li>
             <li class="nav-item">
-                <a href="{{ url_for('blog', path=plans) }}" class="nav-link">Plans</a>
+                <a href="{{ url_for('blog', path=about) }}" class="nav-link">Earn</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('blog', path=about) }}" class="nav-link">Store</a>
             </li>
 
         </ul>
 
         <div class="nav-right">
+            <button class="nav-button"><a href="{{ url_for('logout') }}" style="text-decoration: none; color: white;">Account</a></button>
             <button class="nav-button"><a href="{{ url_for('logout') }}" style="text-decoration: none; color: white;">Logout</a></button>
         </div>
     </div>

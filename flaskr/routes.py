@@ -3,7 +3,7 @@ import json
 import time
 
 from firebase_admin import auth
-from flask import redirect, render_template, make_response, session, url_for, request, jsonify
+from flask import redirect, render_template, make_response, session, url_for, request, jsonify, Response
 from jinja2 import TemplateNotFound
 
 from flaskr import get_firestore_client, app, client
@@ -103,11 +103,15 @@ def cpanel():
     server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
     server_loc = db.collection('servers').stream()
 
+
     servers = []
     for server_ref in server_refs:
         server_data = server_ref.to_dict()
+        container = client.containers.get(server_data['container_id']) if server_data['container_id'] else None
         server_data['id'] = server_ref.id
+        server_data['status'] = container.status if container else 'stopped'
         servers.append(server_data)
+
 
     return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES)
 
@@ -149,9 +153,9 @@ def create_server():
                 'SERVER_NAME': server_name,
                 "CPU": server_cpu,
                 "STORAGE": server_storage,
+                "RAM": server_ram,
 
-            },
-            mem_limit=f"{server_ram}M",  # Set memory limit
+            }
 
 
         )
@@ -167,8 +171,12 @@ def create_server():
             'databases_number': server_databases,
             'backup_number': server_backup,
             'location': server_location,
+            'ip': container.attrs['NetworkSettings']['IPAddress'],
+            'ports': container.ports,
             'user_id': session['user_id'],
-            'type': server_nest
+            'container_id': container.id,
+            'nest': server_nest,
+            'egg': server_egg,
         })
 
 
@@ -289,7 +297,22 @@ def manage_templates():
 
     return render_template('admin_templates.html', templates=SERVER_TEMPLATES)
 
+def stream_logs(container_id):
+    try:
+        container = client.containers.get(container_id)
+        for line in container.logs(stream=True):
+            yield f"data: {line.decode('utf-8')}\n\n"
+    except Exception as e:
+        yield f"data: Error: {str(e)}\n\n"
 
+@app.route('/stream/<container_id>')
+def stream(container_id):
+    return Response(stream_logs(container_id), mimetype='text/event-stream')
+
+
+@app.route('/console/<container_id>')
+def console(container_id):
+    return render_template('cpanel/console.html', container_id=container_id)
 
 ##### Errors
 
