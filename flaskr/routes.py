@@ -101,6 +101,7 @@ def cpanel():
 
     user_id = session['user_id']
     server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
+    server_loc = db.collection('servers').stream()
 
     servers = []
     for server_ref in server_refs:
@@ -173,7 +174,7 @@ def create_server():
 
         return render_template('cpanel/server_details.html', server=container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)})
 
 
 @app.route('/get_eggs/<nest>')
