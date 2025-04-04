@@ -54,19 +54,19 @@ def get_service(name):
 Authentication
 """
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+def register() -> str:
     return Auth.register(request.json.get('idToken'), request.json.get('username'), request.json.get('email'))
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def login() -> str:
     return render_template('auth/login.html')
 
 @app.route('/logout')
-def logout():
+def logout() -> str:
     return Auth.logout(session)
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
-def forgot_password():
+def forgot_password() -> str:
     return render_template('auth/forgot_password.html')
 
 
@@ -168,7 +168,7 @@ def stream_logs(container_id):
         yield f"data: Error: {str(e)}\n\n"
 
 @app.route('/stream/<container_id>')
-def stream(container_id):
+def stream(container_id) -> Response:
     return Response(stream_logs(container_id), mimetype='text/event-stream')
 
 
@@ -181,11 +181,11 @@ def console(container_id):
 @app.errorhandler(404)
 @app.errorhandler(TemplateNotFound)
 def page_not_found(error):
-    return render_template('errors/404.html'), 404
+    return render_template('errors.html', error=404), 404
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return render_template('errors/500.html'), 500
+    return render_template('errors.html', error=500), 500
 
 
 ##### Config

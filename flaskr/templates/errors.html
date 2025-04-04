@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stran ni bila najdena - 404</title>
+    <title>Stran ni bila najdena - {{ error }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>404</h1>
+        <h1>{{ error }}</h1>
         <p>Opa! Stran ni bila najdena.</p>
         <p><a href="/">Pojdi na domačo stran</a></p>
     </div>
