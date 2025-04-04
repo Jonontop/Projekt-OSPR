@@ -1,20 +1,82 @@
-{% extends 'cpanel/base.html' %}
 
 
+{% block title %}Account Overview{% endblock %}
 
-{% block title %}
-  Console Logs
-{% endblock %}
-
-{% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
-{% endblock %}
 {% block content %}
+<!-- Zgornji tabs meni -->
+<div class="top-tabs">
+  <a href="#" class="tab"><i class="fa fa-user"></i> Account</a>
+  <a href="#" class="tab"><i class="fa fa-key"></i> Security</a>
+  <a href="#" class="tab"><i class="fa fa-share-nodes"></i> OAuth</a>
+  <a href="#" class="tab"><i class="fa fa-code"></i> API</a>
+</div>
 
+<!-- Glavna vsebina -->
+<section class="account-dashboard">
+  <h1>Account Overview</h1>
+  <p>View and update account details.</p>
 
-<h1>Account Settings</h1>
+  <div class="account-grid">
+    <div class="account-box">
+      <h3>Update Username</h3>
+      <label>New Username</label>
+      <input type="text" placeholder="Enter new username" />
+      <label>Confirm Password</label>
+      <input type="password" placeholder="Confirm password" />
+      <button class="btn-blue">Update Username</button>
+    </div>
 
+    <div class="account-box">
+      <h3>Update Email Address</h3>
+      <label>Email</label>
+      <input type="email" value="youremail@example.com" />
+      <label>Confirm Password</label>
+      <input type="password" placeholder="Confirm password" />
+      <button class="btn-blue">Update Email</button>
+    </div>
 
+    <div class="account-box">
+      <h3>Set Avatar</h3>
+      <p>To set your avatar, sign up on Gravatar with your email.</p>
+      <a href="https://gravatar.com" target="_blank" class="btn-blue">Go to Gravatar</a>
+    </div>
 
+    <div class="account-box">
+      <h3>Resend Verification Email</h3>
+      <p>Your account is not verified.</p>
+      <button class="btn-blue">Resend Verification Email</button>
+    </div>
+  </div>
+</section>
+
+<!-- Sidebar -->
+<nav class="navbar">
+  <ul class="nav-links">
+    <li class="nav-item">
+      <a href="{{ url_for('cpanel') }}" class="nav-link">
+        <i class="fa fa-search"></i><span class="nav-text">Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url_for('create_server') }}" class="nav-link">
+        <i class="fa fa-server"></i><span class="nav-text">Create Server</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url_for('blog', path='about') }}" class="nav-link">
+        <i class="fa fa-dollar-sign"></i><span class="nav-text">Earn</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url_for('account') }}" class="nav-link">
+        <i class="fa fa-user"></i><span class="nav-text">Account</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url_for('logout') }}" class="nav-link">
+        <i class="fa fa-sign-out-alt"></i><span class="nav-text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</nav>
 {% endblock %}
