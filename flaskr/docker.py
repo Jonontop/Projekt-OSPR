@@ -10,12 +10,12 @@ client = docker.from_env()
 
 class DockerManager:
     def __init__(self):
-        self.server_templates = load_server_templates()
+        self.__server_templates = load_server_templates()
         self.container = None
 
     def docker_create(self, server_name, server_cpu, server_storage, server_ram, server_nest, server_egg):
 
-        docker_image = self.server_templates[server_nest]['eggs'][server_egg]['docker_image']
+        docker_image = self.__server_templates[server_nest]['eggs'][server_egg]['docker_image']
         try:
 
             # Run the container with the appropriate Docker image

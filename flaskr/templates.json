@@ -211,5 +211,84 @@
                 "description": "An open-source voice chat application. <br> Mumble is designed for low-latency and high-quality audio."
             }
         }
+    },
+    "code_server": {
+    "name": "Code Hosting",
+    "ram_min": 256,
+    "ram_default": 512,
+    "ram_max": 2048,
+    "port_default": 80,
+    "startup_script": "start_nginx.sh",
+    "config_files": ["nginx.conf", "php.ini"],
+    "base_folder": "web_servers",
+    "description": "A web hosting service. <br> Host your website with us and enjoy fast and reliable service.",
+    "status": "active",
+    "plans": {
+      "basic": {
+        "name": "Basic Plan",
+        "ram": 512,
+        "cpu": 1,
+        "disk": 10
+      },
+      "standard": {
+        "name": "Standard Plan",
+        "ram": 1024,
+        "cpu": 2,
+        "disk": 20
+      },
+      "premium": {
+        "name": "Premium Plan",
+        "ram": 2048,
+        "cpu": 4,
+        "disk": 50
+      }
+    },
+    "eggs": {
+      "python": {
+        "name": "Python",
+        "docker_image": "python:3.9-slim",
+        "instructions": "Copy code, install dependencies via pip, run with 'python your_script.py'."
+      },
+      "c++": {
+        "name": "C++",
+        "docker_image": "gcc:latest",
+        "instructions": "Copy source, compile with g++, run output binary."
+      },
+      "c": {
+        "name": "C",
+        "docker_image": "gcc:latest",
+        "instructions": "Copy source, compile with gcc, run output binary."
+      },
+      "c#": {
+        "name": "C#",
+        "docker_image": "mcr.microsoft.com/dotnet/sdk:6.0",
+        "instructions": "Copy code, use 'dotnet run' or build with 'dotnet build'."
+      },
+      "lua": {
+        "name": "Lua",
+        "docker_image": "lua:5.4",
+        "instructions": "Copy .lua files, run with 'lua your_script.lua'."
+      },
+      "typescript": {
+        "name": "TypeScript",
+        "docker_image": "node:20",
+        "instructions": "Install TypeScript via npm, compile with 'tsc', run compiled JS with 'node'."
+      },
+      "node.js": {
+        "name": "Node.js",
+        "docker_image": "node:20",
+        "instructions": "Copy project, install dependencies with npm, run with 'node app.js'."
+      },
+      "go": {
+        "name": "Go",
+        "docker_image": "golang:1.21",
+        "instructions": "Copy code, build with 'go build', run the binary."
+      },
+      "rust": {
+        "name": "Rust",
+        "docker_image": "rust:1.74",
+        "instructions": "Copy code, build with 'cargo build', run with 'cargo run' or use compiled binary."
+      }
     }
+  }
 }

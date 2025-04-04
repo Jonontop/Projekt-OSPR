@@ -4,13 +4,11 @@ import time
 from flask import redirect, render_template, session, url_for, request, jsonify, Response
 from jinja2 import TemplateNotFound
 
-from flaskr import get_firestore_client, app, DockerManager
+from flaskr import db, app, DockerManager
 from flaskr.auth import Auth
 from flaskr.models import TokenVerify, auth_required, load_server_templates
 from flaskr.docker import client
-
-db = get_firestore_client()
-
+from flaskr.database import Database
 
 SERVER_TEMPLATES = load_server_templates()
 
@@ -114,39 +112,21 @@ def create_server():
 
 
     # Get the necessary data (e.g., server name, game type) from the request
-    server_name = request.form.get('server_name')
-    server_description = request.form.get('server_description')
-    server_cpu = request.form.get('server_cpu')
-    server_ram = request.form.get('server_ram')
-    server_storage = request.form.get('server_storage')
-    server_ports = request.form.get('server_ports')
-    server_databases = request.form.get('server_databases')
-    server_backup = request.form.get('server_backup')
-    server_location = request.form.get('server_location')
-    server_nest = request.form.get('server_nest')
-    server_egg = request.form.get('server_egg')
+    # General
+    server_name, server_description = request.form.get('server_name'), request.form.get('server_description')
+    # Resources
+    server_cpu, server_ram, server_storage = request.form.get('server_cpu'), request.form.get('server_ram'), request.form.get('server_storage')
+    # Ports
+    server_ports, server_databases, server_backup = request.form.get('server_ports'), request.form.get('server_databases'), request.form.get('server_backup')
+    # Location
+    server_location, server_nest, server_egg = request.form.get('server_location'), request.form.get('server_nest'), request.form.get('server_egg')
 
-    # create server in docker
-    DockerManager.docker_create(client, server_name, server_cpu, server_storage, server_ram, server_nest, server_egg)
     try:
-        # Adding server to Firestore
-        server_ref = db.collection('servers').add({
-            'name': server_name,
-            'description': server_description,
-            'cpu': server_cpu,
-            'ram': server_ram,
-            'storage': server_storage,
-            'ports_number': server_ports,
-            'databases_number': server_databases,
-            'backup_number': server_backup,
-            'location': server_location,
-            'ip': DockerManager.container.attrs['NetworkSettings']['IPAddress'],
-            'ports': DockerManager.container.ports,
-            'user_id': session['user_id'],
-            'container_id': DockerManager.container.id,
-            'nest': server_nest,
-            'egg': server_egg,
-        })
+        # create server in docker
+        DockerManager.docker_create(server_name, server_cpu, server_storage, server_ram, server_nest, server_egg)
+
+        # create server in database
+        Database.server_create(server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup, server_location, server_nest, server_egg)
 
 
         return render_template('cpanel/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
@@ -213,5 +193,4 @@ def internal_server_error(error):
 # Verify ID Token Endpoint
 @app.route('/verify_token', methods=['POST'])
 def verify_token():
-    id_token = request.json.get('idToken')
-    return TokenVerify(id_token)
+    return Auth.TokenVerify(request.json.get('idToken'))

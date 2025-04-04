@@ -3,7 +3,7 @@ import time
 from flask import jsonify, redirect, url_for, session, flash, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from firebase_admin import auth
-from flaskr import get_firestore_client, db
+from flaskr import db
 
 
 # Full Authentication Module in Class
@@ -38,3 +38,15 @@ class Auth:
         response.set_cookie('session', '', expires=0)  # uniči session
         return response
 
+    # Verify Token
+    @staticmethod
+    def TokenVerify(id_token: str) -> jsonify:
+        try:
+            # Verify the ID token
+            decoded_token = auth.verify_id_token(id_token)
+            user_id = decoded_token['uid']
+            # Store user ID in session
+            session['user_id'] = user_id
+            return jsonify({'success': True})
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})

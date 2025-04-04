@@ -24,9 +24,5 @@ cred = credentials.Certificate("firebase-auth.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-## FireBase - Client Function
-def get_firestore_client():
-    return db
-
 
 from flaskr import routes
