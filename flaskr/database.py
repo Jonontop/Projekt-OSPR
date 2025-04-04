@@ -8,7 +8,8 @@ class Database:
     def get_firestore_client(self):
         return db # IDK zakaj je to potrebno
 
-    def server_create(self, server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup, server_location, server_nest, server_egg):
+    @staticmethod
+    def server_create(server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup, server_location, server_nest, server_egg):
         try:
             # Adding server to Firestore
             server_ref = db.collection('servers').add({

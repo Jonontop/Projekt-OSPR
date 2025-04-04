@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from threading import Thread
 
 from flask import redirect, render_template, session, url_for, request, jsonify, Response, send_file
 from jinja2 import TemplateNotFound
@@ -32,6 +33,10 @@ def blog(path):
 @app.route('/services/<name>', methods=['GET'])
 def get_service(name):
     return render_template(f'blog/about_service.html', services=SERVER_TEMPLATES.get(name)) if name in SERVER_TEMPLATES else render_template('errors/404.html'), 404
+
+@app.route('/loading')
+def loading():
+    return render_template('cpanel/loading.html')
 
 """
 ###### Authentication ######
@@ -83,6 +88,11 @@ def files(container_id):
 def download(container_id, file_path):
     return send_file(DockerFiles.docker_download_file(container_id, file_path), as_attachment=True)
 
+@app.route('/account')
+@auth_required
+def account():
+    return render_template('cpanel/account.html')
+
 ##### Errors
 
 @app.errorhandler(404)
@@ -133,15 +143,16 @@ def create_server():
     # Location
     server_location, server_nest, server_egg = request.form.get('server_location'), request.form.get('server_nest'), request.form.get('server_egg')
 
+
+
     try:
         # create server in docker
         DockerManager.docker_create(server_name, server_cpu, server_storage, server_ram, server_nest, server_egg)
-
         # create server in database
         Database.server_create(server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup, server_location, server_nest, server_egg)
 
-
-        return render_template('cpanel/server/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
+        return redirect(url_for('loading'))
+        #return render_template('cpanel/server/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
