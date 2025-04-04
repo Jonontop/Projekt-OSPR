@@ -3,9 +3,8 @@ import time
 from flask import jsonify, redirect, url_for, session, flash, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from firebase_admin import auth
-from flaskr import get_firestore_client
+from flaskr import get_firestore_client, db
 
-db = get_firestore_client()
 
 # Full Authentication Module in Class
 
@@ -14,7 +13,7 @@ class Auth:
         pass
 
     @staticmethod
-    def register_firebase_user(id_token: str, username: str, mail: str):
+    def register(id_token: str, username: str, mail: str):
         try:
             # Verify the ID token
             decoded_token = auth.verify_id_token(id_token, clock_skew_seconds=60) # Bug fix

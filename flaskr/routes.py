@@ -1,15 +1,16 @@
-from firebase_admin import auth
 import json
 import time
 
-from firebase_admin import auth
-from flask import redirect, render_template, make_response, session, url_for, request, jsonify, Response
+from flask import redirect, render_template, session, url_for, request, jsonify, Response
 from jinja2 import TemplateNotFound
+
+from flaskr import get_firestore_client, app, DockerManager
 from flaskr.auth import Auth
-from flaskr import get_firestore_client, app, client
 from flaskr.models import TokenVerify, auth_required, load_server_templates
+from flaskr.docker import client
 
 db = get_firestore_client()
+
 
 SERVER_TEMPLATES = load_server_templates()
 
@@ -31,8 +32,7 @@ All routes in /Blog/
 def blog(path):
     if path != 'about_service.html':
         return render_template(f'blog/{path}.html') # needs to be added
-    else:
-        return render_template('blog/about_service.html')
+    return render_template('blog/about_service.html')
 
 # modify
 @app.route('/purchase/<plan>')
@@ -57,7 +57,7 @@ Authentication
 """
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    return Auth.register_firebase_user(request.json.get('idToken'), request.json.get('username'), request.json.get('email'))
+    return Auth.register(request.json.get('idToken'), request.json.get('username'), request.json.get('email'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -126,29 +126,9 @@ def create_server():
     server_nest = request.form.get('server_nest')
     server_egg = request.form.get('server_egg')
 
-
-
-    docker_image=SERVER_TEMPLATES[server_nest]['eggs'][server_egg]['docker_image']
-
+    # create server in docker
+    DockerManager.docker_create(client, server_name, server_cpu, server_storage, server_ram, server_nest, server_egg)
     try:
-        # Run the container with the appropriate Docker image
-        container = client.containers.run(
-            docker_image,
-            name=server_name,
-            detach=True,  # Run in detached mode
-            ports={'25565/tcp': None},  # Expose necessary ports for the game
-            environment={
-                'EULA': 'TRUE',  # Example environment variable
-                'SERVER_NAME': server_name,
-                "CPU": server_cpu,
-                "STORAGE": server_storage,
-                "RAM": server_ram,
-
-            }
-
-
-        )
-
         # Adding server to Firestore
         server_ref = db.collection('servers').add({
             'name': server_name,
@@ -160,16 +140,16 @@ def create_server():
             'databases_number': server_databases,
             'backup_number': server_backup,
             'location': server_location,
-            'ip': container.attrs['NetworkSettings']['IPAddress'],
-            'ports': container.ports,
+            'ip': DockerManager.container.attrs['NetworkSettings']['IPAddress'],
+            'ports': DockerManager.container.ports,
             'user_id': session['user_id'],
-            'container_id': container.id,
+            'container_id': DockerManager.container.id,
             'nest': server_nest,
             'egg': server_egg,
         })
 
 
-        return render_template('cpanel/server_details.html', server=container, template=SERVER_TEMPLATES.get(server_nest, {}))
+        return render_template('cpanel/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -197,94 +177,7 @@ def server_details(server_id):
     return render_template('cpanel/server_details.html', server=server_data,
                            template=SERVER_TEMPLATES.get(server_data['type'], {}))
 
-# Needs to be fixed
-@app.route('/server/<server_id>/start', methods=['POST'])
-@auth_required
-def start_server(server_id):
-    user_id = session['user_id']
 
-    # Get server details
-    server_ref = db.collection('servers').document(server_id)
-    server = server_ref.get()
-
-    if not server.exists or server.to_dict()['user_id'] != user_id:
-        return jsonify({'success': False, 'error': 'Server not found'})
-
-    # Update server status
-    server_ref.update({'status': 'starting'})
-
-    # In a real application, you would trigger your server start script here
-    server_type = server.to_dict()['type']
-    template = SERVER_TEMPLATES.get(server_type, {})
-
-    if not template:
-        server_ref.update({'status': 'error', 'error_message': 'Invalid server type'})
-        return jsonify({'success': False, 'error': 'Invalid server type'})
-
-    # Simulate server startup (in a real app, this would be a background task)
-    # Example: subprocess.Popen(['bash', template['startup_script'], server_id])
-
-    # For demo, we'll just update the status after a delay
-    time.sleep(2)  # Simulating server startup time
-    server_ref.update({'status': 'running'})
-
-    return jsonify({'success': True}) # Needs to be fixed
-
-# Needs to be fixed
-@app.route('/server/<server_id>/stop', methods=['POST'])
-@auth_required
-def stop_server(server_id):
-    user_id = session['user_id']
-
-    # Get server details
-    server_ref = db.collection('servers').document(server_id)
-    server = server_ref.get()
-
-    if not server.exists or server.to_dict()['user_id'] != user_id:
-        return jsonify({'success': False, 'error': 'Server not found'})
-
-    # Update server status
-    server_ref.update({'status': 'stopping'})
-
-    # In a real application, you would trigger your server stop script here
-    # Example: subprocess.Popen(['bash', 'stop_server.sh', server_id])
-
-    # For demo, we'll just update the status after a delay
-    time.sleep(2)  # Simulating server shutdown time
-    server_ref.update({'status': 'stopped'})
-
-    return jsonify({'success': True}) # Needs to be fixed
-
-# Needs to be fixed
-@app.route('/admin/templates', methods=['GET', 'POST'])
-@auth_required
-def manage_templates():
-    # In a real app, check if user is admin
-    # For demo purposes we'll skip this check
-
-    if request.method == 'POST':
-        # Update templates
-        new_templates = request.json
-
-        # Validate new templates (basic validation)
-        for key, template in new_templates.items():
-            required_fields = ['name', 'ram_min', 'ram_default', 'ram_max', 'port_default',
-                               'startup_script', 'config_files', 'base_folder']
-            for field in required_fields:
-                if field not in template:
-                    return jsonify({'success': False, 'error': f'Missing required field: {field} in template {key}'})
-
-        # Save to JSON file
-        with open('server_templates.json', 'w') as file:
-            json.dump(new_templates, file, indent=2)
-
-        # Reload templates
-        global SERVER_TEMPLATES
-        SERVER_TEMPLATES = SERVER_TEMPLATES
-
-        return jsonify({'success': True})
-
-    return render_template('admin_templates.html', templates=SERVER_TEMPLATES)
 
 def stream_logs(container_id):
     try:
