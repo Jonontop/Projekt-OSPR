@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True) # Ensure the upload folder exists
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
@@ -40,3 +40,7 @@ def create_folder():
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

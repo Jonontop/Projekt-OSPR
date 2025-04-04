@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Explorer - {{ container_id }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        ul { list-style-type: none; padding-left: 20px; }
+        .folder { font-weight: bold; cursor: pointer; }
+        .file-list { display: none; }
+    </style>
+</head>
+<body>
+    <h1>Files in Container: {{ container_id }}</h1>
+
+{% macro render_tree(tree, path) %}
+    <ul>
+        {% for name, content in tree.items() %}
+            {% set full_path = path ~ '/' ~ name %}
+            {% if content is mapping %}
+                <li>
+                    <div class="folder" onclick="toggleFolder(this)">📁 {{ name }}</div>
+                    <div class="file-list">
+                        {{ render_tree(content, full_path) }}
+                    </div>
+                </li>
+            {% else %}
+                <li>
+                    📄 {{ name }}
+                    [<a href="{{ url_for('download', container_id=container_id, file_path=full_path) }}">Download</a>]
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+
+    {{ render_tree(file_tree, '') }}
+
+
+
+    <script>
+        function toggleFolder(el) {
+            const next = el.nextElementSibling;
+            if (next && next.classList.contains('file-list')) {
+                next.style.display = next.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+    </script>
+</body>
+</html>

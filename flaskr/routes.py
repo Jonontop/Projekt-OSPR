@@ -1,57 +1,40 @@
 import json
+import os
 import time
 
-from flask import redirect, render_template, session, url_for, request, jsonify, Response
+from flask import redirect, render_template, session, url_for, request, jsonify, Response, send_file
 from jinja2 import TemplateNotFound
 
 from flaskr import db, app, DockerManager
 from flaskr.auth import Auth
 from flaskr.models import TokenVerify, auth_required, load_server_templates
-from flaskr.docker import client
+from flaskr.docker import client, DockerFiles
 from flaskr.database import Database
 
 SERVER_TEMPLATES = load_server_templates()
 
-
-##### Public Links
+"""
+##### Public Links #####
+"""
 
 """
-Main Page
+###### Main Routes ######
 """
 # Needs to be updated
 @app.route('/')
 def index():
     return render_template('index.html') # HomePage
 
-"""
-All routes in /Blog/
-"""
 @app.route('/<path:path>')
 def blog(path):
-    if path != 'about_service.html':
-        return render_template(f'blog/{path}.html') # needs to be added
-    return render_template('blog/about_service.html')
+    return render_template(f'blog/{path}.html') if path != 'about_service.html' else render_template('blog/about_service.html')
 
-# modify
-@app.route('/purchase/<plan>')
-def purchase(plan):
-    # Logic for handling purchases would go here
-    # For now, just redirect back to pricing page
-    return f"Processing purchase for {plan} plan..."
-
-
-"""
-Services
-"""
 @app.route('/services/<name>', methods=['GET'])
 def get_service(name):
-    if name in SERVER_TEMPLATES:
-        return render_template(f'blog/about_service.html', services=SERVER_TEMPLATES.get(name))  # Render corresponding HTML file
-    return render_template('errors/404.html'), 404  # Render 404 page if service not found
-
+    return render_template(f'blog/about_service.html', services=SERVER_TEMPLATES.get(name)) if name in SERVER_TEMPLATES else render_template('errors/404.html'), 404
 
 """
-Authentication
+###### Authentication ######
 """
 @app.route('/register', methods=['GET', 'POST'])
 def register() -> str:
@@ -69,38 +52,67 @@ def logout() -> str:
 def forgot_password() -> str:
     return render_template('auth/forgot_password.html')
 
+"""
+##### Private Links #####
+"""
+def stream_logs(container_id):
+    try:
+        container = client.containers.get(container_id)
+        for line in container.logs(stream=True):
+            yield f"data: {line.decode('utf-8')}\n\n"
+    except Exception as e:
+        yield f"data: Error: {str(e)}\n\n"
 
-##### Private Links
-
-@app.route('/dashboard')
+@app.route('/stream/<container_id>')
 @auth_required
-def cpanel():
-    # Get user's servers
+def stream(container_id) -> Response:
+    return Response(stream_logs(container_id), mimetype='text/event-stream')
 
-    user_id = session['user_id']
-    server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
-    server_loc = db.collection('servers').stream()
-    user_data = db.collection('users').document(user_id).get().to_dict()
+@app.route('/console/<container_id>')
+@auth_required
+def console(container_id):
+    return render_template('cpanel/server/console.html', container_id=container_id)
+
+@app.route('/files/<container_id>')
+@auth_required
+def files(container_id):
+    return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id)
+
+@app.route('/download/<container_id>/<path:file_path>')
+@auth_required
+def download(container_id, file_path):
+    return send_file(DockerFiles.docker_download_file(container_id, file_path), as_attachment=True)
+
+##### Errors
+
+@app.errorhandler(404)
+@app.errorhandler(TemplateNotFound)
+def page_not_found(error):
+    return render_template('errors.html', error=404), 404
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('errors.html', error=500), 500
 
 
-    servers = []
-    for server_ref in server_refs:
-        server_data = server_ref.to_dict()
-        container = client.containers.get(server_data['container_id']) if server_data['container_id'] else None
-        server_data['id'] = server_ref.id
-        server_data['status'] = container.status if container else 'stopped'
-        servers.append(server_data)
+##### Config
 
-    user = {
-        'username': user_data['username'],
-        'mail': user_data['mail'],
-        'credits': user_data['credits']
-    }
+# Verify ID Token Endpoint
+@app.route('/verify_token', methods=['POST'])
+def verify_token():
+    return Auth.TokenVerify(request.json.get('idToken'))
 
 
 
+#### To fix/ remove/ transform
 
-    return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES, user=user)
+# modify
+@app.route('/purchase/<plan>')
+def purchase(plan):
+    # Logic for handling purchases would go here
+    # For now, just redirect back to pricing page
+    return f"Processing purchase for {plan} plan..."
+
 
 # Needs to be fixed
 @app.route('/create_server', methods=['GET', 'POST'])
@@ -129,15 +141,14 @@ def create_server():
         Database.server_create(server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup, server_location, server_nest, server_egg)
 
 
-        return render_template('cpanel/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
+        return render_template('cpanel/server/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
 
 @app.route('/get_eggs/<nest>')
 def get_eggs(nest):
-    eggs = SERVER_TEMPLATES.get(nest, {}).get("eggs", {})
-    return jsonify(eggs)
+    return jsonify(SERVER_TEMPLATES.get(nest, {}).get("eggs", {}))
 
 # Needs to be fixed
 @app.route('/server/<server_id>')
@@ -158,39 +169,30 @@ def server_details(server_id):
                            template=SERVER_TEMPLATES.get(server_data['type'], {}))
 
 
+@app.route('/dashboard')
+@auth_required
+def cpanel():
+    # Get user's servers
 
-def stream_logs(container_id):
-    try:
-        container = client.containers.get(container_id)
-        for line in container.logs(stream=True):
-            yield f"data: {line.decode('utf-8')}\n\n"
-    except Exception as e:
-        yield f"data: Error: {str(e)}\n\n"
-
-@app.route('/stream/<container_id>')
-def stream(container_id) -> Response:
-    return Response(stream_logs(container_id), mimetype='text/event-stream')
+    user_id = session['user_id']
+    server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
+    # server_loc = db.collection('servers').stream()
+    user_data = db.collection('users').document(user_id).get().to_dict()
 
 
-@app.route('/console/<container_id>')
-def console(container_id):
-    return render_template('cpanel/console.html', container_id=container_id)
+    servers = []
+    for server_ref in server_refs:
+        server_data = server_ref.to_dict()
+        container = client.containers.get(server_data['container_id']) if server_data['container_id'] else None
+        server_data['id'] = server_ref.id
+        server_data['status'] = container.status if container else 'stopped'
+        servers.append(server_data)
 
-##### Errors
-
-@app.errorhandler(404)
-@app.errorhandler(TemplateNotFound)
-def page_not_found(error):
-    return render_template('errors.html', error=404), 404
-
-@app.errorhandler(500)
-def internal_server_error(error):
-    return render_template('errors.html', error=500), 500
+    user = {
+        'username': user_data['username'],
+        'mail': user_data['mail'],
+        'credits': user_data['credits']
+    }
 
 
-##### Config
-
-# Verify ID Token Endpoint
-@app.route('/verify_token', methods=['POST'])
-def verify_token():
-    return Auth.TokenVerify(request.json.get('idToken'))
+    return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES, user=user)
