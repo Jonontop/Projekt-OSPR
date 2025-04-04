@@ -62,15 +62,20 @@ Authentication
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     id_token = request.json.get('idToken')
-    # username = request.json.get('username')
+    username = request.json.get('username')
+    mail = request.json.get('email')
 
     try:
         # Verify the ID token
-        decoded_token = auth.verify_id_token(id_token)
+        decoded_token = auth.verify_id_token(id_token, clock_skew_seconds=100)
         user_id = decoded_token['uid']
 
         # Store user data in your database (e.g., Firestore or Realtime Database)
-        # Example: db.collection('users').document(user_id).set({'username': username})
+        db.collection('users').document(user_id).set({
+            'username': username,
+            'mail': mail,
+            'credits': 100
+        })
 
         return jsonify({'success': True})
     except Exception as e:
@@ -102,6 +107,7 @@ def cpanel():
     user_id = session['user_id']
     server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
     server_loc = db.collection('servers').stream()
+    user_data = db.collection('users').document(user_id).get().to_dict()
 
 
     servers = []
@@ -112,8 +118,16 @@ def cpanel():
         server_data['status'] = container.status if container else 'stopped'
         servers.append(server_data)
 
+    user = {
+        'username': user_data['username'],
+        'mail': user_data['mail'],
+        'credits': user_data['credits']
+    }
 
-    return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES)
+
+
+
+    return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES, user=user)
 
 # Needs to be fixed
 @app.route('/create_server', methods=['GET', 'POST'])

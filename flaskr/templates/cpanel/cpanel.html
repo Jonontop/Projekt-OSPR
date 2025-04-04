@@ -19,7 +19,7 @@
             <ul class="hamburger-menu">
                 <li class="hamburger-item"><a href="" class="hamburger-link">Dashboard</a></li>
                 <li class="hamburger-item"><a href="{{ url_for('create_server')}}" class="hamburger-link">Create Server</a></li>
-                <li class="hamburger-item"><a href="" class="hamburger-link">Store</a></li>
+                <li class="hamburger-item"><a href="{{ url_for('index') }}" class="hamburger-link">Store</a></li>
                 <li class="hamburger-item"><a href="" class="hamburger-link">Earn</a></li>
             </ul>
         </div>
@@ -27,9 +27,9 @@
     <section>
         <div class="coins">
             <ul class="coins-items">
-                <li class="coins-item"><a href="">Coins</a></li>
-                <li class="coins-item"><a href="">Coins</a></li>
-                <li class="coins-item"><a href="">Coins</a></li>
+                <li class="coins-item"><a href="">Servers: {{ servers|length }}</a></li>
+                <li class="coins-item"><a href="">Credits: {{ user.credits }}</a></li>
+                <li class="coins-item"><a href="">Neki</a></li>
             </ul>
         </div>
     </section>
