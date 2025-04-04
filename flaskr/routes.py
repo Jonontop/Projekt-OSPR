@@ -5,7 +5,7 @@ import time
 from firebase_admin import auth
 from flask import redirect, render_template, make_response, session, url_for, request, jsonify, Response
 from jinja2 import TemplateNotFound
-
+from flaskr.auth import Auth
 from flaskr import get_firestore_client, app, client
 from flaskr.models import TokenVerify, auth_required, load_server_templates
 
@@ -34,7 +34,7 @@ def blog(path):
     else:
         return render_template('blog/about_service.html')
 
-
+# modify
 @app.route('/purchase/<plan>')
 def purchase(plan):
     # Logic for handling purchases would go here
@@ -47,13 +47,9 @@ Services
 """
 @app.route('/services/<name>', methods=['GET'])
 def get_service(name):
-    services = SERVER_TEMPLATES
-    service = services.get(name)
-
-    if name in services:
-        return render_template(f'blog/about_service.html', services=service)  # Render corresponding HTML file
-    else:
-        return render_template('errors/404.html'), 404  # Render 404 page if service not found
+    if name in SERVER_TEMPLATES:
+        return render_template(f'blog/about_service.html', services=SERVER_TEMPLATES.get(name))  # Render corresponding HTML file
+    return render_template('errors/404.html'), 404  # Render 404 page if service not found
 
 
 """
@@ -61,25 +57,7 @@ Authentication
 """
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    id_token = request.json.get('idToken')
-    username = request.json.get('username')
-    mail = request.json.get('email')
-
-    try:
-        # Verify the ID token
-        decoded_token = auth.verify_id_token(id_token, clock_skew_seconds=100)
-        user_id = decoded_token['uid']
-
-        # Store user data in your database (e.g., Firestore or Realtime Database)
-        db.collection('users').document(user_id).set({
-            'username': username,
-            'mail': mail,
-            'credits': 100
-        })
-
-        return jsonify({'success': True})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+    return Auth.register_firebase_user(request.json.get('idToken'), request.json.get('username'), request.json.get('email'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -87,10 +65,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user', None) # None = Privzeta vrednost če 'user' ni v session
-    response = make_response(redirect(url_for('login'))) # redirecta na login
-    response.set_cookie('session', '', expires=0) # uniči session
-    return response
+    return Auth.logout(session)
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():

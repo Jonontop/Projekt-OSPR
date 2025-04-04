@@ -1,54 +1,41 @@
 import time
 
-from flask import flas
+from flask import jsonify, redirect, url_for, session, flash, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from firebase_admin import auth
 from flaskr import get_firestore_client
 
 db = get_firestore_client()
 
-# Register user
-def register_user(username:str, email:str, password:str, name:str):
-    users_ref = db.collection("users")
-    # Check if email already exists
-    query = users_ref.where("email", "==", email).limit(1).get()
-    if len(query) > 0:
-        return False, "Email already exists."
+# Full Authentication Module in Class
 
-    # Hash the password
-    password_hash = generate_password_hash(password) # Kriptira geslo
+class Auth:
+    def __init__(self):
+        pass
 
-    # Add user to Firestore
-    user_data = {
-        "name": name,
-        "username": username,
-        "email": email,
-        "password_hash": password_hash,
-        "firstlog": time.time(),
-        "lastlog": time.time()
-    }
-    users_ref.add(user_data)
-    return True, "User registered successfully."
+    @staticmethod
+    def register_firebase_user(id_token: str, username: str, mail: str):
+        try:
+            # Verify the ID token
+            decoded_token = auth.verify_id_token(id_token, clock_skew_seconds=60) # Bug fix
+            user_id = decoded_token['uid']
 
-# Login user
-def login_user(email, password):
-    users_ref = db.collection("users")
-    query = users_ref.where("email", "==", email).limit(1).get()
+            # Store user data in your database (e.g., Firestore or Realtime Database)
+            db.collection('users').document(user_id).set({
+                'username': username,
+                'mail': mail,
+                'credits': 100
+            })
 
-    ## Update last login
-    user_data = {
-        "lastlog": time.time() # Update last login
-    }
+            return jsonify({'success': True})
 
-    users_ref.document(query[0].id).update(user_data) # Update last login
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})
 
-    if len(query) == 0:
-        return False, "User not found."
-
-    user = query[0].to_dict()
-    if check_password_hash(user["password_hash"], password):
-        return True, user
-    else:
-        return False, "Invalid password."
-
+    @staticmethod
+    def logout(session):
+        session.pop('user', None)  # None = Privzeta vrednost če 'user' ni v session
+        response = make_response(redirect(url_for('login')))  # redirecta na login
+        response.set_cookie('session', '', expires=0)  # uniči session
+        return response
 

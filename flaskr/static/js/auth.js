@@ -1,7 +1,7 @@
 import { auth, googleProvider } from "./firebase-config.js";
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
-console.log("auth.js loaded successfully!");
+//console.log("auth.js loaded successfully!");
 
 // Register function
 document.getElementById('register-form').addEventListener('submit', async (e) => {
