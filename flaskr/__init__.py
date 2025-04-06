@@ -18,7 +18,6 @@ DockerManager = DockerManager()
 # Defining the SQLAlchemy database object
 # db = SQLAlchemy(app) # data stealing
 
-
 # Firebase Admin SDK setup
 cred = credentials.Certificate("firebase-auth.json")
 firebase_admin.initialize_app(cred)

@@ -4,10 +4,14 @@ import docker
 import os
 
 # Load Docker client
-#REMOTE_DOCKER_HOST = 'tcp://local.jonpecar.xyz:2375'
-#REMOTE_DOCKER_HOST = 'tcp://192.168.1.187:2375'
-#client = docker.DockerClient(base_url=REMOTE_DOCKER_HOST)
-client = docker.from_env()
+try:
+    REMOTE_DOCKER_HOST = 'tcp://local.jonpecar.xyz:2375'
+    client = docker.DockerClient(base_url=REMOTE_DOCKER_HOST)
+    print("Connected to remote Docker host")
+except Exception as e:
+    client = docker.from_env()
+    print("Connected to local Docker host")
+
 
 class DockerManager:
     def __init__(self):
@@ -20,14 +24,14 @@ class DockerManager:
         port = self.__server_templates[server_nest]['port_default']
         try:
 
-            # Run the container with the appropriate Docker image
+
             container = client.containers.run(
                 docker_image,
                 name=server_name,
-                detach=True,  # Run in detached mode
-                ports={f'{port}/tcp': None},  # Expose necessary ports for the game
+                detach=True,
+                ports={f'{port}/tcp': None},
                 environment={
-                    'EULA': 'TRUE',  # Example environment variable
+                    'EULA': 'TRUE',
                     'SERVER_NAME': server_name,
                     "CPU": server_cpu,
                     "STORAGE": server_storage,
@@ -69,7 +73,6 @@ class DockerManager:
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
 
-
     def docker_restart(self, container_id) -> any:
         try:
             # Restart the container
@@ -78,6 +81,15 @@ class DockerManager:
             return jsonify({'success': True})
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
+
+    @staticmethod
+    def stream_logs(container_id):
+        try:
+            container = client.containers.get(container_id)
+            for line in container.logs(stream=True):
+                yield f"data: {line.decode('utf-8')}\n\n"
+        except Exception as e:
+            yield f"data: Error: {str(e)}\n\n"
 
 class DockerFiles:
     def __init__(self):

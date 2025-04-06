@@ -8,7 +8,7 @@ from flask import redirect, session, url_for, flash, jsonify
 def load_server_templates() -> dict:
     try:
         with open('flaskr/templates.json', 'r') as file:
-            print("Templates loaded")
+            #print("Templates loaded")
             return json.load(file)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"Error loading server templates: {e}")

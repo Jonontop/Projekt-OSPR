@@ -1,16 +1,11 @@
-import json
-import os
-import time
-from threading import Thread
-
 from flask import redirect, render_template, session, url_for, request, jsonify, Response, send_file
 from jinja2 import TemplateNotFound
 
 from flaskr import db, app, DockerManager
 from flaskr.auth import Auth
-from flaskr.models import TokenVerify, auth_required, load_server_templates
-from flaskr.docker import client, DockerFiles
 from flaskr.database import Database
+from flaskr.docker import client, DockerFiles
+from flaskr.models import auth_required, load_server_templates
 
 SERVER_TEMPLATES = load_server_templates()
 
@@ -60,38 +55,100 @@ def forgot_password() -> str:
 """
 ##### Private Links #####
 """
-def stream_logs(container_id):
-    try:
-        container = client.containers.get(container_id)
-        for line in container.logs(stream=True):
-            yield f"data: {line.decode('utf-8')}\n\n"
-    except Exception as e:
-        yield f"data: Error: {str(e)}\n\n"
-
 @app.route('/stream/<container_id>')
 @auth_required
 def stream(container_id) -> Response:
-    return Response(stream_logs(container_id), mimetype='text/event-stream')
-
-@app.route('/console/<container_id>')
-@auth_required
-def console(container_id):
-    return render_template('cpanel/server/console.html', container_id=container_id)
-
-@app.route('/files/<container_id>')
-@auth_required
-def files(container_id):
-    return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id)
-
-@app.route('/download/<container_id>/<path:file_path>')
-@auth_required
-def download(container_id, file_path):
-    return send_file(DockerFiles.docker_download_file(container_id, file_path), as_attachment=True)
+    return Response(DockerManager.stream_logs(container_id), mimetype='text/event-stream')
 
 @app.route('/account')
 @auth_required
 def account():
     return render_template('cpanel/account.html')
+
+"""
+##### Server Management #####
+"""
+# console
+@app.route('/server/<container_id>/console')
+@auth_required
+def console(container_id):
+    return render_template('cpanel/server/console.html', container_id=container_id)
+
+# settings
+@app.route('/server/<container_id>/settings')
+@auth_required
+def settings(container_id):
+    pass
+
+# analytics
+@app.route('/server/<container_id>/analytics')
+@auth_required
+def analytics(container_id):
+    pass
+
+# scheduler
+@app.route('/server/<container_id>/scheduler')
+@auth_required
+def scheduler(container_id):
+    pass
+
+# users
+@app.route('/server/<container_id>/users')
+@auth_required
+def users(container_id):
+    pass
+
+# backup
+@app.route('/server/<container_id>/backup')
+@auth_required
+def backup(container_id):
+    pass
+
+# edit
+@app.route('/server/<container_id>/edit')
+def edit(container_id):
+    # Logic for handling server edit would go here
+    # For now, just redirect back to dashboard
+    return redirect(url_for('dashboard'))
+
+
+### Files ###
+# files access
+@app.route('/server/<container_id>/files')
+@auth_required
+def files(container_id):
+    return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id)
+
+# files download
+@app.route('/server/<container_id>/files/download/<path:file_path>')
+@auth_required
+def files_download(container_id, file_path):
+    return send_file(DockerFiles.docker_download_file(container_id, file_path), as_attachment=True)
+
+# files upload
+@app.route('/server/<container_id>/files/upload', methods=['POST'])
+@auth_required
+def files_upload(container_id):
+    pass
+
+# files delete
+@app.route('/server/<container_id>/files/delete', methods=['POST'])
+@auth_required
+def files_delete(container_id):
+    pass
+
+# files edit
+@app.route('/server/<container_id>/files/edit', methods=['POST'])
+@auth_required
+def files_edit(container_id):
+    pass
+
+# files create
+@app.route('/server/<container_id>/files/create', methods=['POST'])
+@auth_required
+def files_create(container_id):
+    pass
+
 
 ##### Errors
 
@@ -114,7 +171,7 @@ def verify_token():
 
 
 
-#### To fix/ remove/ transform
+#### To fix / remove / transform
 
 # modify
 @app.route('/purchase/<plan>')
@@ -133,7 +190,6 @@ def create_server():
         return render_template('cpanel/create_server.html', nests=SERVER_TEMPLATES, locations=locations)
 
 
-    # Get the necessary data (e.g., server name, game type) from the request
     # General
     server_name, server_description = request.form.get('server_name'), request.form.get('server_description')
     # Resources

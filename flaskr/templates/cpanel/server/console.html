@@ -1,15 +1,9 @@
 {% extends 'cpanel/base.html' %}
 
-
-
 {% block title %}
   Console Logs
 {% endblock %}
 
-{% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
-{% endblock %}
 {% block content %}
 <body>
     <style>
@@ -25,6 +19,98 @@
             background-color: black;
 
         }
+
+            * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      height: 100vh;
+    }
+    .left-panel {
+      flex: 2;
+      background: #0f172a;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .right-panel {
+      flex: 1;
+      background: #1e293b;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #38bdf8;
+    }
+    .subtext {
+      color: #facc15;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .log-box {
+      background: black;
+      font-family: monospace;
+      font-size: 0.75rem;
+      padding: 0.5rem;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      height: 100%;
+    }
+    .button-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .button-bar button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .start { background: #22c55e; }
+    .restart { background: #facc15; }
+    .stop { background: #ef4444; }
+    .kill { background: #f43f5e; }
+    .info-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+    .info-label {
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+    .info-value {
+      font-size: 1rem;
+      color: #e2e8f0;
+    }
+    .save-button, .renew-link {
+      background: #0ea5e9;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+    }
+    .renew-link {
+      background: none;
+      color: #38bdf8;
+      text-decoration: underline;
+      padding: 0;
+      margin-left: 0.5rem;
+    }
     </style>
     <script>
         const containerId = "{{ container_id }}"; // Container ID from docker
@@ -48,8 +134,47 @@
 
         window.onload = startStream;
     </script>
-    <h2 style="color: black;">Docker Console Logs</h2>
-    <div id="console"></div>
+      <div class="left-panel">
+        <h1>23UR novice</h1>
+        <div class="subtext">Silly Development: Best free hosting service.</div>
+        <div id="console"></div>
+      </div>
+      <div class="right-panel">
+        <div class="button-bar">
+          <button class="start">Start</button>
+          <button class="restart">Restart</button>
+          <button class="stop">Stop</button>
+          <button class="kill">Kill</button>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Uptime</div>
+          <div class="info-value">38d 22h 42m 42s</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Address</div>
+          <div class="info-value">45.134.39.193:6001</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">CPU</div>
+          <div class="info-value">0.00% / 100%</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Memory</div>
+          <div class="info-value">14.6 MiB / 512 MiB</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Disk</div>
+          <div class="info-value">1.56 MiB / 1 GiB</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Save Console Logs</div>
+          <button class="save-button">Save</button>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Renewal Date</div>
+          <div class="info-value">in 6 days <button class="renew-link">Renew</button></div>
+        </div>
+      </div>
 </body>
 
 {% endblock %}
