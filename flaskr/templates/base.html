@@ -4,77 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Default Title{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
-    <script src="{{ url_for('static' , filename='js/menu.js') }}"></script>
+
+    <!-- Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine JS for dropdown functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
     {% block head %}{% endblock %}
 </head>
-<body>
-
-    <nav class="navbar">
-    <div class="nav-container">
-        <div class="nav-logo">Company</div>
-
-        <div class="mobile-toggle" id="mobileToggle">☰</div>
-
-        <ul class="nav-links" id="navLinks">
-            <li class="nav-item">
-                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link dropdown-trigger" data-dropdown="hosting-dropdown">HOSTING ▼</a>
-                <div class="dropdown-content" id="hosting-dropdown">
-                    <a href="{{ url_for('login') }}" class="dropdown-item">Free Hosting</a>
-                    <a href="{{ url_for('login') }}" class="dropdown-item">Paid Hosting</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link dropdown-trigger" data-dropdown="more-dropdown">MORE ▼</a>
-                <div class="dropdown-content" id="more-dropdown">
-                    <a href="{{ url_for('blog', path='about') }}" class="dropdown-item">About</a>
-                    <a href="{{ url_for('blog', path='support') }}" class="dropdown-item">Support</a>
-                    <a href="{{ url_for('blog', path='terms') }}" class="dropdown-item">TOS</a>
-                    <a href="{{ url_for('blog', path='privacy') }}" class="dropdown-item">Privacy policy</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link dropdown-trigger" data-dropdown="services-dropdown">SERVICES ▼</a>
-                <div class="dropdown-content wide-dropdown" id="services-dropdown">
-                    <a href="{{ url_for('get_service', name='minecraft') }}" style="text-decoration: none;">
-                    <div class="service-item">
-                        <div class="service-title">Minecraft</div>
-                        <div class="service-description">Expert advice on business strategies and technology implementation.</div>
-                    </div>
-                    </a>
-                    <a href="{{ url_for('get_service', name='vps_ubuntu') }}" style="text-decoration: none;">
-                    <div class="service-item">
-                        <div class="service-title">VPS</div>
-                        <div class="service-description">Custom software solutions tailored to your business needs.</div>
-                    </div>
-                    </a>
-                    <a href="{{ url_for('get_service', name='web_server') }}" style="text-decoration: none;">
-                    <div class="service-item">
-                        <div class="service-title">Web Server</div>
-                        <div class="service-description">Scalable cloud infrastructure and migration services.</div>
-                    </div>
-                    </a>
-                    <a href="{{ url_for('get_service', name='voice_server') }}" style="text-decoration: none;">
-                    <div class="service-item">
-                        <div class="service-title">Voice Server</div>
-                        <div class="service-description">Turn your data into actionable business insights.</div>
-                    </div>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Left side - Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="flex items-center">
+                        <!-- Replace with your logo -->
+                        <svg class="h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span class="ml-2 text-xl font-bold text-gray-800">YourBrand</span>
                     </a>
                 </div>
-            </li>
-        </ul>
 
-        <div class="nav-right">
-            <button class="nav-button"><a href="{{ url_for('login') }}" style="text-decoration: none; color: white;">Login</a></button>
+                <!-- Middle - Navigation Links -->
+                <div class="hidden md:flex md:items-center md:space-x-4">
+                    <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="{{ url_for('blog', path='about') }}" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+
+                    <!-- Services Dropdown -->
+                    <div x-data="{ open: false }" @click.away="open = false" class="relative">
+                        <button @click="open = !open" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            Services
+                            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div x-show="open" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" style="display: none;">
+                            <div class="py-1">
+                                <a href="{{ url_for('get_service', name='minecraft') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Minecraft</a>
+                                <a href="{{ url_for('get_service', name='vps_ubuntu') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Web Hosting</a>
+                                <a href="{{ url_for('get_service', name='web_server') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">VPS</a>
+                                <a href="{{ url_for('get_service', name='voice_server') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Voice Server</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More Dropdown -->
+                    <div x-data="{ open: false }" @click.away="open = false" class="relative">
+                        <button @click="open = !open" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                            More
+                            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div x-show="open" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" style="display: none;">
+                            <div class="py-1">
+                                <a href="{{ url_for('blog', path='support') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support</a>
+                                <a href="{{ url_for('blog', path='terms') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">TOS</a>
+                                <a href="{{ url_for('blog', path='privacy') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Privacy Policy</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side - Buttons -->
+                <div class="hidden md:flex md:items-center md:space-x-4 ">
+                    <a href="{{ url_for('login') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="flex md:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-</nav>
-    {% block content %}
-    {% endblock %}
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="md:hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{{ url_for('index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Home</a>
+                <a href="{{ url_for('blog', path='about') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">About</a>
+                <a href="{{ url_for('blog', path='support') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Services</a>
+                <a href="{{ url_for('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Login</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">More</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Replace with your content -->
+        {% block content %}
+        {% endblock %}
+        <!-- /End replace -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <p class="text-center">&copy; 2025 YourBrand. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
-

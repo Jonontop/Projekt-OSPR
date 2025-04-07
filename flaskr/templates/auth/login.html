@@ -1,21 +1,66 @@
 {% extends "base.html" %}
-
-{% block title %}
-    Login
-{% endblock %}
-
-{% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <!-- Include Firebase SDK as modules -->
-    <script type="module" src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
-     <!-- Include your custom scripts as modules -->
-    <script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
-{% endblock %}
-
+{% block title %}Login{% endblock %}
 {% block content %}
-    <div class="container">
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
+
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 font-sans" style="background-image: url('{{ url_for('static', filename='images/login_background.jpg') }}'); background-size: cover; backdrop-filter: blur(2px);">
+    <style>
+    .form-container {
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .form-container.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      position: absolute;
+      pointer-events: none;
+    }
+    .form-transition-wrapper {
+      position: relative;
+      min-height: 340px;
+    }
+    input {
+      transition: all 0.3s ease;
+    }
+    input:focus {
+      transform: scale(1.02);
+    }
+    button {
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .tab-button {
+      transition: all 0.3s ease;
+    }
+    .pulse-effect {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+      }
+    }
+    .rotate-icon {
+      transition: transform 0.5s ease;
+    }
+    .rotate-icon:hover {
+      transform: rotate(180deg);
+    }
+  </style>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="alert alert-{{ category }}">
@@ -23,42 +68,204 @@
                     </div>
                 {% endfor %}
             {% endif %}
-        {% endwith %}
+  {% endwith %}
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:shadow-3xl">
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-5 flex justify-between items-center rounded-t-2xl">
+        <h2 class="text-white text-2xl font-bold" id="formTitle">Login</h2>
+        <div class="flex space-x-2 bg-white bg-opacity-20 p-1 rounded-xl">
+          <button id="loginTab" class="tab-button px-5 py-2 text-sm font-medium text-white bg-white bg-opacity-30 rounded-xl shadow-sm hover:bg-opacity-40 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-300">
+            Login
+          </button>
+          <button id="registerTab" class="tab-button px-5 py-2 text-sm text-white text-opacity-70 hover:text-opacity-100 rounded-xl hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-300">
+            Register
+          </button>
+        </div>
+      </div>
 
+      <div class="form-transition-wrapper">
         <!-- Login Form -->
-        <div class="form-container login-form">
-            <h2>Login</h2>
-            <form id="login-form">
-                <label for="login-username">Email</label>
-                <input type="text" id="login-username" name="username" required>
-                <label for="login-password">Password</label>
-                <input type="password" id="login-password" name="password" required>
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <a href="#" id="show-register-link">Register here</a></p>
-            <p>Didn't receive the verification email? <a href="#" id="resend-verification-link">Resend verification email</a></p>
-            <a href="{{ url_for('forgot_password') }}" id="forgot-the-password">Forgot your password</a>
-            <p>Or sign in with:</p>
-            <button id="google-sign-in-button">Sign in with Google</button>
+        <div id="loginForm" class="form-container p-8">
+          <form id="login-form">
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="login-username">
+                Email Address
+              </label>
+              <input class="shadow-sm appearance-none border border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="login-username" type="email" placeholder="your@email.com" name="username">
+            </div>
+            <div class="mb-6">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="login-password">
+                Password
+              </label>
+              <input class="shadow-sm appearance-none border border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="login-password" type="password" placeholder="••••••••" name="password">
+              <a class="inline-block align-baseline text-sm text-blue-600 hover:text-blue-800 transition-colors duration-300" href="#">
+                Forgot Password?
+              </a>
+            </div>
+            <div class="flex items-center justify-between">
+              <button class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full transition-all duration-300 pulse-effect" type="submit">
+                Sign In
+              </button>
+            </div>
+          </form>
         </div>
 
-        <!-- Register Form -->
-        <div class="form-container register-form">
-            <h2>Register</h2>
-            <form id="register-form">
-                <label for="register-username">Username</label>
-                <input type="text" id="register-username" name="username" required>
-                <label for="register-email">Email</label>
-                <input type="email" id="register-email" name="email" required>
-                <label for="register-password">Password</label>
-                <input type="password" id="register-password" name="password" required>
-                <button type="submit">Register</button>
-            </form>
-            <p>Already have an account? <a href="#" id="show-login-link">Login here</a></p>
-
+        <!-- Register Form (Hidden by default) -->
+        <div id="registerForm" class="form-container p-8 hidden">
+          <form id="register-form">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="register-username">
+                Full Name
+              </label>
+              <input class="shadow-sm appearance-none border border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="register-username" type="text" placeholder="John Doe" name="username">
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="register-email">
+                Email Address
+              </label>
+              <input class="shadow-sm appearance-none border border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="register-email" type="email" placeholder="your@email.com" name="email">
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="register-password">
+                Password
+              </label>
+              <input class="shadow-sm appearance-none border border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="register-password" type="password" placeholder="••••••••" name="password">
+            </div>
+            <div class="mb-6">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="register-confirm">
+                Confirm Password
+              </label>
+              <input class="shadow-sm appearance-none border border-gray-200 rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                    id="register-confirm" type="password" placeholder="••••••••" name="confirm_password">
+            </div>
+            <div class="flex items-center justify-between">
+              <button class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl focus:outline-none focus:shadow-outline w-full transition-all duration-300" type="submit">
+                Create Account
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
+
+      <div class="px-8 py-5 bg-gray-50 text-center rounded-b-2xl">
+        <p class="text-sm text-gray-600" id="switchMessage">
+          Don't have an account?
+          <a href="#" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 border-b border-blue-300 hover:border-blue-600" id="switchForm">Register now</a>
+          <p style="display:none;">Didn't receive the verification email? <a href="#" id="resend-verification-link">Resend verification email</a></p>
+          <button id="google-sign-in-button" style="display:none;">Sign in with Google</button>
+        </p>
+      </div>
     </div>
+  </div>
 
-    <!-- Include script.js for form toggling (not a module) -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script>
+    // Elements
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const formTitle = document.getElementById('formTitle');
+    const switchForm = document.getElementById('switchForm');
+    const switchMessage = document.getElementById('switchMessage');
+
+    // Add animation when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('.max-w-md').classList.add('animate-fadeIn');
+    });
+
+    // Switch to Register Form
+    function showRegisterForm() {
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+
+      // Add entrance animation
+      setTimeout(() => {
+        registerForm.style.opacity = '1';
+        registerForm.style.transform = 'translateY(0)';
+      }, 50);
+
+      formTitle.textContent = 'Register';
+
+      // Animate tabs
+      loginTab.classList.remove('bg-white', 'bg-opacity-30', 'shadow-sm');
+      loginTab.classList.add('text-opacity-70');
+      registerTab.classList.add('bg-white', 'bg-opacity-30', 'shadow-sm');
+      registerTab.classList.remove('text-opacity-70');
+
+      // Animate form switch text change with fade effect
+      switchMessage.style.opacity = '0';
+      setTimeout(() => {
+        switchMessage.innerHTML = 'Already have an account? <a href="#" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 border-b border-blue-300 hover:border-blue-600" id="switchForm">Login now</a>';
+        document.getElementById('switchForm').addEventListener('click', showLoginForm);
+        switchMessage.style.opacity = '1';
+      }, 200);
+
+      // Button pulse effect
+      document.querySelector('#registerForm button').classList.add('pulse-effect');
+      setTimeout(() => {
+        document.querySelector('#registerForm button').classList.remove('pulse-effect');
+      }, 2000);
+    }
+
+    // Switch to Login Form
+    function showLoginForm() {
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+
+      // Add entrance animation
+      setTimeout(() => {
+        loginForm.style.opacity = '1';
+        loginForm.style.transform = 'translateY(0)';
+      }, 50);
+
+      formTitle.textContent = 'Login';
+
+      // Animate tabs
+      registerTab.classList.remove('bg-white', 'bg-opacity-30', 'shadow-sm');
+      registerTab.classList.add('text-opacity-70');
+      loginTab.classList.add('bg-white', 'bg-opacity-30', 'shadow-sm');
+      loginTab.classList.remove('text-opacity-70');
+
+      // Animate form switch text change with fade effect
+      switchMessage.style.opacity = '0';
+      setTimeout(() => {
+        switchMessage.innerHTML = 'Don\'t have an account? <a href="#" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 border-b border-blue-300 hover:border-blue-600" id="switchForm">Register now</a>';
+        document.getElementById('switchForm').addEventListener('click', showRegisterForm);
+        switchMessage.style.opacity = '1';
+      }, 200);
+
+      // Button pulse effect
+      document.querySelector('#loginForm button').classList.add('pulse-effect');
+      setTimeout(() => {
+        document.querySelector('#loginForm button').classList.remove('pulse-effect');
+      }, 2000);
+    }
+
+    // Event Listeners
+    loginTab.addEventListener('click', showLoginForm);
+    registerTab.addEventListener('click', showRegisterForm);
+    switchForm.addEventListener('click', showRegisterForm);
+
+    // Add subtle input animation
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.classList.add('shadow-md');
+      });
+      input.addEventListener('blur', function() {
+        this.classList.remove('shadow-md');
+      });
+    });
+
+  </script>
+  <script type="module" src="{{ url_for('static', filename='js/auth.js') }}"></script>
+  <!-- Include Firebase SDK as modules -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+
+</body>
 {% endblock %}

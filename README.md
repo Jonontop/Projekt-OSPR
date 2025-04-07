@@ -3,29 +3,29 @@ Projekt za OSPR
 #TODO
 - []Cpanel - py flask, html
     - []console
-    - []analitics
+    - []analytics
     - []database
     - []user system
     - []settings
     - []cpanel
+    - []user settings
+    - []backup
 - [x]Home Page - html
 - []Blog - html
-    - []about - html
-    - [x]TOS - html
-    - []PP - html
+    - [x]about - html
+    - []TOS - html
+    - [x]PP - html
 - [x]Error - html
-    - [x]404 - html
-    - [x]500 - html
 - [x]Login - flask login
     - Login/Register Website - FireBase, html, py
-- []Payment System - flask paypal
+- []Payment System - flask PayPal
 - [x]DataBase - firebase
     - [x]connection
     - [x]user's info
     - [x]user's general info
-    - [x]Google Analitics
+    - []Google Analytics
 - [x]Plans site - html
-- []currency acquering system - firebase, py
+- []currency acquiring system - firebase, py
 
   Addon:
   - []TailWind
@@ -33,7 +33,7 @@ Projekt za OSPR
   - []DarkMode
   - [x]1 File for primary settings - css
   - []SQL - Database - Data stealing
-  - []Minigames - loading screens, coins collecting
+  - []Mini games - loading screens, coins collecting
 
 
 
@@ -42,7 +42,7 @@ Resources:
 - https://firebase.google.com/ - database
 - https://github.com/Jonontop/Projekt-OSPR
 - https://flask.palletsprojects.com/en/stable/api/ - flask
-- https://github.com/pallets-eco/flask-wtf - data menegment
+- https://github.com/pallets-eco/flask-wtf - data tenement
 - https://github.com/maxcountryman/flask-login - login
 - https://medium.com/@andrii.gorshunov/paypal-flask-integration-python-2022-1c012322801d - paypal integration
 

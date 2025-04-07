@@ -142,6 +142,9 @@ class DockerFiles:
     def docker_create_file(self):
         pass
 
+    def docker_upload_file(self):
+        pass
+
     @staticmethod
     def docker_display_files( container_id):
         container = client.containers.get(container_id)
