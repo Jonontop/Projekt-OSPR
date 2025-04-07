@@ -1,3 +1,5 @@
+import os
+
 from flask import redirect, render_template, session, url_for, request, jsonify, Response, send_file
 from jinja2 import TemplateNotFound
 
@@ -6,6 +8,7 @@ from flaskr.auth import Auth
 from flaskr.database import Database
 from flaskr.docker import client, DockerFiles
 from flaskr.models import auth_required, load_server_templates
+from werkzeug.utils import secure_filename
 
 SERVER_TEMPLATES = load_server_templates()
 
@@ -113,37 +116,56 @@ def edit(container_id):
 
 
 ### Files ###
-# files access
+# files access - dela
 @app.route('/server/<container_id>/files')
 @auth_required
 def files(container_id):
     return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id)
 
-# files download
+# files download - ne dela
 @app.route('/server/<container_id>/files/download/<path:file_path>')
 @auth_required
 def files_download(container_id, file_path):
     return send_file(DockerFiles.docker_download_file(container_id, file_path), as_attachment=True)
 
-# files upload
+# files upload - ne dela
 @app.route('/server/<container_id>/files/upload', methods=['POST'])
 @auth_required
 def files_upload(container_id):
-    pass
+    if 'file' not in request.files:
+        return 'No file part', 400
 
-# files delete
+    file = request.files['file']
+    if file.filename == '':
+        return 'No selected file', 400
+
+    target_path = request.form.get('target_path', '')
+    filename = secure_filename(file.filename)
+    file.save('/tmp/' + filename)  # Temporarily save
+
+    success = DockerFiles.docker_upload_file(container_id, '/tmp/' + filename, os.path.join(target_path, filename))
+    os.remove('/tmp/' + filename)  # Clean up
+
+    return ('', 204) if success else ('Upload failed', 500)
+
+# files delete - ne dela
 @app.route('/server/<container_id>/files/delete', methods=['POST'])
 @auth_required
 def files_delete(container_id):
-    pass
+    file_path = request.form.get('file_path')
+    success = DockerFiles.docker_delete_file(container_id, file_path)
+    return ('', 204) if success else ('Delete failed', 500)
 
-# files edit
+# files edit - ne dela
 @app.route('/server/<container_id>/files/edit', methods=['POST'])
 @auth_required
 def files_edit(container_id):
-    pass
+    file_path = request.form.get('file_path')
+    new_content = request.form.get('content')
+    success = DockerFiles.docker_edit_file(container_id, file_path, new_content)
+    return ('', 204) if success else ('Edit failed', 500)
 
-# files create
+# files create - ne dela
 @app.route('/server/<container_id>/files/create', methods=['POST'])
 @auth_required
 def files_create(container_id):
@@ -176,8 +198,6 @@ def delete_server(container_id):
     # Delete server from Firestore
     Database.server_delete(container_id)
     return redirect(url_for('cpanel'))
-
-
 
 
 ##### Errors
