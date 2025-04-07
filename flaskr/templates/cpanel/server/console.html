@@ -136,16 +136,17 @@
     </script>
       <div class="left-panel">
         <h1>23UR novice</h1>
-        <div class="subtext">Silly Development: Best free hosting service.</div>
+        <div class="subtext">OUR Development: Best free hosting service.</div>
         <div id="console"></div>
       </div>
       <div class="right-panel">
         <div class="button-bar">
-          <button class="start">Start</button>
-          <button class="restart">Restart</button>
-          <button class="stop">Stop</button>
-          <button class="kill">Kill</button>
+          <a class="start" href="{{ url_for('start_server', container_id=container_id) }}"><button>Start</button></a>
+          <a class="restart" href="{{ url_for('restart_server', container_id=container_id) }}"><button>Restart</button></a>
+          <a class="stop" href="{{ url_for('stop_server', container_id=container_id) }}"><button>Stop</button></a>
+          <a class="kill" href="{{ url_for('stop_server', container_id=container_id) }}"><button>Kill</button></a>
         </div>
+
         <div class="info-box">
           <div class="info-label">Uptime</div>
           <div class="info-value">38d 22h 42m 42s</div>

@@ -149,6 +149,36 @@ def files_edit(container_id):
 def files_create(container_id):
     pass
 
+#### Docker ####
+@app.route('/server/<container_id>/stop')
+@auth_required
+def stop_server(container_id):
+    DockerManager.docker_stop(container_id)
+    return Response(status=204)
+
+@app.route('/server/<container_id>/start')
+@auth_required
+def start_server(container_id):
+    DockerManager.docker_start(container_id)
+    return Response(status=204)
+
+@app.route('/server/<container_id>/restart')
+@auth_required
+def restart_server(container_id):
+    DockerManager.docker_restart(container_id)
+    return Response(status=204)
+
+@app.route('/server/<container_id>/delete')
+@auth_required
+def delete_server(container_id):
+    # Stop the container
+    DockerManager.docker_delete(container_id)
+    # Delete server from Firestore
+    Database.server_delete(container_id)
+    return redirect(url_for('cpanel'))
+
+
+
 
 ##### Errors
 

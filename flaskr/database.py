@@ -33,15 +33,13 @@ class Database:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    def server_delete(self, server_id):
+    @staticmethod
+    def server_delete(server_id):
         try:
-            # Stop the container
-            container = DockerManager.container.get(server_id)
-            container.stop()
-            container.remove(force=True)  # Force remove the container
-
             # Delete server from Firestore
-            db.collection('servers').document(server_id).delete()
+            docs = db.collection('servers').where('container_id', '==', server_id).stream()
+            for doc in docs: #Loop je nepotreben, ker je samo en server
+                db.collection('servers').document(doc.id).delete()
 
             return {'success': True}
         except Exception as e:

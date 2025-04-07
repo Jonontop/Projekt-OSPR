@@ -45,7 +45,8 @@ class DockerManager:
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
 
-    def docker_stop(self, container_id):
+    @staticmethod
+    def docker_stop(container_id):
         try:
             # Stop the container
             container = client.containers.get(container_id)
@@ -54,7 +55,8 @@ class DockerManager:
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
 
-    def docker_start(self, container_id):
+    @staticmethod
+    def docker_start(container_id):
         try:
             # Start the container
             container = client.containers.get(container_id)
@@ -63,7 +65,8 @@ class DockerManager:
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
 
-    def docker_delete(self, container_id):
+    @staticmethod
+    def docker_delete(container_id):
         try:
             # Stop the container
             container = client.containers.get(container_id)
@@ -73,7 +76,8 @@ class DockerManager:
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)})
 
-    def docker_restart(self, container_id) -> any:
+    @staticmethod
+    def docker_restart(container_id) -> any:
         try:
             # Restart the container
             container = client.containers.get(container_id)
@@ -83,7 +87,7 @@ class DockerManager:
             return jsonify({'success': False, 'error': str(e)})
 
     @staticmethod
-    def stream_logs(container_id):
+    def stream_logs(container_id) -> any:
         try:
             container = client.containers.get(container_id)
             for line in container.logs(stream=True):
