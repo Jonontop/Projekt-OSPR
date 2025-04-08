@@ -79,7 +79,7 @@
                           <h3 class="mt-2 text-sm font-medium text-gray-900">No servers added</h3>
                           <p class="mt-1 text-sm text-gray-500">Get started by adding your first server.</p>
                           <div class="mt-6">
-                              <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                              <button type="button" onclick="window.location.href='{{ url_for('create_server') }}'" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                   <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                   </svg>
@@ -138,62 +138,62 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     {% for server in servers %}
                                     <!-- Server 1 -->
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {% if server.status == 'running' %}
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                    Online
-                                                </span>
-                                            {% elif server.status == 'exited' or server.status == 'stopped' %}
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                    Offline
-                                                </span>
-                                            {% else %}
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                    Unknown
-                                                </span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">{{ server.name }}</div>
-                                            <div class="text-sm text-gray-500">{{ server.description.title() }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                          {{ server.ip }}:{{ server.port }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ server.nest.title() }} - {{ server.egg.title() }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 35%"></div>
+                                        <tr onclick="window.location.href='{{ url_for('console', container_id=server.container_id) }}'" style="cursor: pointer;">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {% if server.status == 'running' %}
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                        Online
+                                                    </span>
+                                                {% elif server.status == 'exited' or server.status == 'stopped' %}
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                        Offline
+                                                    </span>
+                                                {% else %}
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                        Unknown
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm font-medium text-gray-900">{{ server.name }}</div>
+                                                <div class="text-sm text-gray-500">{{ server.description.title() }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                              {{ server.ip }}:{{ server.port }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ server.nest.title() }} - {{ server.egg.title() }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 35%"></div>
+                                                    </div>
+                                                    <span class="text-sm text-gray-700">35%</span>
                                                 </div>
-                                                <span class="text-sm text-gray-700">35%</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                                    <div class="bg-green-500 h-2 rounded-full" style="width: 42%"></div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                                        <div class="bg-green-500 h-2 rounded-full" style="width: 42%"></div>
+                                                    </div>
+                                                    <span class="text-sm text-gray-700">42%</span>
                                                 </div>
-                                                <span class="text-sm text-gray-700">42%</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 68%"></div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 68%"></div>
+                                                    </div>
+                                                    <span class="text-sm text-gray-700">68%</span>
                                                 </div>
-                                                <span class="text-sm text-gray-700">68%</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-indigo-600 hover:text-indigo-900 mr-3">View</button>
-                                            <button class="text-gray-600 hover:text-gray-900 mr-3">Edit</button>
-                                            <button class="text-red-600 hover:text-red-900">Delete</button>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <a class="stop" href="{{ url_for('stop_server', container_id=server.container_id) }}"><button class="text-indigo-600 hover:text-indigo-900 mr-3">Stop</button></a>
+                                                <a class="stop" href="{{ url_for('edit', container_id=server.container_id) }}"><button class="text-gray-600 hover:text-gray-900 mr-3">Edit</button></a>
+                                                <a class="stop" href="{{ url_for('delete_server', container_id=server.container_id) }}"><button class="text-red-600 hover:text-red-900">Delete</button></a>
+                                            </td>
+                                        </tr>
                                     {% endfor %}
                                     <!-- Server 2 -->
                                     <tr>
