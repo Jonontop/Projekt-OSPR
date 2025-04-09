@@ -1,7 +1,9 @@
-from flask import jsonify, request, render_template, send_file
-from flaskr.models import load_server_templates
-import docker
 import os
+
+import docker
+from flask import jsonify
+
+from flaskr.models import load_server_templates
 
 # Load Docker client
 try:
@@ -30,12 +32,11 @@ class DockerManager:
                 name=server_name,
                 detach=True,
                 ports={f'{port}/tcp': None},
+                mem_limit=f"{server_ram}M",
+                cpuset_cpus=server_cpu*100000,
                 environment={
                     'EULA': 'TRUE',
                     'SERVER_NAME': server_name,
-                    "CPU": server_cpu,
-                    "STORAGE": server_storage,
-                    "RAM": server_ram,
                 }
 
             )
