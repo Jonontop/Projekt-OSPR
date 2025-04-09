@@ -262,7 +262,7 @@ def create_server():
         return redirect(url_for('loading'))
         #return render_template('cpanel/server/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'success': False, 'error': f"{e} - {type(e)}"})
 
 
 @app.route('/get_eggs/<nest>')
