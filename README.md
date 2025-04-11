@@ -48,7 +48,7 @@ Resources:
 
 
 # Structure:
-
+```md
 OSPR-projekt/
 - │
 - ├── flaskr/
@@ -87,3 +87,5 @@ t
 - ├── run.py               # To run the application
 - ├── venv/                # Virtual environment
 - └── requirements.txt     # List of dependencies
+
+```
