@@ -16,7 +16,8 @@
 {% macro render_tree(tree, path) %}
     <ul>
         {% for name, content in tree.items() %}
-            {% set full_path = path ~ '/' ~ name %}
+            {% set full_path = path ~ name %}
+
             {% if content is mapping %}
                 <li>
                     <div class="folder" onclick="toggleFolder(this)">📁 {{ name }}</div>
@@ -27,7 +28,7 @@
             {% else %}
                 <li>
                     📄 {{ name }}
-                    [<a href="{{ url_for('download', container_id=container_id, file_path=full_path) }}">Download</a>]
+                    [<a href="{{ url_for('files_download', container_id=container_id, file_path=full_path) }}">Download</a>]
                 </li>
             {% endif %}
         {% endfor %}
