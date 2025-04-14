@@ -15,8 +15,6 @@ socketio = SocketIO(app)
 # Defining the SQLAlchemy database object
 # db = SQLAlchemy(app) # data stealing
 
-# Docker
-DockerManager = DockerManager()
 
 
 

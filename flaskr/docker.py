@@ -25,11 +25,12 @@ except Exception as e:
 
 
 class DockerManager:
+
     def __init__(self):
         self.__server_templates = load_server_templates()
         self.container = None
 
-    def docker_create(self, server_name, server_cpu, server_storage, server_ram, server_nest, server_egg):
+    def docker_create(self, server_name, server_cpu, server_storage, server_ram, server_nest, server_egg) -> any:
 
         docker_image = self.__server_templates[server_nest]['eggs'][server_egg]['docker_image']
         port = self.__server_templates[server_nest]['port_default']
@@ -62,7 +63,7 @@ class DockerManager:
             return jsonify({'success': False, 'error': str(e)})
 
     @staticmethod
-    def docker_stop(container_id):
+    def docker_stop(container_id) -> any:
         try:
             # Stop the container
             container = client.containers.get(container_id)
@@ -72,7 +73,7 @@ class DockerManager:
             return jsonify({'success': False, 'error': str(e)})
 
     @staticmethod
-    def docker_start(container_id):
+    def docker_start(container_id) -> any:
         try:
             # Start the container
             container = client.containers.get(container_id)
@@ -82,7 +83,7 @@ class DockerManager:
             return jsonify({'success': False, 'error': str(e)})
 
     @staticmethod
-    def docker_delete(container_id):
+    def docker_delete(container_id) -> any:
         try:
             # Stop the container
             container = client.containers.get(container_id)
@@ -221,6 +222,9 @@ class DockerFiles:
 
     def docker_create_folder(self):
         pass
+
+# Docker
+DockerManager = DockerManager()
 
 class Database:
     def __init__(self):
