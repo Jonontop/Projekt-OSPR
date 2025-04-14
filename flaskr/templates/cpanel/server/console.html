@@ -4,6 +4,37 @@
   Console Logs
 {% endblock %}
 
+<script>
+            // Function to update stats every 1 second
+            function updateStats() {
+                const containerId = '{{ server.container_id }}';  // Replace with actual container ID
+                fetch(`/container_stats/${containerId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update CPU usage progress bar
+                        const cpuPercentage = Math.min(data.cpu_percentage, 100); // Limit to 100% for display
+                        document.getElementById("cpu_usage_bar").style.width = cpuPercentage + "%";
+                        document.getElementById("cpu_usage_text").innerText = cpuPercentage.toFixed(2) + "%";
+                        console.log("CPU Usage: " + cpuPercentage.toFixed(2) + "%");
+
+                        // Update RAM usage progress bar
+                        const memPercentage = Math.min(data.mem_percentage, 100); // Limit to 100% for display
+                        document.getElementById("mem_usage_bar").style.width = memPercentage + "%";
+                        document.getElementById("mem_usage_text").innerText = "Memory Usage: " + memPercentage.toFixed(2) + "%";
+                        console.log("Memory Usage: " + memPercentage.toFixed(2) + "%");
+
+                        // Update Disk usage progress bar
+                        const diskPercentage = Math.min(data.disk_percentage, 100); // Limit to 100% for display
+                        document.getElementById("disk_usage_bar").style.width = diskPercentage + "%";
+                        document.getElementById("disk_usage_text").innerText = "Disk Usage: " + diskPercentage.toFixed(2) + "%";
+                        console.log("Disk Usage: " + diskPercentage.toFixed(2) + "%");
+                    })
+                    .catch(error => console.error('Error fetching container stats:', error));
+            }
+
+            // Update stats every 1 second
+            setInterval(updateStats, 1000);
+        </script>
 
 {% block content %}
 <body>

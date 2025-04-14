@@ -96,7 +96,7 @@
                     <div class="bg-white shadow rounded-lg p-6 mb-6">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-xl font-semibold text-gray-800">Servers</h2>
-                            <button class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center">
+                            <button onclick="window.location.href='{{ url_for('create_server') }}'" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
@@ -167,9 +167,9 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 35%"></div>
+                                                        <div id="cpu_usage_bar" class="bg-blue-600 h-2 rounded-full" style="width: 35%"></div>
                                                     </div>
-                                                    <span class="text-sm text-gray-700">35%</span>
+                                                    <span id="cpu_usage_text" class="text-sm text-gray-700">999%</span>
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
@@ -195,53 +195,6 @@
                                             </td>
                                         </tr>
                                     {% endfor %}
-                                    <!-- Server 2 -->
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                Warning
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">db-server-01</div>
-                                            <div class="text-sm text-gray-500">Database Server</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            192.168.1.102
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            Production
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 78%"></div>
-                                                </div>
-                                                <span class="text-sm text-gray-700">78%</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                                    <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
-                                                </div>
-                                                <span class="text-sm text-gray-700">85%</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                                                    <div class="bg-red-500 h-2 rounded-full" style="width: 92%"></div>
-                                                </div>
-                                                <span class="text-sm text-gray-700">92%</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-indigo-600 hover:text-indigo-900 mr-3">View</button>
-                                            <button class="text-gray-600 hover:text-gray-900 mr-3">Edit</button>
-                                            <button class="text-red-600 hover:text-red-900">Delete</button>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>

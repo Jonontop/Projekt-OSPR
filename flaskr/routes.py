@@ -3,12 +3,12 @@ import os
 from flask import redirect, render_template, session, url_for, request, jsonify, Response, send_file
 from jinja2 import TemplateNotFound
 
-from flaskr import db, app, DockerManager
+from flaskr import app, DockerManager
 from flaskr.auth import Auth
-from flaskr.database import Database
-from flaskr.docker import client, DockerFiles
+from flaskr.docker import client, DockerFiles, Database, db
 from flaskr.models import auth_required, load_server_templates
 from werkzeug.utils import secure_filename
+
 
 SERVER_TEMPLATES = load_server_templates()
 
@@ -62,6 +62,11 @@ def forgot_password() -> str:
 @auth_required
 def stream(container_id) -> Response:
     return Response(DockerManager.stream_logs(container_id), mimetype='text/event-stream')
+
+@app.route('/container_stats/<container_id>')
+@auth_required
+def container_stats(container_id) -> Response:
+    return jsonify(DockerManager.container_stats(container_id))
 
 @app.route('/account')
 @auth_required
@@ -294,7 +299,6 @@ def cpanel():
 
     user_id = session['user_id']
     server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
-    # server_loc = db.collection('servers').stream()
     user_data = db.collection('users').document(user_id).get().to_dict()
 
 
