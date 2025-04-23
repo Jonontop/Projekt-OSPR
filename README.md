@@ -2,7 +2,7 @@
 Projekt za OSPR
 #TODO
 - []Cpanel - py flask, html
-    - []console
+    - [x]console
     - []analytics
     - []database
     - []user system
@@ -28,8 +28,8 @@ Projekt za OSPR
 - []currency acquiring system - firebase, py
 
   Addon:
-  - []TailWind
-  - []Bootstrap
+  - [x]TailWind
+  - [x]Bootstrap
   - []DarkMode
   - [x]1 File for primary settings - css
   - []SQL - Database - Data stealing
