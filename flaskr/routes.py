@@ -226,6 +226,38 @@ def verify_token():
     return Auth.TokenVerify(request.json.get('idToken'))
 
 
+##### Payment
+
+@app.route('/checkout')
+def checkout():
+    plan = request.args.get('plan')
+    price = request.args.get('price')
+    return render_template('checkout.html', plan=plan, price=price)
+
+@app.route('/charge', methods=['POST'])
+def charge():
+    plan = request.form['plan']
+    amount = int(request.form['price'])
+
+    customer = stripe.Customer.create(
+        email=request.form['stripeEmail'],
+        source=request.form['stripeToken']
+    )
+
+    stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description=f'{plan} Plan'
+    )
+
+    return redirect('/success')
+
+@app.route('/success')
+def success():
+    return "Payment successful!"
+
+
 
 #### To fix / remove / transform
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <h2>Selected Plan: {{ plan }}</h2>
+    <p>Price: ${{ price | int / 100 }}</p>
+
+    <form action="/charge" method="post">
+        <input type="hidden" name="plan" value="{{ plan }}">
+        <input type="hidden" name="price" value="{{ price }}">
+
+        <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="your_stripe_publishable_key"
+            data-amount="{{ price }}"
+            data-name="Your Store"
+            data-description="{{ plan }} Plan"
+            data-currency="usd"
+            data-email="customer@example.com">
+        </script>
+    </form>
+</body>
+</html>
