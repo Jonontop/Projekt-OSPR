@@ -47,7 +47,7 @@ class DockerManager:
                 mem_limit=f"{server_ram}M",
                 cpu_period=100000,
                 cpu_quota=int(server_cpu * 1000),  # 50% → 50000
-                storage_opt={'size': f'{storage}M'},
+                storage_opt={'size': f'{storage}M'}, # Ne dela v celoti
                 environment={
                     'EULA': 'TRUE' if server_nest == 'minecraft' else None,
                     'SERVER_NAME': server_name,
@@ -192,20 +192,75 @@ class DockerFiles:
 
         return local_tmp
 
-    def docker_delete_file(self):
-        pass
-
-    def docker_edit_file(self):
-        pass
-
-    def docker_create_file(self):
-        pass
-
-    def docker_upload_file(self):
-        pass
+    @staticmethod
+    def docker_delete_file(container_id, file_path):
+        try:
+            container = client.containers.get(container_id)
+            exit_code, output = container.exec_run(f"rm -f {file_path}")
+            
+            if exit_code == 0:
+                return jsonify({'success': True})
+            else:
+                return jsonify({'success': False, 'error': output.decode()})
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})
 
     @staticmethod
-    def docker_display_files( container_id):
+    def docker_edit_file(container_id, file_path, content):
+        try:
+            container = client.containers.get(container_id)
+            temp_path = f"/tmp/edit_{os.path.basename(file_path)}"
+            
+            # Write content to a temp file
+            with open(temp_path, 'w') as f:
+                f.write(content)
+                
+            # Copy the file into the container
+            with open(temp_path, 'rb') as f:
+                container.put_archive(os.path.dirname(file_path), f.read())
+                
+            os.remove(temp_path)
+            return jsonify({'success': True})
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})
+
+    @staticmethod
+    def docker_create_file(container_id, file_path, content=""):
+        try:
+            container = client.containers.get(container_id)
+            # Create directory structure if it doesn't exist
+            dir_path = os.path.dirname(file_path)
+            exit_code, _ = container.exec_run(f"mkdir -p {dir_path}")
+            
+            # Create file with content
+            temp_path = f"/tmp/new_{os.path.basename(file_path)}"
+            with open(temp_path, 'w') as f:
+                f.write(content)
+                
+            # Copy the file into the container
+            with open(temp_path, 'rb') as f:
+                container.put_archive(dir_path, f.read())
+                
+            os.remove(temp_path)
+            return jsonify({'success': True})
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})
+
+    @staticmethod
+    def docker_upload_file(container_id, local_file_path, container_file_path):
+        try:
+            container = client.containers.get(container_id)
+            
+            # Copy the file into the container
+            with open(local_file_path, 'rb') as f:
+                container.put_archive(os.path.dirname(container_file_path), f.read())
+                
+            return jsonify({'success': True})
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})
+
+    @staticmethod
+    def docker_display_files(container_id):
         container = client.containers.get(container_id)
         volumes = container.attrs['Mounts']
         full_output = []
@@ -220,8 +275,18 @@ class DockerFiles:
         file_tree = DockerFiles.build_tree(full_output)
         return file_tree
 
-    def docker_create_folder(self):
-        pass
+    @staticmethod
+    def docker_create_folder(container_id, folder_path):
+        try:
+            container = client.containers.get(container_id)
+            exit_code, output = container.exec_run(f"mkdir -p {folder_path}")
+            
+            if exit_code == 0:
+                return jsonify({'success': True})
+            else:
+                return jsonify({'success': False, 'error': output.decode()})
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)})
 
 # Docker
 DockerManager = DockerManager()

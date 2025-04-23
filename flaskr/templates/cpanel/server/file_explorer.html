@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>File Explorer - {{ container_id }}</title>
+{% extends "cpanel/server/base.html" %}
+
+{% block title %}
+  File Explorer
+{% endblock %}
+
+{% block content %}
+
+<body>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
         ul { list-style-type: none; padding-left: 20px; }
         .folder { font-weight: bold; cursor: pointer; }
         .file-list { display: none; }
     </style>
-</head>
-<body>
     <h1>Files in Container: {{ container_id }}</h1>
 
+<!-- Tree by ChatGPT -->
 {% macro render_tree(tree, path) %}
     <ul>
         {% for name, content in tree.items() %}
@@ -49,4 +52,5 @@
         }
     </script>
 </body>
-</html>
+
+{% endblock %}
