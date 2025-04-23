@@ -230,9 +230,30 @@ def verify_token():
 
 @app.route('/checkout')
 def checkout():
-    plan = request.args.get('plan')
-    price = request.args.get('price')
-    return render_template('checkout.html', plan=plan, price=price)
+    # Get parameters from URL
+    package_id = request.args.get('package_id', '')
+    package_name = request.args.get('package_name', 'Standard Package')
+    package_description = request.args.get('package_description', 'Package description')
+    package_details = request.args.get('package_details', 'Basic features')
+    package_price = float(request.args.get('package_price', 0))
+
+    # Optional add-ons
+    package_addon = request.args.get('package_addon', '')
+    addon_details = request.args.get('addon_details', '')
+    addon_price = float(request.args.get('addon_price', 0))
+
+    total_price = package_price + addon_price
+
+    return render_template('checkout.html',
+                           package_id=package_id,
+                           package_name=package_name,
+                           package_description=package_description,
+                           package_details=package_details,
+                           package_price=package_price,
+                           package_addon=package_addon,
+                           addon_details=addon_details,
+                           addon_price=addon_price,
+                           total_price=total_price)
 
 @app.route('/charge', methods=['POST'])
 def charge():
