@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Navigation Bars</title>
       <!-- Tailwind CSS from CDN -->
       <script src="https://cdn.tailwindcss.com"></script>
+
+      <script>
+        async function fetchUptime() {
+          const res = await fetch('/uptime/{{ container_id }}');
+          const data = await res.json();
+          document.getElementById('uptime').textContent = data.uptime;
+        }
+        setInterval(fetchUptime, 1000);
+        window.onload = fetchUptime;
+      </script>
 
       <!-- Alpine JS for functionality -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
@@ -120,18 +130,23 @@
     <!-- Content Area -->
     <div class="flex-1 p-6 bg-gray-900">
       <div class="mb-8">
-        <h1 class="text-xl font-bold mb-1">Server Details - KOS2</h1>
-        <p class="text-gray-500 text-sm">UUID: d9993dba-4dab-46ed-9133-fde7def7c2b</p>
+        <h1 class="text-xl font-bold mb-1">Server Details - {{servers.name}}</h1>
+        <p class="text-gray-500 text-sm">UUID: {{container_id}}</p>
       </div>
 
       <!-- Server Info Cards -->
       <div class="grid grid-cols-3 gap-6 mb-8">
         <div class="bg-gray-800 p-4 rounded-md">
           <h3 class="text-gray-400 mb-2">Server Status</h3>
+          {% if servers.status == 'running' %}
+          <p class="font-medium text-green-400">Online</p>
+          {% elif servers.status == 'exited' or servers.status == 'stopped' %}
           <p class="font-medium text-orange-400">Offline</p>
-          <p class="text-gray-400 mt-2">Server Started: <span class="text-orange-400">Offline</span></p>
-          <p class="text-gray-400">Server Uptime: <span class="text-orange-400">Offline</span></p>
-          <p class="text-gray-400">Server Time Zone: <span class="text-blue-400">UTC</span></p>
+          {% else %}
+          <p class="font-medium text-red-400">Unknown</p>
+          {% endif %}
+          <br>
+          <p class="text-gray-400">Server Uptime: <span class="text-orange-400" id="uptime">Offline</span></p>
         </div>
 
         <div class="bg-gray-800 p-4 rounded-md">
@@ -144,8 +159,8 @@
         <div class="bg-gray-800 p-4 rounded-md">
           <h3 class="text-gray-400 mb-2">Server Info</h3>
           <p class="text-gray-400">Version: <span class="font-medium">Unable To Connect</span></p>
-          <p class="text-gray-400">Description: <span class="font-medium">Unable To Connect</span></p>
-          <p class="text-gray-400">Server Type: <span class="text-purple-400">minecraft-java</span></p>
+          <p class="text-gray-400">Description: <span class="font-medium">{{ servers.description }}</span></p>
+          <p class="text-gray-400">Server Type: <span class="text-purple-400">{{servers.nest.title()}}/{{servers.egg.title()}}</span></p>
         </div>
       </div>
 

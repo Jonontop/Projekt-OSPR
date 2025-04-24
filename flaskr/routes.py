@@ -1,5 +1,5 @@
 import os
-
+from datetime import datetime, timezone
 from flask import redirect, render_template, session, url_for, request, jsonify, Response, send_file
 from jinja2 import TemplateNotFound
 
@@ -80,7 +80,13 @@ def account():
 @app.route('/server/<container_id>/console')
 @auth_required
 def console(container_id):
-    return render_template('cpanel/server/console.html', container_id=container_id)
+    # Get user's servers
+    servers = Database.get_server_stats(container_id)
+
+
+    print(servers)
+
+    return render_template('cpanel/server/console.html', container_id=container_id, servers=servers)
 
 # settings
 @app.route('/server/<container_id>/settings')
@@ -224,6 +230,14 @@ def internal_server_error(error):
 @app.route('/verify_token', methods=['POST'])
 def verify_token():
     return Auth.TokenVerify(request.json.get('idToken'))
+
+@app.route('/uptime/<container_id>')
+def get_uptime(container_id):
+    container = client.containers.get(container_id)
+    started_at = container.attrs['State']['StartedAt']
+    started = datetime.fromisoformat(started_at.replace('Z', '+00:00'))
+    uptime = datetime.now(timezone.utc) - started
+    return jsonify({'uptime': str(uptime).split('.')[0]})
 
 
 ##### Payment

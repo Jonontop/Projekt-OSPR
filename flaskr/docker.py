@@ -47,7 +47,7 @@ class DockerManager:
                 mem_limit=f"{server_ram}M",
                 cpu_period=100000,
                 cpu_quota=int(server_cpu * 1000),  # 50% → 50000
-                storage_opt={'size': f'{storage}M'}, # Ne dela v celoti
+                #storage_opt={'size': f'{storage}M'}, # Ne dela v celoti
                 environment={
                     'EULA': 'TRUE' if server_nest == 'minecraft' else None,
                     'SERVER_NAME': server_name,
@@ -348,6 +348,8 @@ class Database:
                     'cpu': server_data['cpu'],
                     'ram': server_data['ram'],
                     'storage': server_data['storage'],
+                    'name': server_data['name'],
+                    'description': server_data['description'],
                     'ports_number': server_data['ports_number'],
                     'databases_number': server_data['databases_number'],
                     'backup_number': server_data['backup_number'],
