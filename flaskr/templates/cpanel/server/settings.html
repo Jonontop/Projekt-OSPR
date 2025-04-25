@@ -1,9 +1,218 @@
 {% extends "cpanel/server/base.html" %}
 
 {% block title %}
-  Console Logs
+  System Settings
 {% endblock %}
 
-
 {% block content %}
-{% blockend %}
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto py-8 px-4">
+        <div class="bg-white shadow-md rounded-lg max-w-4xl mx-auto p-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">System Settings</h1>
+
+            <form action="/update_settings" method="POST" class="space-y-8">
+                <!-- Profile Section -->
+                <div class="border-b pb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Profile Settings</h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">System Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter system name">
+                        </div>
+
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                            <textarea id="description" name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter system description"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hardware Resources Section -->
+                <div class="border-b pb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Hardware Resources</h2>
+
+                    <div class="space-y-6">
+                        <!-- CPU with + and - buttons -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">CPU Cores</label>
+                            <div class="flex items-center">
+                                <button type="button" class="cpu-minus px-3 py-2 bg-gray-200 text-gray-700 rounded-l-md hover:bg-gray-300" onclick="decrementCPU()">-</button>
+                                <div id="cpu-display" class="w-16 text-center px-2 py-2 border-t border-b border-gray-300 bg-white">1</div>
+                                <button type="button" class="cpu-plus px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300" onclick="incrementCPU()">+</button>
+                                <span class="ml-2 text-gray-500">cores</span>
+                                <input type="hidden" id="cpu" name="cpu" value="1">
+                            </div>
+                        </div>
+
+                        <!-- RAM with + and - buttons -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">RAM</label>
+                            <div class="flex items-center">
+                                <button type="button" class="ram-minus px-3 py-2 bg-gray-200 text-gray-700 rounded-l-md hover:bg-gray-300" onclick="decrementRAM()">-</button>
+                                <div id="ram-display" class="w-16 text-center px-2 py-2 border-t border-b border-gray-300 bg-white">1</div>
+                                <button type="button" class="ram-plus px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300" onclick="incrementRAM()">+</button>
+                                <select name="ram_unit" class="ml-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="GB">GB</option>
+                                    <option value="MB">MB</option>
+                                </select>
+                                <input type="hidden" id="ram" name="ram" value="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Storage Section -->
+                <div class="border-b pb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Storage</h2>
+
+                    <div class="space-y-6">
+                        <!-- Disk Space with + and - buttons -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Disk Space</label>
+                            <div class="flex items-center">
+                                <button type="button" class="disk-minus px-3 py-2 bg-gray-200 text-gray-700 rounded-l-md hover:bg-gray-300" onclick="decrementDisk()">-</button>
+                                <div id="disk-display" class="w-16 text-center px-2 py-2 border-t border-b border-gray-300 bg-white">10</div>
+                                <button type="button" class="disk-plus px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300" onclick="incrementDisk()">+</button>
+                                <select name="disk_unit" class="ml-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="GB">GB</option>
+                                    <option value="TB">TB</option>
+                                </select>
+                                <input type="hidden" id="disk" name="disk" value="10">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="storage_type" class="block text-sm font-medium text-gray-700 mb-1">Storage Type</label>
+                            <select id="storage_type" name="storage_type" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="ssd">SSD</option>
+                                <option value="hdd">HDD</option>
+                                <option value="nvme">NVMe</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Port Settings -->
+                <div class="border-b pb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Port Settings</h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Port Number</label>
+                            <div class="flex items-center">
+                                <button type="button" class="port-minus px-3 py-2 bg-gray-200 text-gray-700 rounded-l-md hover:bg-gray-300" onclick="decrementPort()">-</button>
+                                <div id="port-display" class="w-24 text-center px-2 py-2 border-t border-b border-gray-300 bg-white">8080</div>
+                                <button type="button" class="port-plus px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300" onclick="incrementPort()">+</button>
+                                <input type="hidden" id="port" name="port" value="8080">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end">
+                    <button type="submit" class="px-6 py-2 bg-blue-500 text-white font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // CPU Controls
+        function incrementCPU() {
+            const cpuHidden = document.getElementById('cpu');
+            const cpuDisplay = document.getElementById('cpu-display');
+            const currentValue = parseInt(cpuHidden.value);
+            if (currentValue < 32) {
+                const newValue = currentValue + 1;
+                cpuHidden.value = newValue;
+                cpuDisplay.textContent = newValue;
+            }
+        }
+
+        function decrementCPU() {
+            const cpuHidden = document.getElementById('cpu');
+            const cpuDisplay = document.getElementById('cpu-display');
+            const currentValue = parseInt(cpuHidden.value);
+            if (currentValue > 1) {
+                const newValue = currentValue - 1;
+                cpuHidden.value = newValue;
+                cpuDisplay.textContent = newValue;
+            }
+        }
+
+        // RAM Controls
+        function incrementRAM() {
+            const ramHidden = document.getElementById('ram');
+            const ramDisplay = document.getElementById('ram-display');
+            const currentValue = parseInt(ramHidden.value);
+            if (currentValue < 128) {
+                const newValue = currentValue + 1;
+                ramHidden.value = newValue;
+                ramDisplay.textContent = newValue;
+            }
+        }
+
+        function decrementRAM() {
+            const ramHidden = document.getElementById('ram');
+            const ramDisplay = document.getElementById('ram-display');
+            const currentValue = parseInt(ramHidden.value);
+            if (currentValue > 1) {
+                const newValue = currentValue - 1;
+                ramHidden.value = newValue;
+                ramDisplay.textContent = newValue;
+            }
+        }
+
+        // Disk Controls
+        function incrementDisk() {
+            const diskHidden = document.getElementById('disk');
+            const diskDisplay = document.getElementById('disk-display');
+            const currentValue = parseInt(diskHidden.value);
+            if (currentValue < 2000) {
+                const newValue = currentValue + 10;
+                diskHidden.value = newValue;
+                diskDisplay.textContent = newValue;
+            }
+        }
+
+        function decrementDisk() {
+            const diskHidden = document.getElementById('disk');
+            const diskDisplay = document.getElementById('disk-display');
+            const currentValue = parseInt(diskHidden.value);
+            if (currentValue > 10) {
+                const newValue = currentValue - 10;
+                diskHidden.value = newValue;
+                diskDisplay.textContent = newValue;
+            }
+        }
+
+        // Port Controls
+        function incrementPort() {
+            const portHidden = document.getElementById('port');
+            const portDisplay = document.getElementById('port-display');
+            const currentValue = parseInt(portHidden.value);
+            if (currentValue < 65535) {
+                const newValue = currentValue + 1;
+                portHidden.value = newValue;
+                portDisplay.textContent = newValue;
+            }
+        }
+
+        function decrementPort() {
+            const portHidden = document.getElementById('port');
+            const portDisplay = document.getElementById('port-display');
+            const currentValue = parseInt(portHidden.value);
+            if (currentValue > 1) {
+                const newValue = currentValue - 1;
+                portHidden.value = newValue;
+                portDisplay.textContent = newValue;
+            }
+        }
+    </script>
+</body>
+
+{% endblock %}

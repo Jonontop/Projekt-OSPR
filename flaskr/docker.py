@@ -343,6 +343,9 @@ class Database:
             # Get server stats from Firestore
             server_ref = db.collection('servers').where('container_id', '==', container_id).stream()
             for doc in server_ref:
+                # Get container
+                container = client.containers.get(doc.to_dict()['container_id']) if doc.to_dict()['container_id'] else None
+                # Get the server data
                 server_data = doc.to_dict()
                 return {
                     'cpu': server_data['cpu'],
@@ -359,7 +362,8 @@ class Database:
                     'user_id': server_data['user_id'],
                     'container_id': server_data['container_id'],
                     'nest': server_data['nest'],
-                    'egg': server_data['egg']
+                    'egg': server_data['egg'],
+                    'status': container.status,
                 }
         except Exception as e:
             return {'success': False, 'error': str(e)}

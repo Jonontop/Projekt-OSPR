@@ -6,7 +6,7 @@ from jinja2 import TemplateNotFound
 from flaskr import app, DockerManager
 from flaskr.auth import Auth
 from flaskr.docker import client, DockerFiles, Database, db
-from flaskr.models import auth_required, load_server_templates
+from flaskr.models import auth_required, load_server_templates, webhook
 from werkzeug.utils import secure_filename
 
 
@@ -93,13 +93,12 @@ def console(container_id):
 @app.route('/server/<container_id>/settings')
 @auth_required
 def settings(container_id):
-    pass
+    servers = Database.get_server_stats(container_id)
+    container = client.containers.get(servers['container_id']) if servers['container_id'] else None
+    servers['status'] = container.status if container else 'stopped'
 
-# analytics
-@app.route('/server/<container_id>/analytics')
-@auth_required
-def analytics(container_id):
-    pass
+    return render_template('cpanel/server/settings.html', container_id=container_id, servers=servers)
+
 
 # scheduler
 @app.route('/server/<container_id>/scheduler')
@@ -107,11 +106,6 @@ def analytics(container_id):
 def scheduler(container_id):
     pass
 
-# users
-@app.route('/server/<container_id>/users')
-@auth_required
-def users(container_id):
-    pass
 
 # backup
 @app.route('/server/<container_id>/backup')
@@ -127,15 +121,29 @@ def edit(container_id):
     return redirect(url_for('dashboard'))
 
 
+# webhook
+@app.route('/server/<container_id>/webhook', methods=['GET','POST'])
+@auth_required
+def webhook(container_id):
+    servers = Database.get_server_stats(container_id)
+
+
+    if not request.method == 'POST':
+        return render_template('cpanel/server/webhook.html', container_id=container_id, servers=servers)
+    webhook_url = request.form.get('webhook_url')
+    message = request.form.get('message')
+    username = request.form.get('username')
+    if webhook_url and message and username:
+        if webhook(webhook_url, message, username):
+            return jsonify({'success': True})
+    return render_template('cpanel/server/webhook.html', container_id=container_id, servers=servers)
+
 ### Files ###
-# files access - dela
+# file explorer
 @app.route('/server/<container_id>/files')
 @auth_required
 def files(container_id):
-    servers = Database.get_server_stats(container_id)
-    container = client.containers.get(servers['container_id']) if servers['container_id'] else None
-    servers['status'] = container.status if container else 'stopped'
-    return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id, servers=servers)
+    return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id, servers=Database.get_server_stats(container_id))
 
 # files download - ne dela
 @app.route('/server/<container_id>/files/download/<path:file_path>')
@@ -215,7 +223,6 @@ def delete_server(container_id):
     return redirect(url_for('cpanel'))
 
 
-
 ##### Errors
 
 @app.errorhandler(404)
@@ -243,8 +250,89 @@ def get_uptime(container_id):
     uptime = datetime.now(timezone.utc) - started
     return jsonify({'uptime': str(uptime).split('.')[0]})
 
+@app.route('/get_eggs/<nest>')
+def get_eggs(nest):
+    return jsonify(SERVER_TEMPLATES.get(nest, {}).get("eggs", {}))
 
 ##### Payment
+
+@app.route('/success')
+def success():
+    return "Payment successful!"
+
+
+#### To fix / remove / transform
+
+# modify
+@app.route('/purchase/<plan>')
+def purchase(plan):
+    # Logic for handling purchases would go here
+    # For now, just redirect back to pricing page
+    return f"Processing purchase for {plan} plan..."
+
+
+# Needs to be fixed
+@app.route('/create_server', methods=['GET', 'POST'])
+@auth_required
+def create_server():
+    locations = ["Slovenija, Ljubljana"]
+    if not request.method == 'POST':
+        return render_template('cpanel/create_server.html', nests=SERVER_TEMPLATES, locations=locations)
+
+
+    # General
+    server_name, server_description = request.form.get('server_name'), request.form.get('server_description')
+    # Resources
+    server_cpu, server_ram, server_storage = request.form.get('server_cpu'), request.form.get('server_ram'), request.form.get('server_storage')
+    # Ports
+    server_ports, server_databases, server_backup = request.form.get('server_ports'), request.form.get('server_databases'), request.form.get('server_backup')
+    # Location
+    server_location, server_nest, server_egg = request.form.get('server_location'), request.form.get('server_nest'), request.form.get('server_egg')
+
+
+
+    try:
+        # create server in docker
+        DockerManager.docker_create(server_name, server_cpu, server_storage, server_ram, server_nest, server_egg)
+        # create server in database
+        Database.server_create(server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup, server_location, server_nest, server_egg)
+
+        return redirect(url_for('loading'))
+        #return render_template('cpanel/server/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
+    except Exception as e:
+        return jsonify({'success': False, 'error': f"{e} - {type(e)}"})
+
+
+
+
+
+@app.route('/dashboard')
+@auth_required
+def cpanel():
+    # Get user's servers
+
+    user_id = session['user_id']
+    server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
+    user_data = db.collection('users').document(user_id).get().to_dict()
+
+
+    servers = []
+    for server_ref in server_refs:
+        server_data = server_ref.to_dict()
+        container = client.containers.get(server_data['container_id']) if server_data['container_id'] else None
+        server_data['id'] = server_ref.id
+        server_data['status'] = container.status if container else 'stopped'
+        servers.append(server_data)
+
+    user = {
+        'username': user_data['username'],
+        'mail': user_data['mail'],
+        'credits': user_data['credits']
+    }
+
+
+    return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES, user=user)
+
 
 @app.route('/checkout')
 def checkout():
@@ -291,101 +379,3 @@ def charge():
     )
 
     return redirect('/success')
-
-@app.route('/success')
-def success():
-    return "Payment successful!"
-
-
-
-#### To fix / remove / transform
-
-# modify
-@app.route('/purchase/<plan>')
-def purchase(plan):
-    # Logic for handling purchases would go here
-    # For now, just redirect back to pricing page
-    return f"Processing purchase for {plan} plan..."
-
-
-# Needs to be fixed
-@app.route('/create_server', methods=['GET', 'POST'])
-@auth_required
-def create_server():
-    locations = ["Slovenija, Ljubljana"]
-    if not request.method == 'POST':
-        return render_template('cpanel/create_server.html', nests=SERVER_TEMPLATES, locations=locations)
-
-
-    # General
-    server_name, server_description = request.form.get('server_name'), request.form.get('server_description')
-    # Resources
-    server_cpu, server_ram, server_storage = request.form.get('server_cpu'), request.form.get('server_ram'), request.form.get('server_storage')
-    # Ports
-    server_ports, server_databases, server_backup = request.form.get('server_ports'), request.form.get('server_databases'), request.form.get('server_backup')
-    # Location
-    server_location, server_nest, server_egg = request.form.get('server_location'), request.form.get('server_nest'), request.form.get('server_egg')
-
-
-
-    try:
-        # create server in docker
-        DockerManager.docker_create(server_name, server_cpu, server_storage, server_ram, server_nest, server_egg)
-        # create server in database
-        Database.server_create(server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup, server_location, server_nest, server_egg)
-
-        return redirect(url_for('loading'))
-        #return render_template('cpanel/server/server_details.html', server=DockerManager.container, template=SERVER_TEMPLATES.get(server_nest, {}))
-    except Exception as e:
-        return jsonify({'success': False, 'error': f"{e} - {type(e)}"})
-
-
-@app.route('/get_eggs/<nest>')
-def get_eggs(nest):
-    return jsonify(SERVER_TEMPLATES.get(nest, {}).get("eggs", {}))
-
-# Needs to be fixed
-@app.route('/server/<server_id>')
-@auth_required
-def server_details(server_id):
-    user_id = session['user_id']
-
-    # Get server details
-    server_ref = db.collection('servers').document(server_id)
-    server = server_ref.get()
-
-    if not server.exists or server.to_dict()['user_id'] != user_id:
-        return redirect(url_for('dashboard'))
-
-    server_data = server.to_dict()
-
-    return render_template('cpanel/server_details.html', server=server_data,
-                           template=SERVER_TEMPLATES.get(server_data['type'], {}))
-
-
-@app.route('/dashboard')
-@auth_required
-def cpanel():
-    # Get user's servers
-
-    user_id = session['user_id']
-    server_refs = db.collection('servers').where('user_id', '==', user_id).stream()
-    user_data = db.collection('users').document(user_id).get().to_dict()
-
-
-    servers = []
-    for server_ref in server_refs:
-        server_data = server_ref.to_dict()
-        container = client.containers.get(server_data['container_id']) if server_data['container_id'] else None
-        server_data['id'] = server_ref.id
-        server_data['status'] = container.status if container else 'stopped'
-        servers.append(server_data)
-
-    user = {
-        'username': user_data['username'],
-        'mail': user_data['mail'],
-        'credits': user_data['credits']
-    }
-
-
-    return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES, user=user)

@@ -8,12 +8,11 @@
 
 <body>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        ul { list-style-type: none; padding-left: 20px; }
-        .folder { font-weight: bold; cursor: pointer; }
+
+        ul { list-style-type: none; padding-left: 20px;color:white; }
+        .folder { font-weight: bold; cursor: pointer; color:white; }
         .file-list { display: none; }
     </style>
-    <h1>Files in Container: {{ container_id }}</h1>
 
 <!-- Tree by ChatGPT -->
 {% macro render_tree(tree, path) %}
@@ -30,8 +29,7 @@
                 </li>
             {% else %}
                 <li>
-                    📄 {{ name }}
-                    [<a href="{{ url_for('files_download', container_id=container_id, file_path=full_path) }}">Download</a>]
+                    <a href="{{ url_for('files_download', container_id=container_id, file_path=full_path) }}">📄 {{ name }}</a>
                 </li>
             {% endif %}
         {% endfor %}

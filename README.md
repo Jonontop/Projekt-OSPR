@@ -1,19 +1,16 @@
 # Projekt-OSPR
 Projekt za OSPR
 #TODO
+```md
 - []Cpanel - py flask, html
     - [x]console
-    - []analytics
-    - []database
-    - []user system
-    - []settings
-    - []cpanel
+    - [x]settings
+    - [x]cpanel
     - []user settings
-    - []backup
 - [x]Home Page - html
-- []Blog - html
+- [x]Blog - html
     - [x]about - html
-    - []TOS - html
+    - [x]TOS - html
     - [x]PP - html
 - [x]Error - html
 - [x]Login - flask login
@@ -25,17 +22,15 @@ Projekt za OSPR
     - [x]user's general info
     - []Google Analytics
 - [x]Plans site - html
-- []currency acquiring system - firebase, py
 
   Addon:
   - [x]TailWind
   - [x]Bootstrap
-  - []DarkMode
   - [x]1 File for primary settings - css
   - []SQL - Database - Data stealing
-  - []Mini games - loading screens, coins collecting
+  - []Mini games - loading screens
 
-
+```
 
 
 Resources:

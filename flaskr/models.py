@@ -1,5 +1,7 @@
 import json
 from functools import wraps
+
+import requests
 from firebase_admin import auth
 from flask import redirect, session, url_for, flash, jsonify
 
@@ -46,4 +48,19 @@ def TokenVerify(id_token:str) -> jsonify:
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+
+
+
+def webhook(webhook_url, message, username):
+    data = {
+        "content": f"{message}",
+        "username": f"{username}",
+    }
+
+    response = requests.post(webhook_url, json=data)
+
+    if response.status_code == 204:
+        return True
+    else:
+        return False
 
