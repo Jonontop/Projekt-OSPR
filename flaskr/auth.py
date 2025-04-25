@@ -1,8 +1,6 @@
-import time
-
-from flask import jsonify, redirect, url_for, session, flash, make_response
-from werkzeug.security import generate_password_hash, check_password_hash
 from firebase_admin import auth
+from flask import jsonify, redirect, url_for, session, make_response
+
 db = None  # Placeholder for Firestore database instance
 
 

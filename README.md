@@ -37,9 +37,10 @@ Resources:
 - https://firebase.google.com/ - database
 - https://github.com/Jonontop/Projekt-OSPR
 - https://flask.palletsprojects.com/en/stable/api/ - flask
-- https://github.com/pallets-eco/flask-wtf - data tenement
-- https://github.com/maxcountryman/flask-login - login
+- https://flask.palletsprojects.com/en/stable/tutorial/templates/ - flask templates
 - https://medium.com/@andrii.gorshunov/paypal-flask-integration-python-2022-1c012322801d - paypal integration
+- https://www.docker.com/ - docker API
+- 
 
 
 # Structure:
@@ -83,4 +84,25 @@ t
 - ├── venv/                # Virtual environment
 - └── requirements.txt     # List of dependencies
 
+```
+
+Postopek za zagon:
+```bash
+# 1. Clone the repository
+git clone
+# 2. Navigate to the project directory
+cd Projekt-OSPR
+# 3. Create a virtual environment
+python -m venv venv
+# 4. Activate the virtual environment
+# On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
+# 5. Install the required packages
+pip install -r requirements.txt
+# 6. Set up connection to Docker
+# Make sure Docker is running on your local machine - remote connection can be set in docker.py:19
+# 7. Run the application
+python run.py
 ```
