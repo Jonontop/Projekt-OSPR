@@ -82,7 +82,8 @@ def account():
 def console(container_id):
     # Get user's servers
     servers = Database.get_server_stats(container_id)
-
+    container = client.containers.get(servers['container_id']) if servers['container_id'] else None
+    servers['status'] = container.status if container else 'stopped'
 
     print(servers)
 
@@ -131,7 +132,10 @@ def edit(container_id):
 @app.route('/server/<container_id>/files')
 @auth_required
 def files(container_id):
-    return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id)
+    servers = Database.get_server_stats(container_id)
+    container = client.containers.get(servers['container_id']) if servers['container_id'] else None
+    servers['status'] = container.status if container else 'stopped'
+    return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id, servers=servers)
 
 # files download - ne dela
 @app.route('/server/<container_id>/files/download/<path:file_path>')
