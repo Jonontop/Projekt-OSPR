@@ -1,7 +1,6 @@
 from firebase_admin import auth
 from flask import jsonify, redirect, url_for, session, make_response
-
-db = None  # Placeholder for Firestore database instance
+from flaskr.docker import db
 
 
 # Full Authentication Module in Class

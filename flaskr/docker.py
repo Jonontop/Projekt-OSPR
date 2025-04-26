@@ -155,9 +155,6 @@ class DockerManager:
 
 
 class DockerFiles:
-    def __init__(self):
-        pass
-
     @staticmethod
     def build_tree(file_list):
         tree = {}

@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 //web app's Firebase configuration
 // Nism biu dost sposoben dt tega v posebi .env
@@ -23,7 +23,7 @@ const googleProvider = new GoogleAuthProvider(); // Create a new instance of the
 export { auth, googleProvider };
 
 // Export auth for use in other modules
-window.auth = auth;
+ window.auth = auth;
 
 
 

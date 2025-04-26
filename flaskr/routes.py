@@ -8,6 +8,7 @@ from flaskr.auth import Auth
 from flaskr.docker import client, DockerFiles, Database, db
 from flaskr.models import auth_required, load_server_templates, webhook
 from werkzeug.utils import secure_filename
+import stripe
 
 
 SERVER_TEMPLATES = load_server_templates()
