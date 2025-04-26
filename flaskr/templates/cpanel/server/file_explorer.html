@@ -29,7 +29,7 @@
                 </li>
             {% else %}
                 <li>
-                    <a href="{{ url_for('files_download', container_id=container_id, file_path=full_path) }}">📄 {{ name }}</a>
+                    <a href="">📄 {{ name }}</a> <!--  -->
                 </li>
             {% endif %}
         {% endfor %}

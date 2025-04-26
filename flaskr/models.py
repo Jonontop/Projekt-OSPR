@@ -51,7 +51,7 @@ def TokenVerify(id_token:str) -> jsonify:
 
 
 
-def webhook(webhook_url, message, username):
+def Webhook(webhook_url, message, username):
     data = {
         "content": f"{message}",
         "username": f"{username}",

@@ -71,36 +71,10 @@
           <a class="stop" href="{{ url_for('stop_server', container_id=container_id) }}"><button>Stop</button></a>
           <a class="kill" href="{{ url_for('stop_server', container_id=container_id) }}"><button>Kill</button></a>
         </div>
-
-        <div class="info-box">
-          <div class="info-label">Uptime</div>
-          <div class="info-value">38d 22h 42m 42s</div>
-        </div>
-        <div class="info-box">
-          <div class="info-label">Address</div>
-          <div class="info-value">45.134.39.193:6001</div>
-        </div>
-        <div class="info-box">
-          <div class="info-label">CPU</div>
-          <div class="info-value">0.00% / 100%</div>
-        </div>
-        <div class="info-box">
-          <div class="info-label">Memory</div>
-          <div class="info-value">14.6 MiB / 512 MiB</div>
-        </div>
-        <div class="info-box">
-          <div class="info-label">Disk</div>
-          <div class="info-value">1.56 MiB / 1 GiB</div>
-        </div>
-        <div class="info-box">
-          <div class="info-label">Save Console Logs</div>
-          <button class="save-button">Save</button>
-        </div>
-        <div class="info-box">
-          <div class="info-label">Renewal Date</div>
-          <div class="info-value">in 6 days <button class="renew-link">Renew</button></div>
-        </div>
       </div>
+
+
+
 </body>
 
 {% endblock %}

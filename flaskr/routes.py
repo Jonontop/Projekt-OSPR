@@ -6,7 +6,7 @@ from jinja2 import TemplateNotFound
 from flaskr import app, DockerManager
 from flaskr.auth import Auth
 from flaskr.docker import client, DockerFiles, Database, db
-from flaskr.models import auth_required, load_server_templates, webhook
+from flaskr.models import auth_required, load_server_templates, Webhook
 from werkzeug.utils import secure_filename
 import stripe
 
@@ -83,17 +83,34 @@ def account():
 def console(container_id):
     # Get user's servers
     servers = Database.get_server_stats(container_id)
-    container = client.containers.get(servers['container_id']) if servers['container_id'] else None
-    servers['status'] = container.status if container else 'stopped'
+
 
     print(servers)
 
     return render_template('cpanel/server/console.html', container_id=container_id, servers=servers)
 
 # settings
-@app.route('/server/<container_id>/settings')
+@app.route('/server/<container_id>/settings', methods=['GET', 'POST'])
 @auth_required
 def settings(container_id):
+    if request.method == 'POST':
+        # Handle form submission for server settings
+        server_name = request.form.get('server_name')
+        server_description = request.form.get('server_description')
+        server_cpu = request.form.get('server_cpu')
+        server_ram = request.form.get('server_ram')
+        server_storage = request.form.get('server_storage')
+        server_ports = request.form.get('server_ports')
+        server_databases = request.form.get('server_databases')
+        server_backup = request.form.get('server_backup')
+        #print(server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup)
+
+
+        # Update server settings in the database
+        Database.server_update(container_id, server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup)
+
+        return redirect(url_for('settings', container_id=container_id))
+
     servers = Database.get_server_stats(container_id)
     container = client.containers.get(servers['container_id']) if servers['container_id'] else None
     servers['status'] = container.status if container else 'stopped'
@@ -122,23 +139,6 @@ def edit(container_id):
     return redirect(url_for('dashboard'))
 
 
-# webhook
-@app.route('/server/<container_id>/webhook', methods=['GET','POST'])
-@auth_required
-def webhook(container_id):
-    servers = Database.get_server_stats(container_id)
-
-
-    if not request.method == 'POST':
-        return render_template('cpanel/server/webhook.html', container_id=container_id, servers=servers)
-    webhook_url = request.form.get('webhook_url')
-    message = request.form.get('message')
-    username = request.form.get('username')
-    if webhook_url and message and username:
-        if webhook(webhook_url, message, username):
-            return jsonify({'success': True})
-    return render_template('cpanel/server/webhook.html', container_id=container_id, servers=servers)
-
 ### Files ###
 # file explorer
 @app.route('/server/<container_id>/files')
@@ -146,54 +146,7 @@ def webhook(container_id):
 def files(container_id):
     return render_template('cpanel/server/file_explorer.html', file_tree=DockerFiles.docker_display_files(container_id), container_id=container_id, servers=Database.get_server_stats(container_id))
 
-# files download - ne dela
-@app.route('/server/<container_id>/files/download/<path:file_path>')
-@auth_required
-def files_download(container_id, file_path):
-    return send_file(DockerFiles.docker_download_file(container_id, file_path), as_attachment=True)
-
-# files upload - ne dela
-@app.route('/server/<container_id>/files/upload', methods=['POST'])
-@auth_required
-def files_upload(container_id):
-    if 'file' not in request.files:
-        return 'No file part', 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return 'No selected file', 400
-
-    target_path = request.form.get('target_path', '')
-    filename = secure_filename(file.filename)
-    file.save('/tmp/' + filename)  # Temporarily save
-
-    success = DockerFiles.docker_upload_file(container_id, '/tmp/' + filename, os.path.join(target_path, filename))
-    os.remove('/tmp/' + filename)  # Clean up
-
-    return ('', 204) if success else ('Upload failed', 500)
-
-# files delete - ne dela
-@app.route('/server/<container_id>/files/delete', methods=['POST'])
-@auth_required
-def files_delete(container_id):
-    file_path = request.form.get('file_path')
-    success = DockerFiles.docker_delete_file(container_id, file_path)
-    return ('', 204) if success else ('Delete failed', 500)
-
-# files edit - ne dela
-@app.route('/server/<container_id>/files/edit', methods=['POST'])
-@auth_required
-def files_edit(container_id):
-    file_path = request.form.get('file_path')
-    new_content = request.form.get('content')
-    success = DockerFiles.docker_edit_file(container_id, file_path, new_content)
-    return ('', 204) if success else ('Edit failed', 500)
-
-# files create - ne dela
-@app.route('/server/<container_id>/files/create', methods=['POST'])
-@auth_required
-def files_create(container_id):
-    pass
+# ... #
 
 #### Docker ####
 @app.route('/server/<container_id>/stop')
@@ -255,22 +208,8 @@ def get_uptime(container_id):
 def get_eggs(nest):
     return jsonify(SERVER_TEMPLATES.get(nest, {}).get("eggs", {}))
 
-##### Payment
-
-@app.route('/success')
-def success():
-    return "Payment successful!"
-
 
 #### To fix / remove / transform
-
-# modify
-@app.route('/purchase/<plan>')
-def purchase(plan):
-    # Logic for handling purchases would go here
-    # For now, just redirect back to pricing page
-    return f"Processing purchase for {plan} plan..."
-
 
 # Needs to be fixed
 @app.route('/create_server', methods=['GET', 'POST'])
@@ -304,9 +243,6 @@ def create_server():
         return jsonify({'success': False, 'error': f"{e} - {type(e)}"})
 
 
-
-
-
 @app.route('/dashboard')
 @auth_required
 def cpanel():
@@ -334,49 +270,3 @@ def cpanel():
 
     return render_template('cpanel/cpanel.html', servers=servers, templates=SERVER_TEMPLATES, user=user)
 
-
-@app.route('/checkout')
-def checkout():
-    # Get parameters from URL
-    package_id = request.args.get('package_id', '')
-    package_name = request.args.get('package_name', 'Standard Package')
-    package_description = request.args.get('package_description', 'Package description')
-    package_details = request.args.get('package_details', 'Basic features')
-    package_price = float(request.args.get('package_price', 0))
-
-    # Optional add-ons
-    package_addon = request.args.get('package_addon', '')
-    addon_details = request.args.get('addon_details', '')
-    addon_price = float(request.args.get('addon_price', 0))
-
-    total_price = package_price + addon_price
-
-    return render_template('checkout.html',
-                           package_id=package_id,
-                           package_name=package_name,
-                           package_description=package_description,
-                           package_details=package_details,
-                           package_price=package_price,
-                           package_addon=package_addon,
-                           addon_details=addon_details,
-                           addon_price=addon_price,
-                           total_price=total_price)
-
-@app.route('/charge', methods=['POST'])
-def charge():
-    plan = request.form['plan']
-    amount = int(request.form['price'])
-
-    customer = stripe.Customer.create(
-        email=request.form['stripeEmail'],
-        source=request.form['stripeToken']
-    )
-
-    stripe.Charge.create(
-        customer=customer.id,
-        amount=amount,
-        currency='usd',
-        description=f'{plan} Plan'
-    )
-
-    return redirect('/success')

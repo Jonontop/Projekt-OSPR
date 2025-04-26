@@ -365,3 +365,25 @@ class Database:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
+    @staticmethod
+    def server_update(container_id, server_name, server_description, server_cpu, server_ram, server_storage, server_ports, server_databases, server_backup):
+        server_data = Database.get_server_stats(container_id)
+
+        try:
+            # Update server in Firestore frontend needs to be updated to support this
+            db.collection('servers').where("container_id", "==", container_id).get()[0].reference.update({
+                'name': server_name if server_name else server_data['name'],
+                'description': server_description if server_description else server_data['description'],
+                'cpu': server_cpu if server_cpu else server_data['cpu'],
+                'ram': server_ram if server_ram else server_data['ram'],
+                'storage': server_storage if server_storage else server_data['storage'],
+                'ports_number': server_ports if server_ports else server_data['ports_number'],
+                'databases_number': server_databases if server_databases else server_data['databases_number'],
+                'backup_number': server_backup if server_backup else server_data['backup_number'],
+            })
+            print("Works")
+            return {'success': True}
+        except Exception as e:
+            print("Error updating server:", e)
+            return {'success': False, 'error': str(e)}
+
