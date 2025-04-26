@@ -56,7 +56,6 @@ OSPR-projekt/
 - │   ├── docker.py        # Google Analytics integration
 - │   ├── static/          # Static files (CSS, JS, etc.)
 - │   │   └── css/         # Stylesheets
-t
 - │   │   └── js/          # JavaScript
 - │   └── templates/       # HTML templates
 - │       ├── index.html   # Home page
@@ -76,7 +75,7 @@ t
 - │       │   ├── user_system.html
 - │       │   ├── settings.html
 - │       │   └── cpanel.html
-- │       ├── payment/      # Payment-related templates
+- │       ├── payment/      # Payment-related templates - not implemented yet
 - │       │   ├── payment.html
 - │       │   └── plans.html
 - ├── config.py            # Configuration settings (e.g., app settings, database)
@@ -106,3 +105,65 @@ pip install -r requirements.txt
 # 7. Run the application
 python run.py
 ```
+
+
+## Function Descriptions
+
+### DockerManager Class
+
+This class handles Docker container operations for server management.
+
+| Function         | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| `docker_create`  | Creates a new Docker container with specified server parameters (name, CPU, storage, RAM) using a predefined template. |
+| `docker_stop`    | Stops a running Docker container identified by container ID.               |
+| `docker_start`   | Starts a stopped Docker container identified by container ID.              |
+| `docker_delete`  | Stops and removes a Docker container, performing complete cleanup.         |
+| `docker_restart` | Restarts a running Docker container.                                       |
+| `stream_logs`    | Streams real-time logs from a container as server-sent events.            |
+| `container_stats`| Retrieves and calculates resource usage statistics (CPU, memory, disk) for a container. |
+
+### DockerFiles Class
+
+This class handles file operations within Docker containers.
+
+| Function               | Description                                                                 |
+|------------------------|-----------------------------------------------------------------------------|
+| `build_tree`           | Constructs a hierarchical file structure representation from a flat file list. |
+| `docker_download_file` | Downloads a file from a container to the host system.                      |
+| `docker_delete_file`   | Deletes a file inside a container.                                         |
+| `docker_edit_file`     | Modifies the contents of an existing file in a container.                  |
+| `docker_create_file`   | Creates a new file with specified content in a container.                  |
+| `docker_upload_file`   | Uploads a file from the host system to a container.                        |
+| `docker_display_files` | Lists all files in container volumes and builds a file tree representation. |
+| `docker_create_folder` | Creates a new directory inside a container.                               |
+
+### Database Class
+
+This class manages database operations for server management.
+
+| Function         | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| `server_create`  | Creates a new server record in the database with specified configuration parameters. |
+| `server_delete`  | Removes a server record from the database by container ID.                 |
+| `get_server_stats`| Retrieves comprehensive server statistics and configuration from the database. |
+| `server_update`  | Updates server configuration parameters in the database.                  |
+
+### Auth Class
+
+This class handles user authentication with Firebase.
+
+| Function       | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `register`     | Registers a new user with Firebase Authentication and creates a user record in Firestore. |
+| `logout`       | Logs out the current user by clearing session data and cookies.            |
+| `TokenVerify`  | Verifies a Firebase ID token and establishes a user session.               |
+
+### Model Functions
+
+| Function             | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| `load_server_templates` | Loads server template configurations from a JSON file.                  |
+| `auth_required`      | Decorator that requires user authentication for protected routes.          |
+| `TokenVerify`        | Verifies a Firebase ID token and establishes a user session.              |
+| `Webhook`            | Sends a message to a Discord webhook with specified content and username. |
